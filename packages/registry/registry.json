@@ -1,0 +1,28 @@
+{
+  "components": [
+    {
+      "name": "layout",
+      "files": [
+        "src/layout/layout.tsx",
+        "src/layout/sidebar.tsx",
+        "src/layout/menu.tsx"
+      ],
+      "dependencies": ["@radish-ui/core", "react-icons"]
+    },
+    {
+      "name": "datagrid",
+      "files": ["src/list/datagrid.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "list-view",
+      "files": ["src/list/list-view.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "text-field",
+      "files": ["src/field/text-field.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    }
+  ]
+}
