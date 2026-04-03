@@ -5,8 +5,8 @@ import { RadishError, getErrorMessage } from "./errors.js";
 import { writeFileAtomic } from "./fs.js";
 
 const FileLockSchema = z.object({
-  registryHash: z.string(),
-  localHash: z.string(),
+  registryHash: z.string().regex(/^sha256-[0-9a-f]{64}$/),
+  localHash: z.string().regex(/^sha256-[0-9a-f]{64}$/),
 });
 
 const ComponentLockSchema = z.object({
