@@ -38,7 +38,7 @@ export function loadLockfile(cwd: string): Lockfile {
 
 export function saveLockfile(cwd: string, lockfile: Lockfile): void {
   const lockPath = resolve(cwd, "radish.lock.json");
-  writeFileAtomic(cwd, lockPath, JSON.stringify(lockfile, null, 2) + "\n");
+  writeFileAtomic(cwd, lockPath, `${JSON.stringify(lockfile, null, 2)}\n`);
 }
 
 export function shouldUpdate(

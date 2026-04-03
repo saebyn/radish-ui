@@ -39,11 +39,11 @@ program
   .option("--target <path>", `Output directory (default: ./${DEFAULT_OUTPUT_DIR})`)
   .action(diffCommand);
 
-program.parseAsync(process.argv).catch((error) => {
-  if (error instanceof RadishError) {
-    console.error(`Error: ${error.message}`);
+program.parseAsync(process.argv).catch((err) => {
+  if (err instanceof RadishError) {
+    console.error(`Error: ${err.message}`);
   } else {
-    console.error(error);
+    console.error(err);
   }
   process.exitCode = 1;
 });

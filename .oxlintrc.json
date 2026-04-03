@@ -1,0 +1,52 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "typescript",
+    "unicorn",
+    "oxc",
+    "import"
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    // Enforce consistent type-only import syntax: `import type { Foo }`
+    "typescript/consistent-type-imports": "error",
+    // Prefer template literals over string concatenation
+    "prefer-template": "warn",
+    // Catch blocks should name the error something meaningful (we use `err` throughout)
+    "catch-error-name": [
+      "warn",
+      {
+        "name": "err"
+      }
+    ],
+    // --- Rules that are too opinionated for this codebase, explicitly silenced ---
+    // Async functions are used intentionally in some places for readability, even if they don't `await`
+    "require-await": "off",
+    // The CLI intentionally uses Node.js built-ins everywhere
+    "no-nodejs-modules": "off",
+    // This codebase uses named exports consistently; default exports would be worse here
+    "import/no-named-export": "off",
+    "import/prefer-default-export": "off",
+    "import/group-exports": "off",
+    // Import order is handled by the formatter, not the linter
+    "sort-imports": "off",
+    // Object key order is not meaningful here
+    "sort-keys": "off",
+    // Function declarations and expressions are both used intentionally
+    "func-style": "off",
+    // Ternaries are used clearly throughout
+    "no-ternary": "off",
+    // `continue` is used intentionally in the sync/add loops
+    "no-continue": "off",
+    // Magic numbers would require pointless named constants for e.g. hash lengths
+    "no-magic-numbers": "off",
+    // Single-letter names like `a`, `b` are fine in tests
+    "id-length": "off"
+  },
+  "env": {
+    "builtin": true
+  }
+}

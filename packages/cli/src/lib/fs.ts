@@ -19,7 +19,7 @@ import { RadishError } from "./errors.js";
 export function assertWithinDir(allowedRoot: string, resolvedPath: string): void {
   const realRoot = realpathSync(allowedRoot);
   const realTarget = realpathSync(resolvedPath);
-  if (!realTarget.startsWith(realRoot + "/") && realTarget !== realRoot) {
+  if (!realTarget.startsWith(`${realRoot}/`) && realTarget !== realRoot) {
     throw new RadishError(`Path "${resolvedPath}" escapes the allowed directory "${allowedRoot}".`);
   }
 }
