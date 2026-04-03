@@ -55,6 +55,10 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
       const localPath = resolve(cwd, config.outputDir, relPath);
       const registryPath = resolve(config.registry, relativeToRegistryFile(relPath));
 
+      // Guard against registryPath pointing outside the registry directory
+      // (e.g. via malicious registry file entry or symlink). Done here, as soon as the path is constructed.
+      assertWithinDir(config.registry, registryPath);
+
       if (!existsSync(localPath)) {
         if (!(options.force ?? false)) {
           console.warn(`⚠ Local file not found: ${localPath}. Skipping.`);
