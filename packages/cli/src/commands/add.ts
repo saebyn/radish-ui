@@ -1,5 +1,5 @@
-import { readFileSync, existsSync, mkdirSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { hashContent } from "../lib/hash.js";
 import { loadRegistry, findComponent, registryFileToRelative } from "../lib/registry.js";
 import { loadLockfile, saveLockfile } from "../lib/lockfile.js";
@@ -96,8 +96,7 @@ export async function addCommand(components: string[], options: AddOptions): Pro
       const content = readFileSync(srcPath);
       const hash = hashContent(content);
 
-      mkdirSync(dirname(destPath), { recursive: true });
-      writeFileAtomicForce(destPath, content, options.force ?? false);
+      writeFileAtomicForce(resolve(cwd, config.outputDir), destPath, content, options.force ?? false);
 
       fileLocks[relPath] = {
         registryHash: hash,

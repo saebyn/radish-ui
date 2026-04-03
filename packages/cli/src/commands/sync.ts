@@ -1,11 +1,11 @@
-import { readFileSync, existsSync, mkdirSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { hashContent } from "../lib/hash.js";
 import { loadRegistry, validateRelativePath, relativeToRegistryFile } from "../lib/registry.js";
 import { loadLockfile, saveLockfile, shouldUpdate } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
-import { writeFileAtomic } from "../lib/fs.js";
+import { writeFileAtomic, assertWithinDir } from "../lib/fs.js";
 
 export interface SyncOptions {
   registry?: string;
@@ -68,8 +68,7 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
         const registryContent = readFileSync(registryPath);
         const newRegistryHash = hashContent(registryContent);
 
-        mkdirSync(dirname(localPath), { recursive: true });
-        writeFileAtomic(localPath, registryContent);
+        writeFileAtomic(resolve(cwd, config.outputDir), localPath, registryContent);
         fileLock.registryHash = newRegistryHash;
         fileLock.localHash = newRegistryHash;
         console.log(`✓ Restored ${relPath}`);
@@ -108,7 +107,8 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
       }
 
       // update === true (force or unmodified-and-changed)
-      writeFileAtomic(localPath, registryContent);
+      assertWithinDir(resolve(cwd, config.outputDir), localPath);
+      writeFileAtomic(resolve(cwd, config.outputDir), localPath, registryContent);
       fileLock.registryHash = newRegistryHash;
       fileLock.localHash = newRegistryHash;
       console.log(`✓ Updated ${relPath}`);

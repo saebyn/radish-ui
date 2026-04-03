@@ -6,6 +6,7 @@ import { loadRegistry, validateRelativePath, relativeToRegistryFile } from "../l
 import { loadLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
+import { assertWithinDir } from "../lib/fs.js";
 
 export interface DiffOptions {
   registry?: string;
@@ -64,7 +65,9 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
       continue;
     }
 
-    const localContent = existsSync(localPath) ? readFileSync(localPath, "utf-8") : "";
+    const localContent = existsSync(localPath)
+      ? (assertWithinDir(resolve(cwd, config.outputDir), localPath), readFileSync(localPath, "utf-8"))
+      : "";
     const patch = createPatch(relPath, localContent, registryContent, "local", "registry");
     console.log(patch);
   }
