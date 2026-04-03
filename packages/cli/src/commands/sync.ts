@@ -28,6 +28,7 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
 
   const registry = loadRegistry(config.registry);
   const lockfile = loadLockfile(cwd);
+  let lockfileChanged = 0;
 
   if (Object.keys(lockfile.components).length === 0) {
     console.log("No components found in radish.lock.json. Run `radish add` first.");
@@ -69,8 +70,11 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
         const newRegistryHash = hashContent(registryContent);
 
         writeFileAtomic(resolve(cwd, config.outputDir), localPath, registryContent);
-        fileLock.registryHash = newRegistryHash;
-        fileLock.localHash = newRegistryHash;
+        componentLock.files[relPath] = {
+          registryHash: newRegistryHash,
+          localHash: newRegistryHash,
+        };
+        lockfileChanged++;
         console.log(`✓ Restored ${relPath}`);
         continue;
       }
@@ -109,11 +113,13 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
       // update === true (force or unmodified-and-changed)
       assertWithinDir(resolve(cwd, config.outputDir), localPath);
       writeFileAtomic(resolve(cwd, config.outputDir), localPath, registryContent);
-      fileLock.registryHash = newRegistryHash;
-      fileLock.localHash = newRegistryHash;
+      componentLock.files[relPath] = { registryHash: newRegistryHash, localHash: newRegistryHash };
+      lockfileChanged++;
       console.log(`✓ Updated ${relPath}`);
     }
   }
 
-  saveLockfile(cwd, lockfile);
+  if (lockfileChanged > 0) {
+    saveLockfile(cwd, lockfile);
+  }
 }

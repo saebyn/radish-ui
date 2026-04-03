@@ -10,7 +10,7 @@ import {
 import { loadLockfile, saveLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
-import { writeFileAtomicForce } from "../lib/fs.js";
+import { writeFileAtomic } from "../lib/fs.js";
 
 export interface AddOptions {
   registry?: string;
@@ -102,12 +102,7 @@ export async function addCommand(components: string[], options: AddOptions): Pro
       const content = readFileSync(srcPath);
       const hash = hashContent(content);
 
-      writeFileAtomicForce(
-        resolve(cwd, config.outputDir),
-        destPath,
-        content,
-        options.force ?? false,
-      );
+      writeFileAtomic(resolve(cwd, config.outputDir), destPath, content, options.force ?? false);
 
       fileLocks[relPath] = {
         registryHash: hash,
