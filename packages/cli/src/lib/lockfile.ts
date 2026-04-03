@@ -22,7 +22,11 @@ export function loadLockfile(cwd: string): Lockfile {
   try {
     const raw = readFileSync(lockPath, "utf-8");
     return JSON.parse(raw) as Lockfile;
-  } catch {
+  } catch (error) {
+    console.warn(
+      `Warning: Failed to read or parse lockfile at ${lockPath}. The lockfile will be ignored.`,
+      error
+    );
     return { components: {} };
   }
 }

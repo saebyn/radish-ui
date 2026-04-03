@@ -8,3 +8,10 @@ export function hashContent(content: Buffer | string): string {
       .digest("hex")
   );
 }
+
+export function getErrorMessage(err: unknown): string {
+  if (err && typeof err === "object" && "message" in err) {
+    return String((err as { message: unknown }).message);
+  }
+  return String(err);
+}

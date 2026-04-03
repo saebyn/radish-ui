@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
-import { hashContent } from "../lib/hash.js";
+import { hashContent, getErrorMessage } from "../lib/hash.js";
 import { loadRegistry, findComponent, registryFileToRelative } from "../lib/registry.js";
 import { loadLockfile, saveLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
@@ -47,19 +47,54 @@ export async function addCommand(
       continue;
     }
 
-    const fileLocks: Record<string, { registryHash: string; localHash: string }> = {};
+    // Resolve and validate all source/destination paths before writing anything
+    const resolvedFiles: Array<{
+      relPath: string;
+      srcPath: string;
+      destPath: string;
+    }> = [];
+    let skip = false;
 
-    for (const registryFilePath of component.files) {      const relPath = registryFileToRelative(registryFilePath);
-      const srcPath = resolve(config.registry, registryFilePath);
-      const destPath = resolve(cwd, config.outputDir, relPath);
-
-      if (existsSync(destPath) && !options.force) {
-        console.warn(
-          `⚠ File "${destPath}" already exists. Use --force to overwrite.`
+    for (const registryFilePath of component.files) {
+      let relPath: string;
+      try {
+        relPath = registryFileToRelative(registryFilePath);
+      } catch (err) {
+        console.error(
+          `Error: Invalid registry file path for component "${componentName}": ${getErrorMessage(err)}`
         );
-        continue;
+        skip = true;
+        break;
       }
 
+      const srcPath = resolve(config.registry, registryFilePath);
+      if (!existsSync(srcPath)) {
+        console.error(
+          `Error: Registry file not found for component "${componentName}": ${srcPath}`
+        );
+        skip = true;
+        break;
+      }
+
+      const destPath = resolve(cwd, config.outputDir, relPath);
+      if (existsSync(destPath) && !options.force) {
+        console.warn(
+          `⚠ File "${destPath}" already exists. Use --force to overwrite. Skipping component "${componentName}".`
+        );
+        skip = true;
+        break;
+      }
+
+      resolvedFiles.push({ relPath, srcPath, destPath });
+    }
+
+    if (skip) {
+      continue;
+    }
+
+    const fileLocks: Record<string, { registryHash: string; localHash: string }> = {};
+
+    for (const { relPath, srcPath, destPath } of resolvedFiles) {
       const content = readFileSync(srcPath);
       const hash = hashContent(content);
 

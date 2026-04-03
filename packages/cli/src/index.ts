@@ -33,4 +33,7 @@ program
   .option("--target <path>", "Output directory (default: ./src/components/radish)")
   .action(diffCommand);
 
-program.parse();
+program.parseAsync(process.argv).catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
