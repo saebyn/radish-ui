@@ -1,18 +1,24 @@
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { z } from "zod";
+import { RadishError, getErrorMessage } from "./errors.js";
 
-export interface FileLock {
-  registryHash: string;
-  localHash: string;
-}
+const FileLockSchema = z.object({
+  registryHash: z.string(),
+  localHash: z.string(),
+});
 
-export interface ComponentLock {
-  files: Record<string, FileLock>;
-}
+const ComponentLockSchema = z.object({
+  files: z.record(z.string(), FileLockSchema),
+});
 
-export interface Lockfile {
-  components: Record<string, ComponentLock>;
-}
+const LockfileSchema = z.object({
+  components: z.record(z.string(), ComponentLockSchema),
+});
+
+export type FileLock = z.infer<typeof FileLockSchema>;
+export type ComponentLock = z.infer<typeof ComponentLockSchema>;
+export type Lockfile = z.infer<typeof LockfileSchema>;
 
 export function loadLockfile(cwd: string): Lockfile {
   const lockPath = resolve(cwd, "radish.lock.json");
@@ -21,13 +27,11 @@ export function loadLockfile(cwd: string): Lockfile {
   }
   try {
     const raw = readFileSync(lockPath, "utf-8");
-    return JSON.parse(raw) as Lockfile;
-  } catch (error) {
-    console.warn(
-      `Warning: Failed to read or parse lockfile at ${lockPath}. The lockfile will be ignored.`,
-      error,
+    return LockfileSchema.parse(JSON.parse(raw));
+  } catch (err) {
+    throw new RadishError(
+      `Failed to read or parse lockfile at "${lockPath}": ${getErrorMessage(err)}`,
     );
-    return { components: {} };
   }
 }
 

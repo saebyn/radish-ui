@@ -1,12 +1,15 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { z } from "zod";
 import { getErrorMessage, RadishError } from "./errors.js";
 import { validateRelativeDir } from "./registry.js";
 
-export interface RadishConfig {
-  registry?: string;
-  outputDir?: string;
-}
+const RadishConfigSchema = z.object({
+  registry: z.string().optional(),
+  outputDir: z.string().optional(),
+});
+
+export type RadishConfig = z.infer<typeof RadishConfigSchema>;
 
 export const DEFAULT_OUTPUT_DIR = "src/components/radish";
 
@@ -17,7 +20,7 @@ export function loadConfig(cwd: string): RadishConfig {
   }
   try {
     const raw = readFileSync(configPath, "utf-8");
-    return JSON.parse(raw) as RadishConfig;
+    return RadishConfigSchema.parse(JSON.parse(raw));
   } catch (err) {
     throw new RadishError(
       `Failed to read or parse radish config at "${configPath}": ${getErrorMessage(err)}`,

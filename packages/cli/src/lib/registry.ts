@@ -1,16 +1,20 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve, posix } from "node:path";
+import { z } from "zod";
 import { RadishError, getErrorMessage } from "./errors.js";
 
-export interface RegistryComponent {
-  name: string;
-  files: string[];
-  dependencies: string[];
-}
+const RegistryComponentSchema = z.object({
+  name: z.string(),
+  files: z.array(z.string()),
+  dependencies: z.array(z.string()),
+});
 
-export interface Registry {
-  components: RegistryComponent[];
-}
+const RegistrySchema = z.object({
+  components: z.array(RegistryComponentSchema),
+});
+
+export type RegistryComponent = z.infer<typeof RegistryComponentSchema>;
+export type Registry = z.infer<typeof RegistrySchema>;
 
 export function loadRegistry(registryDir: string): Registry {
   const registryPath = resolve(registryDir, "registry.json");
@@ -21,7 +25,7 @@ export function loadRegistry(registryDir: string): Registry {
   }
   try {
     const raw = readFileSync(registryPath, "utf-8");
-    return JSON.parse(raw) as Registry;
+    return RegistrySchema.parse(JSON.parse(raw));
   } catch (err) {
     throw new RadishError(
       `Failed to read or parse registry at "${registryPath}": ${getErrorMessage(err)}`,
