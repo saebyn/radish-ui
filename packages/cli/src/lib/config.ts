@@ -1,7 +1,6 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
-import { getErrorMessage } from "./hash.js";
-import { RadishError } from "./errors.js";
+import { getErrorMessage, RadishError } from "./errors.js";
 
 export interface RadishConfig {
   registry?: string;
