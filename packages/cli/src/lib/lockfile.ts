@@ -1,7 +1,8 @@
-import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { z } from "zod";
 import { RadishError, getErrorMessage } from "./errors.js";
+import { writeFileSafe } from "./fs.js";
 
 const FileLockSchema = z.object({
   registryHash: z.string(),
@@ -37,7 +38,7 @@ export function loadLockfile(cwd: string): Lockfile {
 
 export function saveLockfile(cwd: string, lockfile: Lockfile): void {
   const lockPath = resolve(cwd, "radish.lock.json");
-  writeFileSync(lockPath, JSON.stringify(lockfile, null, 2) + "\n", "utf-8");
+  writeFileSafe(lockPath, JSON.stringify(lockfile, null, 2) + "\n");
 }
 
 export function shouldUpdate(

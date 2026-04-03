@@ -1,18 +1,11 @@
-import {
-  readFileSync,
-  writeFileSync,
-  mkdirSync,
-  existsSync,
-  renameSync,
-  unlinkSync,
-} from "node:fs";
-import { resolve, dirname, join } from "node:path";
-import { randomBytes } from "node:crypto";
+import { readFileSync, existsSync, mkdirSync } from "node:fs";
+import { resolve, dirname } from "node:path";
 import { hashContent } from "../lib/hash.js";
 import { loadRegistry, findComponent, registryFileToRelative } from "../lib/registry.js";
 import { loadLockfile, saveLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
+import { writeFileAtomicForce } from "../lib/fs.js";
 
 export interface AddOptions {
   registry?: string;
@@ -104,23 +97,7 @@ export async function addCommand(components: string[], options: AddOptions): Pro
       const hash = hashContent(content);
 
       mkdirSync(dirname(destPath), { recursive: true });
-      // destPath is derived from registryFileToRelative() which already rejects traversal,
-      // so the temp file is always written within the same validated output directory.
-      const tmpPath = join(dirname(destPath), `.radish-tmp-${randomBytes(6).toString("hex")}`);
-      try {
-        writeFileSync(tmpPath, content);
-        if (options.force && existsSync(destPath)) {
-          unlinkSync(destPath);
-        }
-        renameSync(tmpPath, destPath);
-      } catch (err) {
-        try {
-          unlinkSync(tmpPath);
-        } catch {
-          // ignore cleanup errors
-        }
-        throw err;
-      }
+      writeFileAtomicForce(destPath, content, options.force ?? false);
 
       fileLocks[relPath] = {
         registryHash: hash,
