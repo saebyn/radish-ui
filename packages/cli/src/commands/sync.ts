@@ -1,7 +1,12 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { hashContent } from "../lib/hash.js";
-import { loadRegistry, validateRelativePath, relativeToRegistryFile } from "../lib/registry.js";
+import {
+  loadRegistry,
+  validateRelativePath,
+  relativeToRegistryFile,
+  validateComponentName,
+} from "../lib/registry.js";
 import { loadLockfile, saveLockfile, shouldUpdate } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
@@ -36,6 +41,13 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
   }
 
   for (const [componentName, componentLock] of Object.entries(lockfile.components)) {
+    try {
+      validateComponentName(componentName);
+    } catch {
+      console.warn(`⚠ Skipping invalid component name in lockfile: "${componentName}"`);
+      continue;
+    }
+
     const registryComponent = registry.components.find((c) => c.name === componentName);
     if (!registryComponent) {
       console.warn(`⚠ Component "${componentName}" not found in registry. Skipping.`);
