@@ -1,6 +1,7 @@
 import {
   existsSync,
   mkdirSync,
+  readFileSync,
   realpathSync,
   renameSync,
   unlinkSync,
@@ -55,6 +56,21 @@ export function writeFileAtomic(
     }
     throw err;
   }
+}
+
+/**
+ * Reads a file that is expected to be within allowedRoot, asserting the
+ * symlink-resolved path does not escape it. Returns an empty string if the
+ * file does not exist (callers can treat absence as empty content).
+ * The file must exist before assertWithinDir is called, which is guaranteed
+ * by the existsSync guard here.
+ */
+export function readFileWithinDir(allowedRoot: string, filePath: string): string {
+  if (!existsSync(filePath)) {
+    return "";
+  }
+  assertWithinDir(allowedRoot, filePath);
+  return readFileSync(filePath, "utf-8");
 }
 
 /**

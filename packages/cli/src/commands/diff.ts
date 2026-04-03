@@ -11,25 +11,11 @@ import {
 import { loadLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
-import { assertWithinDir } from "../lib/fs.js";
+import { assertWithinDir, readFileWithinDir } from "../lib/fs.js";
 
 export interface DiffOptions {
   registry?: string;
   target?: string;
-}
-
-/**
- * Reads the local copy of a component file, asserting it is within the
- * allowed output directory (symlink-safe). Returns an empty string if the
- * file does not exist locally (so the diff shows the full registry content
- * as an addition).
- */
-function readLocalFile(allowedRoot: string, localPath: string): string {
-  if (!existsSync(localPath)) {
-    return "";
-  }
-  assertWithinDir(allowedRoot, localPath);
-  return readFileSync(localPath, "utf-8");
 }
 
 export async function diffCommand(componentName: string, options: DiffOptions): Promise<void> {
@@ -77,6 +63,7 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
       continue;
     }
 
+    assertWithinDir(config.registry, registryPath);
     const registryContent = readFileSync(registryPath, "utf-8");
     const newRegistryHash = hashContent(registryContent);
 
@@ -85,7 +72,7 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
       continue;
     }
 
-    const localContent = readLocalFile(resolve(cwd, config.outputDir), localPath);
+    const localContent = readFileWithinDir(resolve(cwd, config.outputDir), localPath);
     const patch = createPatch(relPath, localContent, registryContent, "local", "registry");
     console.log(patch);
   }

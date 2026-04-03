@@ -10,7 +10,7 @@ import {
 import { loadLockfile, saveLockfile, shouldUpdate } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
-import { writeFileAtomic, assertWithinDir } from "../lib/fs.js";
+import { writeFileAtomic, assertWithinDir, readFileWithinDir } from "../lib/fs.js";
 
 export interface SyncOptions {
   registry?: string;
@@ -100,7 +100,7 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
         continue;
       }
 
-      const localContent = readFileSync(localPath);
+      const localContent = readFileWithinDir(resolve(cwd, config.outputDir), localPath);
       const currentLocalHash = hashContent(localContent);
 
       const registryContent = readFileSync(registryPath);
