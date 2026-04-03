@@ -5,6 +5,17 @@ import { RadishError, getErrorMessage } from "./errors.js";
 
 const COMPONENT_NAME_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
 
+const RegistryFilePathSchema = z.string().refine(
+  (p) => {
+    if (!p.startsWith("src/")) return false;
+    // Reject null bytes and Windows-style paths before normalisation.
+    if (p.includes("\0") || p.includes("\\") || /^[A-Za-z]:/.test(p)) return false;
+    const rel = posix.normalize(p.slice(4));
+    return !posix.isAbsolute(rel) && !rel.startsWith("..");
+  },
+  { message: 'Registry file path must start with "src/" and must not contain path traversal' },
+);
+
 const RegistryComponentSchema = z.object({
   name: z
     .string()
@@ -12,7 +23,7 @@ const RegistryComponentSchema = z.object({
       COMPONENT_NAME_RE,
       "Component name must be lowercase alphanumeric words separated by hyphens, optionally grouped with slashes",
     ),
-  files: z.array(z.string()),
+  files: z.array(RegistryFilePathSchema),
   dependencies: z.array(z.string()),
 });
 

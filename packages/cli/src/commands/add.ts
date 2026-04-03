@@ -52,9 +52,7 @@ function resolveComponentFiles(
 
     const srcPath = resolve(config.registry, registryFilePath);
     if (!existsSync(srcPath)) {
-      throw new RadishError(
-        `Registry file not found for component "${componentName}": ${srcPath}`,
-      );
+      throw new RadishError(`Registry file not found for component "${componentName}": ${srcPath}`);
     }
     // Guard against registry file entries that are symlinks pointing outside
     // the registry directory. Done here, as soon as the path is constructed.
