@@ -63,4 +63,20 @@ describe("validateRelativePath", () => {
       /Unsafe relative path/
     );
   });
+
+  it("accepts a path starting with .. but not a traversal (..foo/bar.tsx)", () => {
+    expect(() => validateRelativePath("..foo/bar.tsx")).not.toThrow();
+  });
+
+  it("throws on a Windows drive-letter absolute path", () => {
+    expect(() => validateRelativePath("C:/Windows/System32")).toThrow(
+      /Unsafe relative path/
+    );
+  });
+
+  it("throws on a Windows backslash traversal", () => {
+    expect(() => validateRelativePath("a\\..\\..\\etc")).toThrow(
+      /Unsafe relative path/
+    );
+  });
 });

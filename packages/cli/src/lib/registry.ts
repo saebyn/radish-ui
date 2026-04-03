@@ -50,8 +50,19 @@ export function registryFileToRelative(registryFilePath: string): string {
  * contain path traversal sequences. Throws if unsafe.
  */
 export function validateRelativePath(relPath: string): void {
+  // Reject Windows-style backslash separators and drive-letter prefixes
+  // (e.g. "a\\..\\..\\etc" or "C:/Windows/...") before POSIX normalisation.
+  if (relPath.includes("\\") || /^[A-Za-z]:/.test(relPath)) {
+    throw new Error(`Unsafe relative path in lockfile: ${relPath}`);
+  }
+
   const normalized = posix.normalize(relPath);
-  if (posix.isAbsolute(normalized) || normalized.startsWith("..")) {
+  if (
+    posix.isAbsolute(normalized) ||
+    normalized === "." ||
+    normalized === ".." ||
+    normalized.startsWith("../")
+  ) {
     throw new Error(`Unsafe relative path in lockfile: ${relPath}`);
   }
 }

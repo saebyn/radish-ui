@@ -7,7 +7,6 @@ import { resolveConfig } from "../lib/config.js";
 
 export interface DiffOptions {
   registry?: string;
-  target?: string;
 }
 
 export async function diffCommand(
@@ -17,7 +16,6 @@ export async function diffCommand(
   const cwd = process.cwd();
   const config = resolveConfig(cwd, {
     registry: options.registry,
-    outputDir: options.target,
   });
 
   if (!config.registry) {

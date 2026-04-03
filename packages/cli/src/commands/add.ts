@@ -112,6 +112,9 @@ export async function addCommand(
       );
       try {
         writeFileSync(tmpPath, content);
+        if (options.force && existsSync(destPath)) {
+          unlinkSync(destPath);
+        }
         renameSync(tmpPath, destPath);
       } catch (err) {
         try {
