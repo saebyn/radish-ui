@@ -31,8 +31,7 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
   }
 
   const registry = loadRegistry(config.registry);
-  const registryComponent = registry.components.find((c) => c.name === componentName);
-  if (!registryComponent) {
+  if (!registry.components.some((c) => c.name === componentName)) {
     throw new RadishError(`Component "${componentName}" not found in registry.`);
   }
 
