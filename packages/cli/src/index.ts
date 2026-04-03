@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import { addCommand } from "./commands/add.js";
 import { syncCommand } from "./commands/sync.js";
 import { diffCommand } from "./commands/diff.js";
+import { RadishError } from "./lib/errors.js";
 
 const require = createRequire(import.meta.url);
 const packageJson = require("../package.json") as { version: string };
@@ -37,6 +38,10 @@ program
   .action(diffCommand);
 
 program.parseAsync(process.argv).catch((error) => {
-  console.error(error);
+  if (error instanceof RadishError) {
+    console.error(`Error: ${error.message}`);
+  } else {
+    console.error(error);
+  }
   process.exitCode = 1;
 });

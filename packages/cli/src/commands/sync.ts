@@ -4,6 +4,7 @@ import { hashContent } from "../lib/hash.js";
 import { loadRegistry, validateRelativePath } from "../lib/registry.js";
 import { loadLockfile, saveLockfile, shouldUpdate } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
+import { RadishError } from "../lib/errors.js";
 
 export interface SyncOptions {
   registry?: string;
@@ -19,10 +20,9 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
   });
 
   if (!config.registry) {
-    console.error(
-      "Error: No registry path specified. Use --registry <path> or set registry in radish.json",
+    throw new RadishError(
+      "No registry path specified. Use --registry <path> or set registry in radish.json",
     );
-    process.exit(1);
   }
 
   const registry = loadRegistry(config.registry);

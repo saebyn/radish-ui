@@ -4,6 +4,7 @@ import { hashContent } from "../lib/hash.js";
 import { loadRegistry, validateRelativePath } from "../lib/registry.js";
 import { loadLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
+import { RadishError } from "../lib/errors.js";
 
 export interface DiffOptions {
   registry?: string;
@@ -16,26 +17,23 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
   });
 
   if (!config.registry) {
-    console.error(
-      "Error: No registry path specified. Use --registry <path> or set registry in radish.json",
+    throw new RadishError(
+      "No registry path specified. Use --registry <path> or set registry in radish.json",
     );
-    process.exit(1);
   }
 
   const lockfile = loadLockfile(cwd);
   const componentLock = lockfile.components[componentName];
   if (!componentLock) {
-    console.error(
-      `Error: Component "${componentName}" not found in radish.lock.json. Run \`radish add ${componentName}\` first.`,
+    throw new RadishError(
+      `Component "${componentName}" not found in radish.lock.json. Run \`radish add ${componentName}\` first.`,
     );
-    process.exit(1);
   }
 
   const registry = loadRegistry(config.registry);
   const registryComponent = registry.components.find((c) => c.name === componentName);
   if (!registryComponent) {
-    console.error(`Error: Component "${componentName}" not found in registry.`);
-    process.exit(1);
+    throw new RadishError(`Component "${componentName}" not found in registry.`);
   }
 
   for (const [relPath, fileLock] of Object.entries(componentLock.files)) {

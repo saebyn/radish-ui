@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { getErrorMessage } from "./hash.js";
+import { RadishError } from "./errors.js";
 
 export interface RadishConfig {
   registry?: string;
@@ -16,10 +17,9 @@ export function loadConfig(cwd: string): RadishConfig {
     const raw = readFileSync(configPath, "utf-8");
     return JSON.parse(raw) as RadishConfig;
   } catch (err) {
-    console.error(
+    throw new RadishError(
       `Failed to read or parse radish config at "${configPath}": ${getErrorMessage(err)}`,
     );
-    process.exit(1);
   }
 }
 

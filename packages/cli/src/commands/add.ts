@@ -12,6 +12,7 @@ import { hashContent, getErrorMessage } from "../lib/hash.js";
 import { loadRegistry, findComponent, registryFileToRelative } from "../lib/registry.js";
 import { loadLockfile, saveLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
+import { RadishError } from "../lib/errors.js";
 
 export interface AddOptions {
   registry?: string;
@@ -27,10 +28,9 @@ export async function addCommand(components: string[], options: AddOptions): Pro
   });
 
   if (!config.registry) {
-    console.error(
-      "Error: No registry path specified. Use --registry <path> or set registry in radish.json",
+    throw new RadishError(
+      "No registry path specified. Use --registry <path> or set registry in radish.json",
     );
-    process.exit(1);
   }
 
   const registry = loadRegistry(config.registry);
@@ -40,8 +40,7 @@ export async function addCommand(components: string[], options: AddOptions): Pro
   // Pre-validate all component names before writing anything
   for (const componentName of components) {
     if (!findComponent(registry, componentName)) {
-      console.error(`Error: Component "${componentName}" not found in registry.`);
-      process.exit(1);
+      throw new RadishError(`Component "${componentName}" not found in registry.`);
     }
   }
 
