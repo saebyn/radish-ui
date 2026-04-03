@@ -1,6 +1,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { getErrorMessage, RadishError } from "./errors.js";
+import { validateRelativeDir } from "./registry.js";
 
 export interface RadishConfig {
   registry?: string;
@@ -24,8 +25,16 @@ export function loadConfig(cwd: string): RadishConfig {
 
 export function resolveConfig(cwd: string, flags: Partial<RadishConfig>): Required<RadishConfig> {
   const file = loadConfig(cwd);
+  const outputDir = flags.outputDir ?? file.outputDir ?? "src/components/radish";
+  try {
+    validateRelativeDir(outputDir);
+  } catch {
+    throw new RadishError(
+      `Invalid outputDir "${outputDir}": must be a relative path that does not escape the project root.`,
+    );
+  }
   return {
     registry: flags.registry ?? file.registry ?? "",
-    outputDir: flags.outputDir ?? file.outputDir ?? "src/components/radish",
+    outputDir,
   };
 }

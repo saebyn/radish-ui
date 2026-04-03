@@ -36,6 +36,7 @@ export async function addCommand(components: string[], options: AddOptions): Pro
   const registry = loadRegistry(config.registry);
   const lockfile = loadLockfile(cwd);
   const allDeps = new Set<string>();
+  let componentsWritten = 0;
 
   // Pre-validate all component names before writing anything
   for (const componentName of components) {
@@ -130,13 +131,16 @@ export async function addCommand(components: string[], options: AddOptions): Pro
     }
 
     lockfile.components[componentName] = { files: fileLocks };
+    componentsWritten++;
 
     for (const dep of component.dependencies) {
       allDeps.add(dep);
     }
   }
 
-  saveLockfile(cwd, lockfile);
+  if (componentsWritten > 0) {
+    saveLockfile(cwd, lockfile);
+  }
 
   if (allDeps.size > 0) {
     console.log("\nDon't forget to install dependencies:");

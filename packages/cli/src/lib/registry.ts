@@ -15,13 +15,17 @@ export interface Registry {
 export function loadRegistry(registryDir: string): Registry {
   const registryPath = resolve(registryDir, "registry.json");
   if (!existsSync(registryPath)) {
-    throw new RadishError(`Registry not found at "${registryPath}". Check your --registry path or radish.json.`);
+    throw new RadishError(
+      `Registry not found at "${registryPath}". Check your --registry path or radish.json.`,
+    );
   }
   try {
     const raw = readFileSync(registryPath, "utf-8");
     return JSON.parse(raw) as Registry;
   } catch (err) {
-    throw new RadishError(`Failed to read or parse registry at "${registryPath}": ${getErrorMessage(err)}`);
+    throw new RadishError(
+      `Failed to read or parse registry at "${registryPath}": ${getErrorMessage(err)}`,
+    );
   }
 }
 
@@ -74,5 +78,23 @@ export function validateRelativePath(relPath: string): void {
     normalized.startsWith("../")
   ) {
     throw new Error(`Unsafe relative path in lockfile: ${relPath}`);
+  }
+}
+
+/**
+ * Validates that a directory path used as an output destination does not
+ * escape the project root. Unlike validateRelativePath, "." is allowed
+ * (meaning the project root itself).
+ * Throws if the path is absolute or traverses upward.
+ */
+export function validateRelativeDir(dirPath: string): void {
+  // Reject Windows-style backslash separators and drive-letter prefixes.
+  if (dirPath.includes("\\") || /^[A-Za-z]:/.test(dirPath)) {
+    throw new Error(`Unsafe directory path: ${dirPath}`);
+  }
+
+  const normalized = posix.normalize(dirPath);
+  if (posix.isAbsolute(normalized) || normalized === ".." || normalized.startsWith("../")) {
+    throw new Error(`Unsafe directory path: ${dirPath}`);
   }
 }
