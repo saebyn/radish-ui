@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { registryFileToRelative } from "./registry.js";
+import { registryFileToRelative, validateRelativePath } from "./registry.js";
 
 describe("registryFileToRelative", () => {
   it("strips the leading src/ prefix", () => {
@@ -34,5 +34,33 @@ describe("registryFileToRelative", () => {
     // On POSIX, normalize("src/" + "/etc/passwd") would give "/etc/passwd" after
     // slicing the "src/" prefix — guard against this.
     expect(() => registryFileToRelative("src//etc/passwd")).toThrow();
+  });
+});
+
+describe("validateRelativePath", () => {
+  it("accepts a simple relative path", () => {
+    expect(() => validateRelativePath("list/datagrid.tsx")).not.toThrow();
+  });
+
+  it("accepts a top-level file", () => {
+    expect(() => validateRelativePath("button.tsx")).not.toThrow();
+  });
+
+  it("throws on a path starting with ..", () => {
+    expect(() => validateRelativePath("../package.json")).toThrow(
+      /Unsafe relative path/
+    );
+  });
+
+  it("throws on a deeply nested traversal", () => {
+    expect(() => validateRelativePath("a/../../etc/passwd")).toThrow(
+      /Unsafe relative path/
+    );
+  });
+
+  it("throws on an absolute path", () => {
+    expect(() => validateRelativePath("/etc/passwd")).toThrow(
+      /Unsafe relative path/
+    );
   });
 });

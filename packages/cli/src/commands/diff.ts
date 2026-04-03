@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from "fs";
 import { resolve } from "path";
 import { hashContent } from "../lib/hash.js";
-import { loadRegistry } from "../lib/registry.js";
+import { loadRegistry, validateRelativePath } from "../lib/registry.js";
 import { loadLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 
@@ -44,6 +44,13 @@ export async function diffCommand(
   }
 
   for (const [relPath, fileLock] of Object.entries(componentLock.files)) {
+    try {
+      validateRelativePath(relPath);
+    } catch (err) {
+      console.warn(`⚠ Skipping unsafe path in lockfile: ${relPath} — ${err instanceof Error ? err.message : String(err)}`);
+      continue;
+    }
+
     const registryFilePath = `src/${relPath}`;
     const registryPath = resolve(config.registry, registryFilePath);
 

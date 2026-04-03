@@ -1,5 +1,6 @@
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
-import { resolve, dirname } from "path";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, renameSync, unlinkSync } from "fs";
+import { resolve, dirname, join } from "path";
+import { randomBytes } from "crypto";
 import { hashContent, getErrorMessage } from "../lib/hash.js";
 import { loadRegistry, findComponent, registryFileToRelative } from "../lib/registry.js";
 import { loadLockfile, saveLockfile } from "../lib/lockfile.js";
@@ -103,7 +104,23 @@ export async function addCommand(
       const hash = hashContent(content);
 
       mkdirSync(dirname(destPath), { recursive: true });
-      writeFileSync(destPath, content);
+      // destPath is derived from registryFileToRelative() which already rejects traversal,
+      // so the temp file is always written within the same validated output directory.
+      const tmpPath = join(
+        dirname(destPath),
+        `.radish-tmp-${randomBytes(6).toString("hex")}`
+      );
+      try {
+        writeFileSync(tmpPath, content);
+        renameSync(tmpPath, destPath);
+      } catch (err) {
+        try {
+          unlinkSync(tmpPath);
+        } catch {
+          // ignore cleanup errors
+        }
+        throw err;
+      }
 
       fileLocks[relPath] = {
         registryHash: hash,

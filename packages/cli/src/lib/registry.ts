@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { resolve, normalize, isAbsolute } from "path";
+import { resolve, posix } from "path";
 
 export interface RegistryComponent {
   name: string;
@@ -36,11 +36,22 @@ export function registryFileToRelative(registryFilePath: string): string {
       `Registry file path must start with "src/": ${registryFilePath}`
     );
   }
-  const relPath = normalize(registryFilePath.slice(4));
-  if (isAbsolute(relPath) || relPath.startsWith("..")) {
+  const relPath = posix.normalize(registryFilePath.slice(4));
+  if (posix.isAbsolute(relPath) || relPath.startsWith("..")) {
     throw new Error(
       `Registry file path contains path traversal: ${registryFilePath}`
     );
   }
   return relPath;
+}
+
+/**
+ * Validates that a relative path read from radish.lock.json does not
+ * contain path traversal sequences. Throws if unsafe.
+ */
+export function validateRelativePath(relPath: string): void {
+  const normalized = posix.normalize(relPath);
+  if (posix.isAbsolute(normalized) || normalized.startsWith("..")) {
+    throw new Error(`Unsafe relative path in lockfile: ${relPath}`);
+  }
 }
