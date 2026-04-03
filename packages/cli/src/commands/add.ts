@@ -8,7 +8,7 @@ import {
 } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { randomBytes } from "node:crypto";
-import { hashContent, getErrorMessage } from "../lib/hash.js";
+import { hashContent } from "../lib/hash.js";
 import { loadRegistry, findComponent, registryFileToRelative } from "../lib/registry.js";
 import { loadLockfile, saveLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
@@ -61,27 +61,23 @@ export async function addCommand(components: string[], options: AddOptions): Pro
       srcPath: string;
       destPath: string;
     }> = [];
-    let skip = false;
+    let skipComponent = false;
 
     for (const registryFilePath of component.files) {
       let relPath: string;
       try {
         relPath = registryFileToRelative(registryFilePath);
       } catch (err) {
-        console.error(
-          `Error: Invalid registry file path for component "${componentName}": ${getErrorMessage(err)}`,
+        throw new RadishError(
+          `Invalid registry file path for component "${componentName}": ${err instanceof Error ? err.message : String(err)}`,
         );
-        skip = true;
-        break;
       }
 
       const srcPath = resolve(config.registry, registryFilePath);
       if (!existsSync(srcPath)) {
-        console.error(
-          `Error: Registry file not found for component "${componentName}": ${srcPath}`,
+        throw new RadishError(
+          `Registry file not found for component "${componentName}": ${srcPath}`,
         );
-        skip = true;
-        break;
       }
 
       const destPath = resolve(cwd, config.outputDir, relPath);
@@ -89,14 +85,14 @@ export async function addCommand(components: string[], options: AddOptions): Pro
         console.warn(
           `⚠ File "${destPath}" already exists. Use --force to overwrite. Skipping component "${componentName}".`,
         );
-        skip = true;
+        skipComponent = true;
         break;
       }
 
       resolvedFiles.push({ relPath, srcPath, destPath });
     }
 
-    if (skip) {
+    if (skipComponent) {
       continue;
     }
 
