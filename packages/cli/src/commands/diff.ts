@@ -1,5 +1,6 @@
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { createPatch } from "diff";
 import { hashContent } from "../lib/hash.js";
 import { loadRegistry, validateRelativePath, relativeToRegistryFile } from "../lib/registry.js";
 import { loadLockfile } from "../lib/lockfile.js";
@@ -8,12 +9,14 @@ import { RadishError } from "../lib/errors.js";
 
 export interface DiffOptions {
   registry?: string;
+  target?: string;
 }
 
 export async function diffCommand(componentName: string, options: DiffOptions): Promise<void> {
   const cwd = process.cwd();
   const config = resolveConfig(cwd, {
     registry: options.registry,
+    outputDir: options.target,
   });
 
   if (!config.registry) {
@@ -45,6 +48,7 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
       continue;
     }
 
+    const localPath = resolve(cwd, config.outputDir, relPath);
     const registryPath = resolve(config.registry, relativeToRegistryFile(relPath));
 
     if (!existsSync(registryPath)) {
@@ -56,20 +60,12 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
     const newRegistryHash = hashContent(registryContent);
 
     if (newRegistryHash === fileLock.registryHash) {
-      console.log(`No upstream changes for ${relPath}`);
+      console.log(`✓ ${relPath}: no upstream changes`);
       continue;
     }
 
-    console.log(`Upstream changes for ${relPath}:`);
-    console.log(`  Old hash: ${fileLock.registryHash}`);
-    console.log(`  New hash: ${newRegistryHash}`);
-    console.log();
-
-    // Show the new registry file content (we only store hashes, not old content)
-    console.log(`--- ${relPath} (current registry version)`);
-    for (const line of registryContent.split("\n")) {
-      console.log(`+ ${line}`);
-    }
-    console.log();
+    const localContent = existsSync(localPath) ? readFileSync(localPath, "utf-8") : "";
+    const patch = createPatch(relPath, localContent, registryContent, "local", "registry");
+    console.log(patch);
   }
 }

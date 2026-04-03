@@ -36,6 +36,7 @@ program
   .command("diff <component>")
   .description("Show what changed upstream since you last synced a component")
   .option("--registry <path>", "Path to registry directory")
+  .option("--target <path>", `Output directory (default: ./${DEFAULT_OUTPUT_DIR})`)
   .action(diffCommand);
 
 program.parseAsync(process.argv).catch((error) => {
