@@ -1,7 +1,7 @@
 {
   "name": "radish-ui",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "prepare": "pnpm --filter @radish-ui/core build && pnpm --filter @radish-ui/cli build",
     "build": "pnpm --filter @radish-ui/core build && pnpm --filter @radish-ui/cli build",
@@ -10,6 +10,8 @@
     "sync": "pnpm --filter @radish-ui/cli build && pnpm --filter @radish-ui/demo sync"
   },
   "devDependencies": {
+    "oxfmt": "^0.43.0",
+    "oxlint": "^1.58.0",
     "typescript": "^5.4.5"
   }
 }

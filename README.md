@@ -88,12 +88,12 @@ CLI flags take precedence over the config file.
 
 ## Available components
 
-| Name | Files |
-|------|-------|
-| `layout` | `layout/layout.tsx`, `layout/sidebar.tsx`, `layout/menu.tsx` |
-| `datagrid` | `list/datagrid.tsx` |
-| `list-view` | `list/list-view.tsx` |
-| `text-field` | `field/text-field.tsx` |
+| Name         | Files                                                        |
+| ------------ | ------------------------------------------------------------ |
+| `layout`     | `layout/layout.tsx`, `layout/sidebar.tsx`, `layout/menu.tsx` |
+| `datagrid`   | `list/datagrid.tsx`                                          |
+| `list-view`  | `list/list-view.tsx`                                         |
+| `text-field` | `field/text-field.tsx`                                       |
 
 ## Demo
 

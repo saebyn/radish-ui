@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "description": "CLI for copying radish-ui registry components into your project",
   "license": "MIT",
-  "type": "module",
   "bin": {
     "radish": "./dist/index.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
+  "type": "module",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
