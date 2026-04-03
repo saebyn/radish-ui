@@ -32,12 +32,16 @@ export async function addCommand(
   const lockfile = loadLockfile(cwd);
   const allDeps = new Set<string>();
 
+  // Pre-validate all component names before writing anything
   for (const componentName of components) {
-    const component = findComponent(registry, componentName);
-    if (!component) {
+    if (!findComponent(registry, componentName)) {
       console.error(`Error: Component "${componentName}" not found in registry.`);
       process.exit(1);
     }
+  }
+
+  for (const componentName of components) {
+    const component = findComponent(registry, componentName)!;
 
     const existingLock = lockfile.components[componentName];
     if (existingLock && !options.force) {

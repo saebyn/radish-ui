@@ -27,11 +27,11 @@ pnpm add @radish-ui/core ra-core react react-dom
 ### 2. Add components with the CLI
 
 ```bash
-# Add a single component
-npx @radish-ui/cli add datagrid --registry ./node_modules/@radish-ui/registry
+# Add a single component (point --registry at a local checkout of packages/registry)
+npx @radish-ui/cli add datagrid --registry ./path/to/registry
 
 # Add multiple components at once
-npx @radish-ui/cli add layout datagrid list-view text-field --registry <path-to-registry>
+npx @radish-ui/cli add layout datagrid list-view text-field --registry ./path/to/registry
 ```
 
 Components are copied into `./src/components/radish/` by default (configurable via `--target` or `radish.json`).

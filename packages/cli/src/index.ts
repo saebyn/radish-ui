@@ -1,14 +1,18 @@
 import { Command } from "commander";
+import { createRequire } from "module";
 import { addCommand } from "./commands/add.js";
 import { syncCommand } from "./commands/sync.js";
 import { diffCommand } from "./commands/diff.js";
+
+const require = createRequire(import.meta.url);
+const packageJson = require("../package.json") as { version: string };
 
 const program = new Command();
 
 program
   .name("radish")
   .description("CLI for managing radish-ui registry components")
-  .version("0.1.0");
+  .version(packageJson.version);
 
 program
   .command("add <components...>")

@@ -1,5 +1,5 @@
-import { readFileSync, writeFileSync, existsSync } from "fs";
-import { resolve } from "path";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
+import { resolve, dirname } from "path";
 import { hashContent } from "../lib/hash.js";
 import { loadRegistry } from "../lib/registry.js";
 import { loadLockfile, saveLockfile, shouldUpdate } from "../lib/lockfile.js";
@@ -46,7 +46,24 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
       const registryPath = resolve(config.registry, registryFilePath);
 
       if (!existsSync(localPath)) {
-        console.warn(`⚠ Local file not found: ${localPath}. Skipping.`);
+        if (!(options.force ?? false)) {
+          console.warn(`⚠ Local file not found: ${localPath}. Skipping.`);
+          continue;
+        }
+
+        if (!existsSync(registryPath)) {
+          console.warn(`⚠ Registry file not found: ${registryPath}. Skipping.`);
+          continue;
+        }
+
+        const registryContent = readFileSync(registryPath);
+        const newRegistryHash = hashContent(registryContent);
+
+        mkdirSync(dirname(localPath), { recursive: true });
+        writeFileSync(localPath, registryContent);
+        fileLock.registryHash = newRegistryHash;
+        fileLock.localHash = newRegistryHash;
+        console.log(`✓ Restored ${relPath}`);
         continue;
       }
 

@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "sync": "radish sync --force"
+    "sync": "pnpm --filter @radish-ui/cli build && radish sync --force"
   },
   "dependencies": {
     "@radish-ui/core": "workspace:*",
