@@ -16,6 +16,14 @@ const RegistryFilePathSchema = z.string().refine(
   { message: 'Registry file path must start with "src/" and must not contain path traversal' },
 );
 
+// Matches valid npm package names: unscoped (e.g. "react-icons") and scoped
+// (e.g. "@radish-ui/core"). Follows the npm package name spec:
+// - Max 214 characters
+// - Lowercase only
+// - Unscoped: starts with a letter or digit, then letters/digits/hyphens/dots/underscores
+// - Scoped: @scope/name where both parts follow the unscoped rules
+const NPM_PACKAGE_NAME_RE = /^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]{0,213}$/;
+
 const RegistryComponentSchema = z.object({
   name: z
     .string()
@@ -24,7 +32,14 @@ const RegistryComponentSchema = z.object({
       "Component name must be lowercase alphanumeric words separated by hyphens, optionally grouped with slashes",
     ),
   files: z.array(RegistryFilePathSchema),
-  dependencies: z.array(z.string()),
+  dependencies: z.array(
+    z
+      .string()
+      .regex(
+        NPM_PACKAGE_NAME_RE,
+        'Dependency must be a valid npm package name (e.g. "react-icons" or "@scope/pkg")',
+      ),
+  ),
 });
 
 const RegistrySchema = z.object({
