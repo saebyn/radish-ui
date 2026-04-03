@@ -26,4 +26,3 @@ describe("hashContent", () => {
     expect(str).toBe(buf);
   });
 });
-

@@ -17,16 +17,13 @@ export function loadConfig(cwd: string): RadishConfig {
     return JSON.parse(raw) as RadishConfig;
   } catch (err) {
     console.error(
-      `Failed to read or parse radish config at "${configPath}": ${getErrorMessage(err)}`
+      `Failed to read or parse radish config at "${configPath}": ${getErrorMessage(err)}`,
     );
     process.exit(1);
   }
 }
 
-export function resolveConfig(
-  cwd: string,
-  flags: Partial<RadishConfig>
-): Required<RadishConfig> {
+export function resolveConfig(cwd: string, flags: Partial<RadishConfig>): Required<RadishConfig> {
   const file = loadConfig(cwd);
   return {
     registry: flags.registry ?? file.registry ?? "",

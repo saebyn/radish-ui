@@ -20,7 +20,7 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
 
   if (!config.registry) {
     console.error(
-      "Error: No registry path specified. Use --registry <path> or set registry in radish.json"
+      "Error: No registry path specified. Use --registry <path> or set registry in radish.json",
     );
     process.exit(1);
   }
@@ -44,7 +44,9 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
       try {
         validateRelativePath(relPath);
       } catch (err) {
-        console.warn(`⚠ Skipping unsafe path in lockfile: ${relPath} — ${err instanceof Error ? err.message : String(err)}`);
+        console.warn(
+          `⚠ Skipping unsafe path in lockfile: ${relPath} — ${err instanceof Error ? err.message : String(err)}`,
+        );
         continue;
       }
 
@@ -90,12 +92,12 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
         fileLock.localHash,
         newRegistryHash,
         fileLock.registryHash,
-        options.force ?? false
+        options.force ?? false,
       );
 
       if (reason === "modified") {
         console.warn(
-          `⚠ Skipping ${relPath} — local modifications detected.\n  Run \`radish diff ${componentName}\` to see upstream changes.`
+          `⚠ Skipping ${relPath} — local modifications detected.\n  Run \`radish diff ${componentName}\` to see upstream changes.`,
         );
         continue;
       }

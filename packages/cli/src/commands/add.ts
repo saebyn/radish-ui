@@ -1,4 +1,11 @@
-import { readFileSync, writeFileSync, mkdirSync, existsSync, renameSync, unlinkSync } from "node:fs";
+import {
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  existsSync,
+  renameSync,
+  unlinkSync,
+} from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { randomBytes } from "node:crypto";
 import { hashContent, getErrorMessage } from "../lib/hash.js";
@@ -12,10 +19,7 @@ export interface AddOptions {
   force?: boolean;
 }
 
-export async function addCommand(
-  components: string[],
-  options: AddOptions
-): Promise<void> {
+export async function addCommand(components: string[], options: AddOptions): Promise<void> {
   const cwd = process.cwd();
   const config = resolveConfig(cwd, {
     registry: options.registry,
@@ -24,7 +28,7 @@ export async function addCommand(
 
   if (!config.registry) {
     console.error(
-      "Error: No registry path specified. Use --registry <path> or set registry in radish.json"
+      "Error: No registry path specified. Use --registry <path> or set registry in radish.json",
     );
     process.exit(1);
   }
@@ -47,7 +51,7 @@ export async function addCommand(
     const existingLock = lockfile.components[componentName];
     if (existingLock && !options.force) {
       console.warn(
-        `⚠ Component "${componentName}" is already installed. Use --force to overwrite.`
+        `⚠ Component "${componentName}" is already installed. Use --force to overwrite.`,
       );
       continue;
     }
@@ -66,7 +70,7 @@ export async function addCommand(
         relPath = registryFileToRelative(registryFilePath);
       } catch (err) {
         console.error(
-          `Error: Invalid registry file path for component "${componentName}": ${getErrorMessage(err)}`
+          `Error: Invalid registry file path for component "${componentName}": ${getErrorMessage(err)}`,
         );
         skip = true;
         break;
@@ -75,7 +79,7 @@ export async function addCommand(
       const srcPath = resolve(config.registry, registryFilePath);
       if (!existsSync(srcPath)) {
         console.error(
-          `Error: Registry file not found for component "${componentName}": ${srcPath}`
+          `Error: Registry file not found for component "${componentName}": ${srcPath}`,
         );
         skip = true;
         break;
@@ -84,7 +88,7 @@ export async function addCommand(
       const destPath = resolve(cwd, config.outputDir, relPath);
       if (existsSync(destPath) && !options.force) {
         console.warn(
-          `⚠ File "${destPath}" already exists. Use --force to overwrite. Skipping component "${componentName}".`
+          `⚠ File "${destPath}" already exists. Use --force to overwrite. Skipping component "${componentName}".`,
         );
         skip = true;
         break;
@@ -106,10 +110,7 @@ export async function addCommand(
       mkdirSync(dirname(destPath), { recursive: true });
       // destPath is derived from registryFileToRelative() which already rejects traversal,
       // so the temp file is always written within the same validated output directory.
-      const tmpPath = join(
-        dirname(destPath),
-        `.radish-tmp-${randomBytes(6).toString("hex")}`
-      );
+      const tmpPath = join(dirname(destPath), `.radish-tmp-${randomBytes(6).toString("hex")}`);
       try {
         writeFileSync(tmpPath, content);
         if (options.force && existsSync(destPath)) {

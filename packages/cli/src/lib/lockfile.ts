@@ -25,7 +25,7 @@ export function loadLockfile(cwd: string): Lockfile {
   } catch (error) {
     console.warn(
       `Warning: Failed to read or parse lockfile at ${lockPath}. The lockfile will be ignored.`,
-      error
+      error,
     );
     return { components: {} };
   }
@@ -41,8 +41,11 @@ export function shouldUpdate(
   lockedLocalHash: string,
   newRegistryHash: string,
   lockedRegistryHash: string,
-  force: boolean
-): { update: boolean; reason: "force" | "unmodified-and-changed" | "modified" | "up-to-date" } {
+  force: boolean,
+): {
+  update: boolean;
+  reason: "force" | "unmodified-and-changed" | "modified" | "up-to-date";
+} {
   if (force) {
     return { update: true, reason: "force" };
   }

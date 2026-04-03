@@ -17,10 +17,7 @@ export function loadRegistry(registryDir: string): Registry {
   return JSON.parse(raw) as Registry;
 }
 
-export function findComponent(
-  registry: Registry,
-  name: string
-): RegistryComponent | undefined {
+export function findComponent(registry: Registry, name: string): RegistryComponent | undefined {
   return registry.components.find((c) => c.name === name);
 }
 
@@ -32,15 +29,11 @@ export function findComponent(
  */
 export function registryFileToRelative(registryFilePath: string): string {
   if (!registryFilePath.startsWith("src/")) {
-    throw new Error(
-      `Registry file path must start with "src/": ${registryFilePath}`
-    );
+    throw new Error(`Registry file path must start with "src/": ${registryFilePath}`);
   }
   const relPath = posix.normalize(registryFilePath.slice(4));
   if (posix.isAbsolute(relPath) || relPath.startsWith("..")) {
-    throw new Error(
-      `Registry file path contains path traversal: ${registryFilePath}`
-    );
+    throw new Error(`Registry file path contains path traversal: ${registryFilePath}`);
   }
   return relPath;
 }

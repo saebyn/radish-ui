@@ -9,10 +9,7 @@ export interface DiffOptions {
   registry?: string;
 }
 
-export async function diffCommand(
-  componentName: string,
-  options: DiffOptions
-): Promise<void> {
+export async function diffCommand(componentName: string, options: DiffOptions): Promise<void> {
   const cwd = process.cwd();
   const config = resolveConfig(cwd, {
     registry: options.registry,
@@ -20,7 +17,7 @@ export async function diffCommand(
 
   if (!config.registry) {
     console.error(
-      "Error: No registry path specified. Use --registry <path> or set registry in radish.json"
+      "Error: No registry path specified. Use --registry <path> or set registry in radish.json",
     );
     process.exit(1);
   }
@@ -29,7 +26,7 @@ export async function diffCommand(
   const componentLock = lockfile.components[componentName];
   if (!componentLock) {
     console.error(
-      `Error: Component "${componentName}" not found in radish.lock.json. Run \`radish add ${componentName}\` first.`
+      `Error: Component "${componentName}" not found in radish.lock.json. Run \`radish add ${componentName}\` first.`,
     );
     process.exit(1);
   }
@@ -45,7 +42,9 @@ export async function diffCommand(
     try {
       validateRelativePath(relPath);
     } catch (err) {
-      console.warn(`⚠ Skipping unsafe path in lockfile: ${relPath} — ${err instanceof Error ? err.message : String(err)}`);
+      console.warn(
+        `⚠ Skipping unsafe path in lockfile: ${relPath} — ${err instanceof Error ? err.message : String(err)}`,
+      );
       continue;
     }
 
