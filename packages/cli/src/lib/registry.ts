@@ -1,5 +1,6 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve, posix } from "node:path";
+import { RadishError, getErrorMessage } from "./errors.js";
 
 export interface RegistryComponent {
   name: string;
@@ -13,8 +14,15 @@ export interface Registry {
 
 export function loadRegistry(registryDir: string): Registry {
   const registryPath = resolve(registryDir, "registry.json");
-  const raw = readFileSync(registryPath, "utf-8");
-  return JSON.parse(raw) as Registry;
+  if (!existsSync(registryPath)) {
+    throw new RadishError(`Registry not found at "${registryPath}". Check your --registry path or radish.json.`);
+  }
+  try {
+    const raw = readFileSync(registryPath, "utf-8");
+    return JSON.parse(raw) as Registry;
+  } catch (err) {
+    throw new RadishError(`Failed to read or parse registry at "${registryPath}": ${getErrorMessage(err)}`);
+  }
 }
 
 export function findComponent(registry: Registry, name: string): RegistryComponent | undefined {
