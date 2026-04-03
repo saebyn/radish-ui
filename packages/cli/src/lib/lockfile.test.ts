@@ -16,6 +16,8 @@ describe("lockfile read/write", () => {
     rmSync(tmpDir, { recursive: true, force: true });
   });
 
+  const VALID_HASH = `sha256-${"a".repeat(64)}`;
+
   it("returns empty lockfile when none exists", () => {
     const lock = loadLockfile(tmpDir);
     expect(lock).toEqual({ components: {} });
@@ -27,8 +29,8 @@ describe("lockfile read/write", () => {
         datagrid: {
           files: {
             "list/datagrid.tsx": {
-              registryHash: "sha256-abc",
-              localHash: "sha256-abc",
+              registryHash: VALID_HASH,
+              localHash: VALID_HASH,
             },
           },
         },
@@ -47,8 +49,8 @@ describe("lockfile read/write", () => {
 });
 
 describe("shouldUpdate", () => {
-  const HASH_A = "sha256-aaaa";
-  const HASH_B = "sha256-bbbb";
+  const HASH_A = "sha256-" + "a".repeat(64);
+  const HASH_B = "sha256-" + "b".repeat(64);
 
   it("force=true always returns update=true", () => {
     const result = shouldUpdate(HASH_B, HASH_A, HASH_B, HASH_A, true);
