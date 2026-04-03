@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
+    "prepare": "pnpm --filter @radish-ui/core build && pnpm --filter @radish-ui/cli build",
     "build": "pnpm --filter @radish-ui/core build && pnpm --filter @radish-ui/cli build",
     "dev": "pnpm --filter @radish-ui/demo dev",
     "preview": "pnpm --filter @radish-ui/demo preview",

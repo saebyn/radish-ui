@@ -1,16 +1,13 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": false,
-    "declaration": true,
-    "declarationDir": "dist",
-    "outDir": "dist",
+    "noEmit": true,
     "lib": ["ES2022"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2022",
-    "allowImportingTsExtensions": false,
-    "jsx": "preserve",
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
     "types": ["node"]
   },
   "include": ["src"],
