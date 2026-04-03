@@ -9,6 +9,7 @@
     "preview": "pnpm --filter @radish-ui/demo preview",
     "sync": "pnpm --filter @radish-ui/cli build && pnpm --filter @radish-ui/demo sync",
     "format": "oxfmt .",
+    "format:check": "oxfmt --check .",
     "lint": "oxlint ."
   },
   "devDependencies": {
