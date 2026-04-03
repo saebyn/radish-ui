@@ -9,7 +9,7 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 import { randomBytes } from "node:crypto";
-import { RadishError, getErrorMessage } from "./errors.js";
+import { RadishError } from "./errors.js";
 
 /**
  * Asserts that resolvedPath is contained within allowedRoot after resolving
