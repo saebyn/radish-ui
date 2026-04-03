@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync, mkdirSync, existsSync, renameSync, unlinkSync } from "fs";
-import { resolve, dirname, join } from "path";
-import { randomBytes } from "crypto";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, renameSync, unlinkSync } from "node:fs";
+import { resolve, dirname, join } from "node:path";
+import { randomBytes } from "node:crypto";
 import { hashContent, getErrorMessage } from "../lib/hash.js";
 import { loadRegistry, findComponent, registryFileToRelative } from "../lib/registry.js";
 import { loadLockfile, saveLockfile } from "../lib/lockfile.js";

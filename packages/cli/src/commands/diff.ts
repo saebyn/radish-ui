@@ -1,5 +1,5 @@
-import { readFileSync, existsSync } from "fs";
-import { resolve } from "path";
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { hashContent } from "../lib/hash.js";
 import { loadRegistry, validateRelativePath } from "../lib/registry.js";
 import { loadLockfile } from "../lib/lockfile.js";

@@ -1,5 +1,5 @@
-import { readFileSync } from "fs";
-import { resolve, posix } from "path";
+import { readFileSync } from "node:fs";
+import { resolve, posix } from "node:path";
 
 export interface RegistryComponent {
   name: string;

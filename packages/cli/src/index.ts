@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { addCommand } from "./commands/add.js";
 import { syncCommand } from "./commands/sync.js";
 import { diffCommand } from "./commands/diff.js";

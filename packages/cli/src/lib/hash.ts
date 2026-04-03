@@ -1,4 +1,4 @@
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 
 export function hashContent(content: Buffer | string): string {
   return (
