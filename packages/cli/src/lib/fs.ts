@@ -1,4 +1,11 @@
-import { existsSync, mkdirSync, realpathSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  realpathSync,
+  renameSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { randomBytes } from "node:crypto";
 import { RadishError, getErrorMessage } from "./errors.js";
@@ -12,9 +19,7 @@ export function assertWithinDir(allowedRoot: string, resolvedPath: string): void
   const realRoot = realpathSync(allowedRoot);
   const realTarget = realpathSync(resolvedPath);
   if (!realTarget.startsWith(realRoot + "/") && realTarget !== realRoot) {
-    throw new RadishError(
-      `Path "${resolvedPath}" escapes the allowed directory "${allowedRoot}".`,
-    );
+    throw new RadishError(`Path "${resolvedPath}" escapes the allowed directory "${allowedRoot}".`);
   }
 }
 

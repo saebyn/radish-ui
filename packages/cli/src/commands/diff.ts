@@ -2,7 +2,12 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { createPatch } from "diff";
 import { hashContent } from "../lib/hash.js";
-import { loadRegistry, validateRelativePath, relativeToRegistryFile } from "../lib/registry.js";
+import {
+  loadRegistry,
+  validateRelativePath,
+  relativeToRegistryFile,
+  validateComponentName,
+} from "../lib/registry.js";
 import { loadLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
@@ -27,6 +32,7 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
   }
 
   const lockfile = loadLockfile(cwd);
+  validateComponentName(componentName);
   const componentLock = lockfile.components[componentName];
   if (!componentLock) {
     throw new RadishError(
@@ -66,7 +72,8 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
     }
 
     const localContent = existsSync(localPath)
-      ? (assertWithinDir(resolve(cwd, config.outputDir), localPath), readFileSync(localPath, "utf-8"))
+      ? (assertWithinDir(resolve(cwd, config.outputDir), localPath),
+        readFileSync(localPath, "utf-8"))
       : "";
     const patch = createPatch(relPath, localContent, registryContent, "local", "registry");
     console.log(patch);

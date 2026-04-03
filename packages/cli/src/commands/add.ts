@@ -1,7 +1,12 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { hashContent } from "../lib/hash.js";
-import { loadRegistry, findComponent, registryFileToRelative } from "../lib/registry.js";
+import {
+  loadRegistry,
+  findComponent,
+  registryFileToRelative,
+  validateComponentName,
+} from "../lib/registry.js";
 import { loadLockfile, saveLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
@@ -33,6 +38,7 @@ export async function addCommand(components: string[], options: AddOptions): Pro
 
   // Pre-validate all component names before writing anything
   for (const componentName of components) {
+    validateComponentName(componentName);
     if (!findComponent(registry, componentName)) {
       throw new RadishError(`Component "${componentName}" not found in registry.`);
     }
@@ -96,7 +102,12 @@ export async function addCommand(components: string[], options: AddOptions): Pro
       const content = readFileSync(srcPath);
       const hash = hashContent(content);
 
-      writeFileAtomicForce(resolve(cwd, config.outputDir), destPath, content, options.force ?? false);
+      writeFileAtomicForce(
+        resolve(cwd, config.outputDir),
+        destPath,
+        content,
+        options.force ?? false,
+      );
 
       fileLocks[relPath] = {
         registryHash: hash,

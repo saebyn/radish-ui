@@ -3,8 +3,15 @@ import { resolve, posix } from "node:path";
 import { z } from "zod";
 import { RadishError, getErrorMessage } from "./errors.js";
 
+const COMPONENT_NAME_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
+
 const RegistryComponentSchema = z.object({
-  name: z.string(),
+  name: z
+    .string()
+    .regex(
+      COMPONENT_NAME_RE,
+      "Component name must be lowercase alphanumeric words separated by hyphens, optionally grouped with slashes",
+    ),
   files: z.array(z.string()),
   dependencies: z.array(z.string()),
 });
@@ -35,6 +42,18 @@ export function loadRegistry(registryDir: string): Registry {
 
 export function findComponent(registry: Registry, name: string): RegistryComponent | undefined {
   return registry.components.find((c) => c.name === name);
+}
+
+/**
+ * Validates that a component name supplied by the user (CLI argument or
+ * lockfile key) matches the allowed pattern. Throws if invalid.
+ */
+export function validateComponentName(name: string): void {
+  if (!COMPONENT_NAME_RE.test(name)) {
+    throw new RadishError(
+      `Invalid component name "${name}". Names must be lowercase alphanumeric words separated by hyphens, optionally grouped with slashes (e.g. "button", "form/input").`,
+    );
+  }
 }
 
 /**
