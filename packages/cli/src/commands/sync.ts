@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { hashContent } from "../lib/hash.js";
-import { loadRegistry, validateRelativePath } from "../lib/registry.js";
+import { loadRegistry, validateRelativePath, relativeToRegistryFile } from "../lib/registry.js";
 import { loadLockfile, saveLockfile, shouldUpdate } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
@@ -51,8 +51,7 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
       }
 
       const localPath = resolve(cwd, config.outputDir, relPath);
-      const registryFilePath = `src/${relPath}`;
-      const registryPath = resolve(config.registry, registryFilePath);
+      const registryPath = resolve(config.registry, relativeToRegistryFile(relPath));
 
       if (!existsSync(localPath)) {
         if (!(options.force ?? false)) {

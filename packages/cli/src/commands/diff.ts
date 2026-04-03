@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { hashContent } from "../lib/hash.js";
-import { loadRegistry, validateRelativePath } from "../lib/registry.js";
+import { loadRegistry, validateRelativePath, relativeToRegistryFile } from "../lib/registry.js";
 import { loadLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
@@ -46,8 +46,7 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
       continue;
     }
 
-    const registryFilePath = `src/${relPath}`;
-    const registryPath = resolve(config.registry, registryFilePath);
+    const registryPath = resolve(config.registry, relativeToRegistryFile(relPath));
 
     if (!existsSync(registryPath)) {
       console.warn(`⚠ Registry file not found: ${registryPath}`);

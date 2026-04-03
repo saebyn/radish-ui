@@ -22,6 +22,15 @@ export function findComponent(registry: Registry, name: string): RegistryCompone
 }
 
 /**
+ * Given a relative path like "list/datagrid.tsx", returns the registry file
+ * path with the "src/" prefix, e.g. "src/list/datagrid.tsx".
+ * This is the symmetric inverse of registryFileToRelative.
+ */
+export function relativeToRegistryFile(relPath: string): string {
+  return `src/${relPath}`;
+}
+
+/**
  * Given a registry file path like "src/list/datagrid.tsx",
  * returns the relative path without the leading "src/" prefix,
  * e.g. "list/datagrid.tsx".
