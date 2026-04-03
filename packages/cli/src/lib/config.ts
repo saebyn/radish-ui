@@ -8,6 +8,8 @@ export interface RadishConfig {
   outputDir?: string;
 }
 
+export const DEFAULT_OUTPUT_DIR = "src/components/radish";
+
 export function loadConfig(cwd: string): RadishConfig {
   const configPath = resolve(cwd, "radish.json");
   if (!existsSync(configPath)) {
@@ -25,7 +27,7 @@ export function loadConfig(cwd: string): RadishConfig {
 
 export function resolveConfig(cwd: string, flags: Partial<RadishConfig>): Required<RadishConfig> {
   const file = loadConfig(cwd);
-  const outputDir = flags.outputDir ?? file.outputDir ?? "src/components/radish";
+  const outputDir = flags.outputDir ?? file.outputDir ?? DEFAULT_OUTPUT_DIR;
   try {
     validateRelativeDir(outputDir);
   } catch {

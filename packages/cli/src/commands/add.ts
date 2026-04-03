@@ -143,9 +143,15 @@ export async function addCommand(components: string[], options: AddOptions): Pro
   }
 
   if (allDeps.size > 0) {
+    const agent = process.env["npm_config_user_agent"] ?? "";
+    const pm = agent.startsWith("yarn")
+      ? "yarn add"
+      : agent.startsWith("npm")
+        ? "npm install"
+        : "pnpm add";
     console.log("\nDon't forget to install dependencies:");
     for (const dep of allDeps) {
-      console.log(`  pnpm add ${dep}`);
+      console.log(`  ${pm} ${dep}`);
     }
   }
 }
