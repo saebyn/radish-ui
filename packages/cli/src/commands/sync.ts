@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { hashContent } from "../lib/hash.js";
 import {
@@ -10,7 +10,7 @@ import {
 import { loadLockfile, saveLockfile, shouldUpdate } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
-import { writeFileAtomic, assertWithinDir, readFileWithinDir } from "../lib/fs.js";
+import { writeFileAtomic, readFileWithinDir } from "../lib/fs.js";
 
 export interface SyncOptions {
   registry?: string;
@@ -65,25 +65,21 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
       }
 
       const localPath = resolve(cwd, config.outputDir, relPath);
-      const registryPath = resolve(config.registry, relativeToRegistryFile(relPath));
+      const componentPath = resolve(config.registry, relativeToRegistryFile(relPath));
 
-      // Guard against registryPath pointing outside the registry directory
-      // (e.g. via malicious registry file entry or symlink). Done here, as soon as the path is constructed.
-      assertWithinDir(config.registry, registryPath);
+      if (!existsSync(componentPath)) {
+        console.warn(`⚠ Registry file not found: ${componentPath}. Skipping.`);
+        continue;
+      }
+
+      const registryContent = readFileWithinDir(config.registry, componentPath);
+      const newRegistryHash = hashContent(registryContent);
 
       if (!existsSync(localPath)) {
         if (!(options.force ?? false)) {
           console.warn(`⚠ Local file not found: ${localPath}. Skipping.`);
           continue;
         }
-
-        if (!existsSync(registryPath)) {
-          console.warn(`⚠ Registry file not found: ${registryPath}. Skipping.`);
-          continue;
-        }
-
-        const registryContent = readFileSync(registryPath);
-        const newRegistryHash = hashContent(registryContent);
 
         writeFileAtomic(resolve(cwd, config.outputDir), localPath, registryContent);
         componentLock.files[relPath] = {
@@ -95,16 +91,8 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
         continue;
       }
 
-      if (!existsSync(registryPath)) {
-        console.warn(`⚠ Registry file not found: ${registryPath}. Skipping.`);
-        continue;
-      }
-
       const localContent = readFileWithinDir(resolve(cwd, config.outputDir), localPath);
       const currentLocalHash = hashContent(localContent);
-
-      const registryContent = readFileSync(registryPath);
-      const newRegistryHash = hashContent(registryContent);
 
       const { update, reason } = shouldUpdate(
         currentLocalHash,
@@ -126,8 +114,7 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
         continue;
       }
 
-      // update === true (force or unmodified-and-changed)
-      assertWithinDir(resolve(cwd, config.outputDir), localPath);
+      // Either force update, or unmodified and changed in registry. In both cases, overwrite local file and update lock.
       writeFileAtomic(resolve(cwd, config.outputDir), localPath, registryContent);
       componentLock.files[relPath] = { registryHash: newRegistryHash, localHash: newRegistryHash };
       lockfileChanged++;

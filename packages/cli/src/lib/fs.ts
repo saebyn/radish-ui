@@ -72,14 +72,3 @@ export function readFileWithinDir(allowedRoot: string, filePath: string): string
   assertWithinDir(allowedRoot, filePath);
   return readFileSync(filePath, "utf-8");
 }
-
-/**
- * Writes data to path, wrapping any error in a RadishError with a clear message.
- */
-export function writeFileSafe(filePath: string, data: string): void {
-  try {
-    writeFileSync(filePath, data, "utf-8");
-  } catch (err) {
-    throw new RadishError(`Failed to write file "${filePath}": ${getErrorMessage(err)}`);
-  }
-}
