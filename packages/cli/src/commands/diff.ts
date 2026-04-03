@@ -18,6 +18,20 @@ export interface DiffOptions {
   target?: string;
 }
 
+/**
+ * Reads the local copy of a component file, asserting it is within the
+ * allowed output directory (symlink-safe). Returns an empty string if the
+ * file does not exist locally (so the diff shows the full registry content
+ * as an addition).
+ */
+function readLocalFile(allowedRoot: string, localPath: string): string {
+  if (!existsSync(localPath)) {
+    return "";
+  }
+  assertWithinDir(allowedRoot, localPath);
+  return readFileSync(localPath, "utf-8");
+}
+
 export async function diffCommand(componentName: string, options: DiffOptions): Promise<void> {
   const cwd = process.cwd();
   const config = resolveConfig(cwd, {
@@ -71,10 +85,7 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
       continue;
     }
 
-    const localContent = existsSync(localPath)
-      ? (assertWithinDir(resolve(cwd, config.outputDir), localPath),
-        readFileSync(localPath, "utf-8"))
-      : "";
+    const localContent = readLocalFile(resolve(cwd, config.outputDir), localPath);
     const patch = createPatch(relPath, localContent, registryContent, "local", "registry");
     console.log(patch);
   }
