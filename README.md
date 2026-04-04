@@ -2,6 +2,10 @@
 
 Tailwind CSS components for react-admin. Like shadcn/ui, but for react-admin — use `ra-core` for the headless state management and own your UI components.
 
+> [!WARNING]
+> **Early development — not production-ready.**
+> This project is brand new. Many components are missing, and those that exist are not fully implemented or tested. The API may change rapidly without notice and is not yet stable. Use at your own risk, and expect breaking changes.
+
 ## What is this?
 
 `radish-ui` provides:
