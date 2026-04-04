@@ -123,7 +123,7 @@ interface ListLayoutProps {
   className?: string;
 }
 
-function ListLayout({
+export function ListLayout({
   children,
   actions,
   aside,

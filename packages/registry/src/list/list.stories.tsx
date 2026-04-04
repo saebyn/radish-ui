@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { ListContextProvider } from "ra-core";
-import { List } from "./list";
+import { List, ListLayout } from "./list";
 import { Datagrid } from "./datagrid";
 import { TextField } from "../field/text-field";
 
@@ -50,13 +50,13 @@ type Story = StoryObj<typeof List>;
 export const Default: Story = {
   render: () => (
     <ListContextProvider value={{ ...baseListContext, data: records, isLoading: false }}>
-      <List>
+      <ListLayout>
         <Datagrid>
           <TextField source="title" label="Title" />
           <TextField source="author" label="Author" />
           <TextField source="year" label="Year" />
         </Datagrid>
-      </List>
+      </ListLayout>
     </ListContextProvider>
   ),
 };
@@ -64,7 +64,7 @@ export const Default: Story = {
 export const WithActions: Story = {
   render: () => (
     <ListContextProvider value={{ ...baseListContext, data: records, isLoading: false }}>
-      <List
+      <ListLayout
         actions={
           <button className="rounded bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700">
             + Create
@@ -75,7 +75,7 @@ export const WithActions: Story = {
           <TextField source="title" label="Title" />
           <TextField source="author" label="Author" />
         </Datagrid>
-      </List>
+      </ListLayout>
     </ListContextProvider>
   ),
 };
@@ -83,12 +83,12 @@ export const WithActions: Story = {
 export const Loading: Story = {
   render: () => (
     <ListContextProvider value={{ ...baseListContext, data: [], isLoading: true, isPending: true }}>
-      <List>
+      <ListLayout>
         <Datagrid>
           <TextField source="title" label="Title" />
           <TextField source="author" label="Author" />
         </Datagrid>
-      </List>
+      </ListLayout>
     </ListContextProvider>
   ),
 };
@@ -103,11 +103,11 @@ export const WithError: Story = {
         error: new Error("Failed to fetch posts"),
       }}
     >
-      <List>
+      <ListLayout>
         <Datagrid>
           <TextField source="title" label="Title" />
         </Datagrid>
-      </List>
+      </ListLayout>
     </ListContextProvider>
   ),
 };
