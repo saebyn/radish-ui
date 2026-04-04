@@ -1,8 +1,8 @@
 import { Admin, ListBase } from "@radish-ui/core";
 import { Resource } from "ra-core";
-import jsonServerProvider from "ra-data-json-server";
 import polyglotI18nProvider from "ra-i18n-polyglot";
 import englishMessages from "ra-language-english";
+import jsonServerProvider from "ra-data-json-server";
 import { Layout } from "./components/layout/layout";
 import { ListView } from "./components/list/list-view";
 import { Datagrid } from "./components/list/datagrid";
