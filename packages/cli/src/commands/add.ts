@@ -13,7 +13,7 @@ import {
 import { loadLockfile, saveLockfile, type FileLock } from "../lib/lockfile.js";
 import { resolveConfig, type RadishConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
-import { assertWithinDir, writeFileAtomic } from "../lib/fs.js";
+import { assertWithinDir, readFileWithinDir, writeFileAtomic } from "../lib/fs.js";
 
 export interface AddOptions {
   registry?: string;
@@ -123,9 +123,12 @@ async function writeComponentFiles(
     const registryHash = hashContent(registryContent);
 
     if (skip) {
-      // File already exists locally. Record the registry hash together with the
-      // current local hash so sync/diff can compare against the upstream version.
-      const localHash = hashContent(readFileSync(destPath));
+      // File already exists locally. Assert the destination is within the
+      // output directory before reading, to guard against symlink escapes.
+      // Record the registry hash together with the current local hash so
+      // sync/diff can compare against the upstream version.
+      const localContent = readFileWithinDir(resolve(cwd, config.outputDir), destPath);
+      const localHash = hashContent(localContent);
       fileLocks[relPath] = { registryHash, localHash };
       continue;
     }

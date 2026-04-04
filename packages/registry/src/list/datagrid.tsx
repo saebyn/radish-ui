@@ -43,7 +43,7 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
           className,
         )}
       >
-        <table className="min-w-full divide-y divide-gray-200 text-sm">
+        <table aria-hidden="true" className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
               {columns.map((col, i) => {
