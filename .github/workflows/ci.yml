@@ -29,6 +29,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Validate registry
+        run: pnpm validate-registry
+
       - name: Build
         run: pnpm build
 

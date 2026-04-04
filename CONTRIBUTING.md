@@ -103,6 +103,17 @@ pnpm storybook          # Start Storybook at http://localhost:6006
 pnpm storybook:build    # Build a static Storybook site
 ```
 
+### Validate registry
+
+```bash
+pnpm validate-registry  # Validate registry.json and radish.lock.json integrity
+```
+
+This script checks that all files referenced in `packages/registry/registry.json` exist on disk,
+that component names are unique and well-formed, that dependency names are valid npm package names,
+and that every component referenced in `apps/demo/radish.lock.json` is present in the registry.
+The same check runs automatically in CI.
+
 ### Sync demo components
 
 ```bash
