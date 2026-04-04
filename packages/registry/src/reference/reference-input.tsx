@@ -60,8 +60,7 @@ export function ReferenceInput({
       parse ??
       ((v: string) => {
         if (v === "") return null;
-        const n = Number(v);
-        return Number.isInteger(n) ? n : v;
+        return /^\d+$/.test(v) ? Number(v) : v;
       }),
   });
 
