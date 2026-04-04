@@ -102,7 +102,8 @@ npx @radish-ui/cli remove <component> [component...] [options]
 
 - Files that are **shared** with another installed component are skipped and not deleted (the other component still depends on them).
 - Files that have **local modifications** are skipped unless `--force` is passed — you will see a warning for each skipped file.
-- The component entry is always removed from `radish.lock.json` regardless of whether individual files were skipped.
+- The component entry is always removed from `radish.lock.json` regardless of whether individual files were skipped because they were shared or locally modified.
+- If a file cannot be deleted or read due to an unexpected error (for example, a permission error), the component entry is **kept** in `radish.lock.json` so it remains tracked. Resolve the issue and run `radish remove <component>` again.
 
 **Example:**
 

@@ -36,6 +36,10 @@ export async function removeCommand(components: string[], options: RemoveOptions
     }
   }
 
+  // componentsToRemove is mutated as we go: if a component fails to remove we
+  // delete it from this set so that subsequent components in the same
+  // invocation still treat its files as "owned by another installed component"
+  // and therefore protected from deletion.
   const componentsToRemove = new Set(uniqueComponents);
   let removedCount = 0;
 
@@ -59,6 +63,7 @@ export async function removeCommand(components: string[], options: RemoveOptions
     // Remove files from disk. Track any unlink failures so we can decide
     // whether it is safe to drop the lockfile entry afterwards.
     let fileRemovalFailed = false;
+    const force = options.force ?? false;
     for (const relPath of filePathsSet) {
       try {
         validateRelativePath(relPath);
@@ -81,17 +86,30 @@ export async function removeCommand(components: string[], options: RemoveOptions
         continue;
       }
 
-      // Warn about locally modified files unless --force is set.
-      const fileLock = componentLock.files[relPath];
-      const localContent = readFileWithinDir(resolve(cwd, config.outputDir), destPath);
-      const currentLocalHash = hashContent(localContent);
-      const userModified = currentLocalHash !== fileLock.localHash;
+      // When --force is not set, read the file and compare its hash against
+      // the lockfile to detect local modifications. If the file cannot be
+      // read for any reason (permissions, symlink escape, etc.) treat the
+      // situation as a removal failure so the lockfile entry is kept.
+      if (!force) {
+        try {
+          const fileLock = componentLock.files[relPath];
+          const localContent = readFileWithinDir(resolve(cwd, config.outputDir), destPath);
+          const currentLocalHash = hashContent(localContent);
+          const userModified = currentLocalHash !== fileLock.localHash;
 
-      if (userModified && !(options.force ?? false)) {
-        console.warn(
-          `⚠ Skipping "${relPath}" — local modifications detected. Use --force to remove anyway.`,
-        );
-        continue;
+          if (userModified) {
+            console.warn(
+              `⚠ Skipping "${relPath}" — local modifications detected. Use --force to remove anyway.`,
+            );
+            continue;
+          }
+        } catch (err) {
+          console.warn(
+            `⚠ Could not read "${relPath}" to check for local modifications: ${err instanceof Error ? err.message : String(err)}`,
+          );
+          fileRemovalFailed = true;
+          continue;
+        }
       }
 
       try {
@@ -106,8 +124,12 @@ export async function removeCommand(components: string[], options: RemoveOptions
     }
 
     if (fileRemovalFailed) {
-      // At least one file could not be deleted. Keep the lockfile entry so the
-      // component remains tracked and future remove/sync/diff calls stay correct.
+      // At least one file could not be deleted or read. Keep the lockfile
+      // entry so the component remains tracked and future remove/sync/diff
+      // calls stay correct. Also remove it from componentsToRemove so that
+      // subsequent components in this invocation still treat its files as
+      // owned by an installed component (and therefore protected).
+      componentsToRemove.delete(componentName);
       console.warn(
         `⚠ Component "${componentName}" was not removed from the lockfile because one or more files could not be deleted. Resolve any file permission issues and run \`radish remove ${componentName}\` again.`,
       );

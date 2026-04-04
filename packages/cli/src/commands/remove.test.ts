@@ -277,4 +277,44 @@ describe("removeCommand", () => {
     ) as LockFile;
     expect(lock.components["skeleton"]).toBeDefined();
   });
+
+  it("protects shared files of a failed component when removing subsequent components", async () => {
+    // Install both components: skeleton and datagrid share skeleton.tsx.
+    await addCommand(["skeleton", "datagrid"], {
+      registry: registryDir,
+      target: "components",
+      cwd: projectDir,
+    });
+
+    const { chmodSync } = await import("node:fs");
+    const skeletonDir = join(projectDir, "components", "skeleton");
+
+    // Make skeleton's directory non-writable so its files cannot be deleted.
+    chmodSync(skeletonDir, 0o555);
+
+    try {
+      // Remove skeleton first (will fail), then datagrid.
+      // datagrid shares skeleton.tsx — because skeleton failed it is still
+      // tracked, so skeleton.tsx must NOT be deleted when datagrid is removed.
+      await removeCommand(["skeleton", "datagrid"], {
+        target: "components",
+        cwd: projectDir,
+      });
+    } finally {
+      chmodSync(skeletonDir, 0o755);
+    }
+
+    // skeleton.tsx must still exist: skeleton removal failed (can't delete)
+    // and datagrid correctly preserved it as a shared file.
+    expect(existsSync(join(projectDir, "components", "skeleton", "skeleton.tsx"))).toBe(true);
+    // datagrid.tsx should be gone.
+    expect(existsSync(join(projectDir, "components", "list", "datagrid.tsx"))).toBe(false);
+
+    const lock = JSON.parse(
+      readFileSync(join(projectDir, "radish.lock.json"), "utf-8"),
+    ) as LockFile;
+    // skeleton remains tracked; datagrid was successfully removed.
+    expect(lock.components["skeleton"]).toBeDefined();
+    expect(lock.components["datagrid"]).toBeUndefined();
+  });
 });
