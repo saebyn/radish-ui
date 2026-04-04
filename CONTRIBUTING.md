@@ -36,9 +36,6 @@ cd radish-ui
 
 # 2. Install all dependencies (workspaces are resolved automatically)
 pnpm install
-
-# 3. Build the publishable packages once so the demo app can import them
-pnpm build
 ```
 
 ## Project Structure
@@ -66,7 +63,7 @@ pnpm build          # Build @radish-ui/core and @radish-ui/cli
 ### Dev server
 
 ```bash
-pnpm dev            # Start the demo app at http://localhost:5173
+pnpm dev            # Start the demo app at http://localhost:5173 (or available port)
 ```
 
 ### Tests
