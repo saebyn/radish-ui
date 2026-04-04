@@ -1,8 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "types": ["@testing-library/jest-dom"]
   },
-  "include": ["src", ".storybook"],
+  "include": ["src", ".storybook", "vitest.config.ts"],
   "exclude": ["node_modules", "dist", "storybook-static"]
 }
