@@ -163,6 +163,12 @@ radish-ui/
     └── demo/       # Working demo app
 ```
 
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for setup
+instructions, development scripts, code-style guidelines, commit format, and PR
+guidelines.
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for a list of notable changes.
