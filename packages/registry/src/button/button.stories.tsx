@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "storybook/test";
 import { ResourceContextProvider, RecordContextProvider, CoreAdminContext } from "ra-core";
-import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
+import { createMemoryRouter, RouterProvider, useLocation, useRouteError } from "react-router-dom";
 import { EditButton } from "./edit-button";
 import { DeleteButton } from "./delete-button";
 import { CreateButton } from "./create-button";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 
 const record = { id: 1, title: "Hello World" };
 
@@ -45,29 +45,64 @@ function makeMockDataProvider(onDelete: (resource: string, params: { id: unknown
   };
 }
 
+function RouteErrorDisplay() {
+  const error = useRouteError();
+  return (
+    <div className="p-4 text-red-600 text-sm">
+      {error instanceof Error ? error.message : String(error)}
+    </div>
+  );
+}
+
 interface WrapperProps {
   children: React.ReactNode;
   onNavigate: (path: string) => void;
   onDelete: (resource: string, params: { id: unknown }) => void;
 }
 
-const Wrapper = ({ children, onNavigate, onDelete }: WrapperProps) => (
-  <MemoryRouter initialEntries={["/"]}>
-    <CoreAdminContext dataProvider={makeMockDataProvider(onDelete)}>
+interface WrapperContextValue {
+  children: React.ReactNode;
+  onNavigate: (path: string) => void;
+  onDelete: (resource: string, params: { id: unknown }) => void;
+}
+
+const WrapperContext = React.createContext<WrapperContextValue>({
+  children: null,
+  onNavigate: () => {},
+  onDelete: () => {},
+});
+
+const stableRouter = createMemoryRouter(
+  [{ path: "*", errorElement: <RouteErrorDisplay />, element: <WrapperInner /> }],
+  { initialEntries: ["/"] },
+);
+
+function Wrapper({ children, onNavigate, onDelete }: WrapperProps) {
+  return (
+    <WrapperContext.Provider value={{ children, onNavigate, onDelete }}>
+      <RouterProvider router={stableRouter} />
+    </WrapperContext.Provider>
+  );
+}
+
+function WrapperInner() {
+  const { children, onNavigate, onDelete } = React.useContext(WrapperContext);
+  const dataProvider = useMemo(
+    () => makeMockDataProvider(onDelete),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+  return (
+    <CoreAdminContext dataProvider={dataProvider}>
       <ResourceContextProvider value="posts">
         <RecordContextProvider value={record}>
           <NavigationSpy onNavigate={onNavigate} />
-          <Routes>
-            <Route
-              path="*"
-              element={<div className="flex items-center gap-2 p-4">{children}</div>}
-            />
-          </Routes>
+          <div className="flex items-center gap-2 p-4">{children}</div>
         </RecordContextProvider>
       </ResourceContextProvider>
     </CoreAdminContext>
-  </MemoryRouter>
-);
+  );
+}
 
 // --- Shared spy args type ---
 
@@ -113,11 +148,7 @@ export const CustomLabel: EditStory = {
 export const DefaultDelete: StoryObj<SpyArgs> = {
   name: "DeleteButton",
   args: defaultSpyArgs,
-  render: (args) => (
-    <Wrapper onNavigate={args.onNavigate} onDelete={args.onDelete}>
-      <DeleteButton />
-    </Wrapper>
-  ),
+  render: () => <DeleteButton />,
 };
 
 // --- CreateButton ---
@@ -125,21 +156,17 @@ export const DefaultDelete: StoryObj<SpyArgs> = {
 export const DefaultCreate: StoryObj<SpyArgs> = {
   name: "CreateButton",
   args: defaultSpyArgs,
-  render: (args) => (
-    <Wrapper onNavigate={args.onNavigate} onDelete={args.onDelete}>
-      <CreateButton />
-    </Wrapper>
-  ),
+  render: () => <CreateButton />,
 };
 
 export const AllButtons: StoryObj<SpyArgs> = {
   name: "All Buttons Together",
   args: defaultSpyArgs,
-  render: (args) => (
-    <Wrapper onNavigate={args.onNavigate} onDelete={args.onDelete}>
+  render: () => (
+    <>
       <CreateButton />
       <EditButton />
       <DeleteButton />
-    </Wrapper>
+    </>
   ),
 };

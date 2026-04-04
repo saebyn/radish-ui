@@ -1,5 +1,6 @@
 import React from "react";
 import { useCreatePath, useResourceContext } from "ra-core";
+import { Link } from "react-router-dom";
 import { cn } from "@radish-ui/core";
 
 interface CreateButtonProps {
@@ -27,14 +28,14 @@ export function CreateButton({ resource, label = "Create", className }: CreateBu
   const path = createPath({ resource: resource ?? resourceContext ?? "", type: "create" });
 
   return (
-    <a
-      href={path}
+    <Link
+      to={path}
       className={cn(
         "inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition-colors",
         className,
       )}
     >
       {label}
-    </a>
+    </Link>
   );
 }

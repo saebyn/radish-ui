@@ -1,5 +1,6 @@
 import React from "react";
 import { useRecordContext, useCreatePath, useResourceContext } from "ra-core";
+import { Link } from "react-router-dom";
 import { cn } from "@radish-ui/core";
 
 interface EditButtonProps {
@@ -35,14 +36,14 @@ export function EditButton({ resource, label = "Edit", className }: EditButtonPr
   });
 
   return (
-    <a
-      href={path}
+    <Link
+      to={path}
       className={cn(
         "inline-flex items-center rounded-md px-2.5 py-1.5 text-xs font-medium text-indigo-600 hover:bg-indigo-50 hover:text-indigo-800 transition-colors",
         className,
       )}
     >
       {label}
-    </a>
+    </Link>
   );
 }
