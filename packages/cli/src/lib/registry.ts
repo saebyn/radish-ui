@@ -82,10 +82,16 @@ export async function loadRegistryAsync(registry: string): Promise<Registry> {
   if (!isRemoteRegistry(registry)) {
     return loadRegistry(registry);
   }
-  const url = `${registry.replace(/\/$/, "")}/registry.json`;
+  if (typeof globalThis.fetch !== "function") {
+    throw new RadishError(
+      `Remote registries require a Node.js runtime with built-in fetch support. Upgrade Node.js or use a local registry path instead: "${registry}"`,
+    );
+  }
+  const baseUrl = new URL(registry.replace(/\/?$/, "/"));
+  const url = new URL("registry.json", baseUrl).toString();
   let response: Response;
   try {
-    response = await fetch(url);
+    response = await globalThis.fetch(url);
   } catch (err) {
     throw new RadishError(`Network error fetching registry from "${url}": ${getErrorMessage(err)}`);
   }
@@ -115,10 +121,20 @@ export async function fetchRegistryFile(
   registry: string,
   registryFilePath: string,
 ): Promise<Buffer> {
-  const url = `${registry.replace(/\/$/, "")}/${registryFilePath}`;
+  if (typeof globalThis.fetch !== "function") {
+    throw new RadishError(
+      `Remote registries require a Node.js runtime with built-in fetch support. Upgrade Node.js or use a local registry path instead: "${registry}"`,
+    );
+  }
+  const baseUrl = new URL(registry.replace(/\/?$/, "/"));
+  const encodedRegistryFilePath = registryFilePath
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  const url = new URL(encodedRegistryFilePath, baseUrl).toString();
   let response: Response;
   try {
-    response = await fetch(url);
+    response = await globalThis.fetch(url);
   } catch (err) {
     throw new RadishError(
       `Network error fetching "${registryFilePath}" from registry: ${getErrorMessage(err)}`,

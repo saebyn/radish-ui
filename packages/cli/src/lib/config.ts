@@ -45,8 +45,10 @@ export function resolveConfig(cwd: string, flags: Partial<RadishConfig>): Requir
       `Invalid outputDir "${outputDir}": must be a relative path that does not escape the project root.`,
     );
   }
+  const registryFromFlags = flags.registry?.trim() || undefined;
+  const registryFromFile = file.registry?.trim() || undefined;
   return {
-    registry: flags.registry ?? file.registry ?? DEFAULT_REGISTRY_URL,
+    registry: registryFromFlags ?? registryFromFile ?? DEFAULT_REGISTRY_URL,
     outputDir,
   };
 }

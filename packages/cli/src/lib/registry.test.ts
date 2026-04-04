@@ -1,5 +1,11 @@
-import { describe, it, expect } from "vitest";
-import { registryFileToRelative, validateRelativePath } from "./registry.js";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import {
+  registryFileToRelative,
+  validateRelativePath,
+  isRemoteRegistry,
+  loadRegistryAsync,
+  fetchRegistryFile,
+} from "./registry.js";
 
 describe("registryFileToRelative", () => {
   it("strips the leading src/ prefix", () => {
@@ -63,9 +69,6 @@ describe("validateRelativePath", () => {
   });
 });
 
-import { vi, beforeEach, afterEach } from "vitest";
-import { isRemoteRegistry, loadRegistryAsync, fetchRegistryFile } from "./registry.js";
-
 describe("isRemoteRegistry", () => {
   it("returns true for https URLs", () => {
     expect(isRemoteRegistry("https://example.com/registry")).toBe(true);
@@ -91,6 +94,14 @@ describe("loadRegistryAsync (remote)", () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+  });
+
+  it("throws RadishError when fetch is unavailable", async () => {
+    vi.stubGlobal("fetch", undefined);
+
+    await expect(loadRegistryAsync("https://example.com/registry")).rejects.toThrow(
+      /built-in fetch support/,
+    );
   });
 
   it("fetches registry.json from the base URL", async () => {
@@ -146,6 +157,14 @@ describe("fetchRegistryFile", () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+  });
+
+  it("throws RadishError when fetch is unavailable", async () => {
+    vi.stubGlobal("fetch", undefined);
+
+    await expect(
+      fetchRegistryFile("https://example.com/registry", "src/button.tsx"),
+    ).rejects.toThrow(/built-in fetch support/);
   });
 
   it("fetches the file from the correct URL", async () => {
