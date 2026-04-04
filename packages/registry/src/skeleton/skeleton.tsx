@@ -85,7 +85,7 @@ interface SkeletonContainerProps {
  */
 export function SkeletonContainer({ label, className, children }: SkeletonContainerProps) {
   return (
-    <div role="status" aria-busy={true} aria-label={label} className={className}>
+    <div aria-busy="true" aria-label={label} className={className}>
       {children}
     </div>
   );
