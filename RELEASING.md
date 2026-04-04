@@ -82,11 +82,11 @@ pnpm --filter @radish-ui/cli publish --access public
 
 This project follows [Semantic Versioning](https://semver.org/):
 
-| Change type                            | Version bump |
-| -------------------------------------- | ------------ |
-| Breaking API or CLI changes            | **major**    |
-| New backwards-compatible features      | **minor**    |
-| Bug fixes, docs, internal refactoring  | **patch**    |
+| Change type                           | Version bump |
+| ------------------------------------- | ------------ |
+| Breaking API or CLI changes           | **major**    |
+| New backwards-compatible features     | **minor**    |
+| Bug fixes, docs, internal refactoring | **patch**    |
 
 While the project is in the **0.x** range, minor-version bumps may include
 breaking changes. Breaking changes will always be called out explicitly in the
