@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { CoreAdminContext, TestMemoryRouter } from "ra-core";
-import React from "react";
 import { Edit } from "./edit";
 import { SimpleForm } from "../form/simple-form";
 import { TextInput } from "../form/text-input";
