@@ -7,7 +7,7 @@ import {
   unlinkSync,
   writeFileSync,
 } from "node:fs";
-import { dirname, join, relative, sep } from "node:path";
+import { dirname, isAbsolute, join, relative, sep } from "node:path";
 import { randomBytes } from "node:crypto";
 import { RadishError } from "./errors.js";
 
@@ -25,7 +25,7 @@ export function assertWithinDir(allowedRoot: string, resolvedPath: string): void
   // An empty string means realTarget === realRoot (exact match, allowed).
   // A path starting with ".." means it escapes the root.
   // A path starting with sep on Windows (absolute) also escapes.
-  if (rel !== "" && (rel.startsWith("..") || rel.startsWith(sep))) {
+  if (rel !== "" && (rel.startsWith("..") || rel.startsWith(sep) || isAbsolute(rel))) {
     throw new RadishError(`Path "${resolvedPath}" escapes the allowed directory "${allowedRoot}".`);
   }
 }
