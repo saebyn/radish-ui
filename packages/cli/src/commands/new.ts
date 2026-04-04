@@ -314,19 +314,19 @@ ${dataProviderNote}
 Add new radish-ui components with:
 
 \`\`\`bash
-radish add <component-name>
+npx @radish-ui/cli add <component-name>
 \`\`\`
 
 Sync existing components to the latest version:
 
 \`\`\`bash
-radish sync
+npx @radish-ui/cli sync
 \`\`\`
 
 See what changed upstream for a component:
 
 \`\`\`bash
-radish diff <component-name>
+npx @radish-ui/cli diff <component-name>
 \`\`\`
 
 ## Project structure
