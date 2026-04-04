@@ -88,6 +88,61 @@ describe("TabbedShowLayout", () => {
     expect(screen.getByRole("tab", { name: "Details" })).toHaveAttribute("aria-selected", "true");
     expect(screen.getByRole("tab", { name: "Other" })).toHaveAttribute("aria-selected", "false");
   });
+
+  it("switches tabs with ArrowRight and ArrowLeft keyboard navigation", () => {
+    render(
+      <RecordContextProvider value={{ id: 1, title: "Hello", body: "The body" }}>
+        <TabbedShowLayout>
+          <TabPanel label="Details">
+            <TextField source="title" />
+          </TabPanel>
+          <TabPanel label="Content">
+            <TextField source="body" />
+          </TabPanel>
+        </TabbedShowLayout>
+      </RecordContextProvider>,
+    );
+
+    const tablist = screen.getByRole("tablist");
+
+    fireEvent.keyDown(tablist, { key: "ArrowRight" });
+    expect(screen.getByRole("tab", { name: "Content" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tabpanel", { name: "Content" })).not.toHaveAttribute("hidden");
+
+    fireEvent.keyDown(tablist, { key: "ArrowLeft" });
+    expect(screen.getByRole("tab", { name: "Details" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tabpanel", { name: "Details" })).not.toHaveAttribute("hidden");
+  });
+
+  it("switches tabs with Home and End keyboard navigation", () => {
+    render(
+      <RecordContextProvider
+        value={{ id: 1, title: "Hello", body: "The body", summary: "Short summary" }}
+      >
+        <TabbedShowLayout>
+          <TabPanel label="Details">
+            <TextField source="title" />
+          </TabPanel>
+          <TabPanel label="Content">
+            <TextField source="body" />
+          </TabPanel>
+          <TabPanel label="Summary">
+            <TextField source="summary" />
+          </TabPanel>
+        </TabbedShowLayout>
+      </RecordContextProvider>,
+    );
+
+    const tablist = screen.getByRole("tablist");
+
+    fireEvent.keyDown(tablist, { key: "End" });
+    expect(screen.getByRole("tab", { name: "Summary" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tabpanel", { name: "Summary" })).not.toHaveAttribute("hidden");
+
+    fireEvent.keyDown(tablist, { key: "Home" });
+    expect(screen.getByRole("tab", { name: "Details" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tabpanel", { name: "Details" })).not.toHaveAttribute("hidden");
+  });
 });
 
 describe("TabbedForm", () => {
@@ -143,5 +198,52 @@ describe("TabbedForm", () => {
     );
     fireEvent.click(screen.getByRole("tab", { name: "Settings" }));
     expect(screen.getByRole("tab", { name: "Settings" })).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("switches tabs with ArrowRight and ArrowLeft keyboard navigation", () => {
+    render(
+      <TabbedForm>
+        <FormTab label="Content">
+          <TextInput source="title" />
+        </FormTab>
+        <FormTab label="Settings">
+          <TextInput source="slug" />
+        </FormTab>
+      </TabbedForm>,
+      { wrapper: Wrapper },
+    );
+
+    const tablist = screen.getByRole("tablist");
+
+    fireEvent.keyDown(tablist, { key: "ArrowRight" });
+    expect(screen.getByRole("tab", { name: "Settings" })).toHaveAttribute("aria-selected", "true");
+
+    fireEvent.keyDown(tablist, { key: "ArrowLeft" });
+    expect(screen.getByRole("tab", { name: "Content" })).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("switches tabs with Home and End keyboard navigation", () => {
+    render(
+      <TabbedForm>
+        <FormTab label="Content">
+          <TextInput source="title" />
+        </FormTab>
+        <FormTab label="Settings">
+          <TextInput source="slug" />
+        </FormTab>
+        <FormTab label="Metadata">
+          <TextInput source="summary" />
+        </FormTab>
+      </TabbedForm>,
+      { wrapper: Wrapper },
+    );
+
+    const tablist = screen.getByRole("tablist");
+
+    fireEvent.keyDown(tablist, { key: "End" });
+    expect(screen.getByRole("tab", { name: "Metadata" })).toHaveAttribute("aria-selected", "true");
+
+    fireEvent.keyDown(tablist, { key: "Home" });
+    expect(screen.getByRole("tab", { name: "Content" })).toHaveAttribute("aria-selected", "true");
   });
 });

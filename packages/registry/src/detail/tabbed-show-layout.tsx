@@ -1,4 +1,4 @@
-import React, { useId, useState } from "react";
+import React, { useId, useRef, useState } from "react";
 import { cn } from "@radish-ui/core";
 
 interface TabPanelProps {
@@ -53,23 +53,29 @@ export function TabbedShowLayout({ children, className }: TabbedShowLayoutProps)
   const tabs = React.Children.toArray(children) as React.ReactElement<TabPanelProps>[];
   const [activeIndex, setActiveIndex] = useState(0);
   const uid = useId();
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const tabId = (i: number) => `${uid}-tab-${i}`;
   const panelId = (i: number) => `${uid}-panel-${i}`;
 
+  const activateTab = (index: number) => {
+    setActiveIndex(index);
+    tabRefs.current[index]?.focus();
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "ArrowRight") {
       e.preventDefault();
-      setActiveIndex((prev) => (prev + 1) % tabs.length);
+      activateTab((activeIndex + 1) % tabs.length);
     } else if (e.key === "ArrowLeft") {
       e.preventDefault();
-      setActiveIndex((prev) => (prev - 1 + tabs.length) % tabs.length);
+      activateTab((activeIndex - 1 + tabs.length) % tabs.length);
     } else if (e.key === "Home") {
       e.preventDefault();
-      setActiveIndex(0);
+      activateTab(0);
     } else if (e.key === "End") {
       e.preventDefault();
-      setActiveIndex(tabs.length - 1);
+      activateTab(tabs.length - 1);
     }
   };
 
@@ -89,6 +95,9 @@ export function TabbedShowLayout({ children, className }: TabbedShowLayoutProps)
         {tabs.map((tab, i) => (
           <button
             key={i}
+            ref={(el) => {
+              tabRefs.current[i] = el;
+            }}
             role="tab"
             type="button"
             id={tabId(i)}

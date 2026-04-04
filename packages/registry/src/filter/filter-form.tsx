@@ -8,6 +8,12 @@ interface FilterFormProps {
    * Each child receives its value from `filterValues` automatically via `useListContext`.
    */
   children: React.ReactNode;
+  /**
+   * When true, the filter bar is always visible regardless of `displayedFilters`.
+   * Useful when using `FilterForm` as a standalone bar without a `FilterButton`.
+   * Default: false.
+   */
+  alwaysOpen?: boolean;
   className?: string;
 }
 
@@ -16,7 +22,8 @@ interface FilterFormProps {
  * `displayedFilters` to show/hide itself.
  *
  * Rendered open when `displayedFilters["__filterForm"]` is truthy (toggled by
- * `<FilterButton>`). Can also always be visible when used as a standalone bar.
+ * `<FilterButton>`). Pass `alwaysOpen` to keep it permanently visible as a
+ * standalone bar.
  *
  * Copy this file into your project and customise freely.
  *
@@ -32,10 +39,10 @@ interface FilterFormProps {
  *   <Datagrid>...</Datagrid>
  * </List>
  */
-export function FilterForm({ children, className }: FilterFormProps) {
+export function FilterForm({ children, alwaysOpen = false, className }: FilterFormProps) {
   const { displayedFilters, filterValues, setFilters } = useListContext();
 
-  const isOpen = !!displayedFilters["__filterForm"];
+  const isOpen = alwaysOpen || !!displayedFilters["__filterForm"];
 
   const handleReset = () => {
     setFilters({}, displayedFilters);

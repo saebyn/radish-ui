@@ -36,11 +36,19 @@ export function ExportButton({
 
   const handleClick = () => {
     if (!data || data.length === 0) return;
-    type RecordWithId = { id: unknown };
-    const fetchRelated = (records: unknown[], relatedResource: string) =>
-      dataProvider
-        .getMany(relatedResource, { ids: records.map((r) => (r as RecordWithId).id) })
+    type RecordWithFields = Record<string, unknown>;
+    const fetchRelated = (records: unknown[], field: string, relatedResource: string) => {
+      const ids = Array.from(
+        new Set(
+          records
+            .map((r) => (r as RecordWithFields)[field])
+            .filter((id): id is NonNullable<typeof id> => id != null),
+        ),
+      );
+      return dataProvider
+        .getMany(relatedResource, { ids })
         .then(({ data: relatedData }: { data: unknown[] }) => relatedData);
+    };
     exporter(data, fetchRelated, dataProvider, resourceName);
   };
 
