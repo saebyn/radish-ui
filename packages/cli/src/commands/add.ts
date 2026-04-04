@@ -28,6 +28,8 @@ interface ResolvedFile {
   /** Registry-relative file path used to fetch from a remote registry. */
   registryFilePath: string;
   destPath: string;
+  /** When true the destination already exists and should be skipped at write time. */
+  skip: boolean;
 }
 
 /**
@@ -35,7 +37,8 @@ interface ResolvedFile {
  * For local registries, performs the assertWithinDir check on each srcPath here,
  * where the path is first constructed, rather than deferring it to write time.
  * For remote registries, srcPath is null and file content is fetched later.
- * Returns null if the component should be skipped (dest file exists, no --force).
+ * Files whose destination already exists are marked skip=true; the rest of the
+ * component's files are still resolved and written.
  */
 function resolveComponentFiles(
   component: RegistryComponent,
@@ -43,7 +46,7 @@ function resolveComponentFiles(
   config: Required<RadishConfig>,
   cwd: string,
   force: boolean,
-): ResolvedFile[] | null {
+): ResolvedFile[] {
   const resolvedFiles: ResolvedFile[] = [];
 
   for (const registryFilePath of component.files) {
@@ -70,14 +73,14 @@ function resolveComponentFiles(
     }
 
     const destPath = resolve(cwd, config.outputDir, relPath);
-    if (existsSync(destPath) && !force) {
+    const skip = existsSync(destPath) && !force;
+    if (skip) {
       console.warn(
-        `⚠ File "${destPath}" already exists. Use --force to overwrite. Skipping component "${componentName}".`,
+        `⚠ File "${destPath}" already exists. Use --force to overwrite. Skipping file "${relPath}" for component "${componentName}".`,
       );
-      return null;
     }
 
-    resolvedFiles.push({ relPath, srcPath, registryFilePath, destPath });
+    resolvedFiles.push({ relPath, srcPath, registryFilePath, destPath, skip });
   }
 
   return resolvedFiles;
@@ -96,7 +99,9 @@ async function writeComponentFiles(
 ): Promise<Record<string, FileLock>> {
   const fileLocks: Record<string, FileLock> = {};
 
-  for (const { relPath, srcPath, registryFilePath, destPath } of resolvedFiles) {
+  for (const { relPath, srcPath, registryFilePath, destPath, skip } of resolvedFiles) {
+    if (skip) continue;
+
     let content: Buffer;
     if (srcPath !== null) {
       content = readFileSync(srcPath);
@@ -175,7 +180,6 @@ export async function addCommand(components: string[], options: AddOptions): Pro
       cwd,
       options.force ?? false,
     );
-    if (resolvedFiles === null) continue;
 
     const fileLocks = await writeComponentFiles(
       resolvedFiles,
@@ -185,6 +189,8 @@ export async function addCommand(components: string[], options: AddOptions): Pro
       options.force ?? false,
     );
 
+    // fileLocks may be empty if every file was already present and --force was not passed.
+    // The component is still recorded in the lockfile so subsequent installs know it was added.
     lockfile.components[componentName] = { files: fileLocks };
     componentsWritten++;
 
