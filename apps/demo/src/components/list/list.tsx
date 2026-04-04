@@ -123,7 +123,7 @@ interface ListLayoutProps {
   className?: string;
 }
 
-function ListLayout({
+export function ListLayout({
   children,
   actions,
   aside,
@@ -166,9 +166,7 @@ function ListLayout({
       {/* Content + optional aside */}
       <div className="flex gap-4">
         <div className="flex-1">
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12 text-gray-500">Loading…</div>
-          ) : isEmpty && empty !== false ? (
+          {isEmpty && empty !== false ? (
             empty != null ? (
               <>{empty}</>
             ) : (
