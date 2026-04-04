@@ -165,12 +165,19 @@ export function Notification({ className }: { className?: string }) {
     if (!payload) return;
 
     const rawDuration = payload.notificationOptions?.autoHideDuration;
-    const duration: number | null =
-      rawDuration === null ? null : typeof rawDuration === "number" ? rawDuration : AUTO_HIDE_MS;
+    let duration: number | null;
+    if (rawDuration === null) {
+      duration = null;
+    } else if (typeof rawDuration === "number") {
+      duration = rawDuration;
+    } else {
+      duration = AUTO_HIDE_MS;
+    }
 
-    // Generate the key before entering setState to avoid relying on mutation
-    // inside a state updater function.
-    const key = ++keyRef.current;
+    // Generate the key before entering setState to avoid mutation inside a
+    // state updater function.
+    keyRef.current += 1;
+    const key = keyRef.current;
     setActive((prev) => [...prev, { ...payload, key, autoHideDuration: duration }]);
   }, [notifications, takeNotification]);
 
