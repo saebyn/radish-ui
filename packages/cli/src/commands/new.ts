@@ -12,6 +12,8 @@ export interface NewOptions {
   registry?: string;
   yes?: boolean;
   cwd?: string;
+  /** Override the project name (used in tests; in interactive mode it is prompted). */
+  projectName?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -384,7 +386,7 @@ function copyComponent(
 // ---------------------------------------------------------------------------
 
 export async function newCommand(
-  projectNameArg: string | undefined,
+  outDirArg: string | undefined,
   options: NewOptions,
 ): Promise<void> {
   const cwd = options.cwd ?? process.cwd();
@@ -394,19 +396,43 @@ export async function newCommand(
     clack.intro(chalk.bold.cyan("✦ radish new"));
   }
 
-  // 1. Resolve project name
+  // 1. Resolve output directory
+  const outDir =
+    outDirArg !== undefined && outDirArg.trim().length > 0 ? outDirArg.trim() : "my-admin";
+  const projectDir = resolve(cwd, outDir);
+  const dirBasename = outDir.split("/").at(-1) ?? outDir;
+
+  // 2. Handle existing directory (before prompting for name, so the user can bail early)
+  if (existsSync(projectDir)) {
+    if (useDefaults) {
+      throw new RadishError(
+        `Directory "${outDir}" already exists. Remove it or choose a different name.`,
+      );
+    }
+    const overwrite = await clack.confirm({
+      message: `Directory "${chalk.yellow(outDir)}" already exists. Continue and overwrite existing files?`,
+      initialValue: false,
+    });
+    if (clack.isCancel(overwrite) || !overwrite) {
+      clack.cancel("Cancelled.");
+      return;
+    }
+  }
+
+  // 3. Resolve project name (defaults to the directory basename)
+  const nameDefault = /^[a-z0-9][a-z0-9._-]*$/.test(dirBasename) ? dirBasename : "my-admin";
   let projectName: string;
-  if (projectNameArg !== undefined && projectNameArg.trim().length > 0) {
-    projectName = projectNameArg.trim();
+  if (options.projectName !== undefined && options.projectName.trim().length > 0) {
+    projectName = options.projectName.trim();
   } else if (useDefaults) {
-    projectName = "my-admin";
+    projectName = nameDefault;
   } else {
     const answer = await clack.text({
       message: "Project name",
-      placeholder: "my-admin",
-      defaultValue: "my-admin",
+      placeholder: nameDefault,
+      defaultValue: nameDefault,
       validate: (v) => {
-        const name = v.trim() || "my-admin";
+        const name = v?.trim() || nameDefault;
         if (!/^[a-z0-9][a-z0-9._-]*$/.test(name)) {
           return "Must start with a lowercase letter or digit and contain only lowercase letters, digits, dots, underscores, and hyphens.";
         }
@@ -416,7 +442,7 @@ export async function newCommand(
       clack.cancel("Cancelled.");
       return;
     }
-    projectName = (answer as string).trim() || "my-admin";
+    projectName = (answer as string).trim() || nameDefault;
   }
 
   if (!/^[a-z0-9][a-z0-9._-]*$/.test(projectName)) {
@@ -425,26 +451,7 @@ export async function newCommand(
     );
   }
 
-  const projectDir = resolve(cwd, projectName);
-
-  // 2. Handle existing directory
-  if (existsSync(projectDir)) {
-    if (useDefaults) {
-      throw new RadishError(
-        `Directory "${projectName}" already exists. Remove it or choose a different name.`,
-      );
-    }
-    const overwrite = await clack.confirm({
-      message: `Directory "${chalk.yellow(projectName)}" already exists. Continue and overwrite existing files?`,
-      initialValue: false,
-    });
-    if (clack.isCancel(overwrite) || !overwrite) {
-      clack.cancel("Cancelled.");
-      return;
-    }
-  }
-
-  // 3. Load registry component list (for the multi-select prompt)
+  // 4. Load registry component list (for the multi-select prompt)
   let availableComponents: string[] = [];
   let registryDir: string | undefined;
 
@@ -466,7 +473,7 @@ export async function newCommand(
     availableComponents = ["layout", "datagrid", "list-view", "text-field"];
   }
 
-  // 4. Select components
+  // 5. Select components
   let selectedComponents: string[];
   if (useDefaults) {
     selectedComponents = [...availableComponents];
@@ -483,7 +490,7 @@ export async function newCommand(
     selectedComponents = answer as string[];
   }
 
-  // 5. Data provider
+  // 6. Data provider
   const dataProviderChoices = ["JSON Server", "None"] as const;
   type DataProvider = (typeof dataProviderChoices)[number];
   let dataProvider: DataProvider;
@@ -502,7 +509,7 @@ export async function newCommand(
     dataProvider = answer as DataProvider;
   }
 
-  // 6. Package manager
+  // 7. Package manager
   const pmChoices = ["pnpm", "npm", "yarn"] as const;
   type PackageManager = (typeof pmChoices)[number];
   let packageManager: PackageManager;
@@ -521,7 +528,7 @@ export async function newCommand(
     packageManager = answer as PackageManager;
   }
 
-  // 7. Create directory structure and write files
+  // 8. Create directory structure and write files
   const spin = useDefaults ? null : clack.spinner();
   spin?.start("Scaffolding project…");
 
@@ -564,7 +571,7 @@ export async function newCommand(
     writeFileAtomic(projectDir, path, content);
   }
 
-  // 8. Copy component files (if registry available)
+  // 9. Copy component files (if registry available)
   const lockfileComponents: Record<string, { files: Record<string, FileLock> }> = {};
 
   if (registryDir !== undefined && selectedComponents.length > 0) {
@@ -599,16 +606,16 @@ export async function newCommand(
 
   spin?.stop(chalk.green(`Scaffolded ${projectName}`));
 
-  // 9. Print next steps
+  // 10. Print next steps
   const installCmd =
     packageManager === "npm" ? "npm install" : packageManager === "yarn" ? "yarn" : "pnpm install";
   const devCmd =
     packageManager === "npm" ? "npm run dev" : packageManager === "yarn" ? "yarn dev" : "pnpm dev";
 
   if (useDefaults) {
-    console.log(`\n✅ Created ${projectName} at ./${projectName}\n`);
+    console.log(`\n✅ Created ${projectName} at ./${outDir}\n`);
     console.log("Next steps:");
-    console.log(`  cd ${projectName}`);
+    console.log(`  cd ${outDir}`);
     console.log(`  ${installCmd}`);
     if (registryDir === undefined && selectedComponents.length > 0) {
       console.log(`  radish add ${selectedComponents.join(" ")}   # copy components from registry`);
@@ -617,7 +624,7 @@ export async function newCommand(
     console.log("");
   } else {
     const nextSteps = [
-      chalk.cyan(`cd ${projectName}`),
+      chalk.cyan(`cd ${outDir}`),
       chalk.cyan(installCmd),
       ...(registryDir === undefined && selectedComponents.length > 0
         ? [
@@ -631,7 +638,7 @@ export async function newCommand(
       .join("\n");
 
     clack.outro(
-      `${chalk.green("✓")} Created ${chalk.bold(projectName)} at ${chalk.dim(`./${projectName}`)}\n\n${chalk.bold("Next steps:")}\n${nextSteps}`,
+      `${chalk.green("✓")} Created ${chalk.bold(projectName)} at ${chalk.dim(`./${outDir}`)}\n\n${chalk.bold("Next steps:")}\n${nextSteps}`,
     );
   }
 }

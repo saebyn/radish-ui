@@ -50,7 +50,7 @@ program
   .action(diffCommand);
 
 program
-  .command("new [project-name]")
+  .command("new [directory]")
   .description("Scaffold a new radish-ui powered react-admin project")
   .option("--registry <path>", "Path to a local registry directory to copy components from")
   .option("-y, --yes", "Accept all defaults and skip interactive prompts")

@@ -106,6 +106,30 @@ describe("newCommand", () => {
     expect(pkgJson.scripts.build).toContain("tsc");
   });
 
+  it("uses directory basename as project name by default", async () => {
+    await newCommand("my-dir", { yes: true, cwd: tmpDir });
+
+    const pkgJson = JSON.parse(readFileSync(join(tmpDir, "my-dir", "package.json"), "utf-8")) as {
+      name: string;
+    };
+    expect(pkgJson.name).toBe("my-dir");
+  });
+
+  it("uses an explicit project name that differs from the directory name", async () => {
+    await newCommand("my-dir", { yes: true, cwd: tmpDir, projectName: "custom-name" });
+
+    const projectDir = join(tmpDir, "my-dir");
+    expect(existsSync(projectDir)).toBe(true);
+    const pkgJson = JSON.parse(readFileSync(join(projectDir, "package.json"), "utf-8")) as {
+      name: string;
+    };
+    expect(pkgJson.name).toBe("custom-name");
+    const appTsx = readFileSync(join(projectDir, "src", "App.tsx"), "utf-8");
+    expect(appTsx).toContain(`title="custom-name"`);
+    const html = readFileSync(join(projectDir, "index.html"), "utf-8");
+    expect(html).toContain("<title>custom-name</title>");
+  });
+
   it("includes ra-data-json-server by default (JSON Server provider)", async () => {
     await newCommand("json-app", { yes: true, cwd: tmpDir });
 
@@ -204,9 +228,9 @@ describe("newCommand", () => {
   });
 
   it("throws when project name is invalid", async () => {
-    await expect(newCommand("My_Bad_Name!", { yes: true, cwd: tmpDir })).rejects.toThrow(
-      /Invalid project name/,
-    );
+    await expect(
+      newCommand("valid-dir", { yes: true, cwd: tmpDir, projectName: "My_Bad_Name!" }),
+    ).rejects.toThrow(/Invalid project name/);
   });
 
   it("throws when directory exists and --yes is set", async () => {
