@@ -166,9 +166,9 @@ export async function initCommand(options: InitOptions): Promise<void> {
     console.log(`✓ Created ${outputDir}/`);
   }
 
-  // 6. Optionally create a sample component
+  // 6. Optionally create a sample component (only meaningful if the directory exists/was created)
   let createSample: boolean;
-  if (useDefaults) {
+  if (useDefaults || !createDir) {
     createSample = false;
   } else {
     const answer = await clack.confirm({
