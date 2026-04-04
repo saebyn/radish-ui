@@ -87,11 +87,7 @@ function Wrapper({ children, onNavigate, onDelete }: WrapperProps) {
 
 function WrapperInner() {
   const { children, onNavigate, onDelete } = React.useContext(WrapperContext);
-  const dataProvider = useMemo(
-    () => makeMockDataProvider(onDelete),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const dataProvider = useMemo(() => makeMockDataProvider(onDelete), [onDelete]);
   return (
     <CoreAdminContext dataProvider={dataProvider}>
       <ResourceContextProvider value="posts">
