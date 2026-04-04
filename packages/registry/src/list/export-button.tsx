@@ -48,6 +48,7 @@ export function ExportButton({
             .filter((id): id is NonNullable<typeof id> => id != null),
         ),
       );
+      if (ids.length === 0) return Promise.resolve([]);
       return dataProvider
         .getMany(relatedResource, { ids })
         .then(({ data: relatedData }: { data: unknown[] }) => relatedData);

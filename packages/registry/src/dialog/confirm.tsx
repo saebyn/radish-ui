@@ -78,7 +78,8 @@ export function Confirm({
     }
   }, [isOpen]);
 
-  // Close on backdrop click (native dialog behaviour)
+  // Close on backdrop click: native <dialog> does NOT close on outside-click by default;
+  // this is intentional custom behaviour that mirrors what users typically expect.
   const handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === dialogRef.current) {
       onClose();
