@@ -34,3 +34,14 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+      - name: Cache Storybook build cache
+        uses: actions/cache@v4
+        with:
+          path: packages/registry/node_modules/.cache/storybook
+          key: storybook-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'packages/registry/.storybook/**', 'packages/registry/src/**') }}
+          restore-keys: |
+            storybook-cache-${{ runner.os }}-
+
+      - name: Build Storybook
+        run: pnpm --filter @radish-ui/registry storybook:build
