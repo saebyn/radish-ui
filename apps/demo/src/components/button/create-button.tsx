@@ -1,4 +1,3 @@
-import React from "react";
 import { useCreatePath, useResourceContext } from "ra-core";
 import { Link } from "react-router-dom";
 import { cn } from "@radish-ui/core";

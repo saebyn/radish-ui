@@ -1,4 +1,3 @@
-import React from "react";
 import { useRecordContext, useResourceContext, useDeleteController } from "ra-core";
 import { cn } from "@radish-ui/core";
 

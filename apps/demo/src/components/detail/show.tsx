@@ -1,6 +1,7 @@
 import React from "react";
 import { ShowBase, useShowContext } from "ra-core";
 import { cn } from "@radish-ui/core";
+import { Skeleton, SkeletonContainer } from "../skeleton/skeleton";
 
 interface ShowProps {
   /**
@@ -103,7 +104,27 @@ function ShowLayout({
   }
 
   if (isLoading) {
-    return <div className="flex items-center justify-center py-12 text-gray-500">Loading…</div>;
+    return (
+      <SkeletonContainer label="Loading record…" className={cn("space-y-4", className)}>
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-8 w-48" />
+          {actions && <Skeleton className="h-8 w-24" />}
+        </div>
+        <div className="flex gap-4">
+          <div className="flex-1 rounded-lg border border-gray-200 bg-white shadow-sm">
+            <dl className="divide-y divide-gray-100">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="mt-1 h-4 sm:col-span-2 sm:mt-0" />
+                </div>
+              ))}
+            </dl>
+          </div>
+          {aside && <Skeleton className="h-48 w-64 shrink-0" />}
+        </div>
+      </SkeletonContainer>
+    );
   }
 
   const displayTitle = title === false ? null : (title ?? defaultTitle);
