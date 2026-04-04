@@ -19,6 +19,37 @@ npm install -g @radish-ui/cli
 
 ## Commands
 
+### `radish init`
+
+Initialize radish-ui in an existing project. Creates a `radish.json`
+configuration file and optionally sets up the components directory.
+
+```
+radish init [options]
+```
+
+**Options:**
+
+| Option             | Description                                      |
+| ------------------ | ------------------------------------------------ |
+| `--registry <url>` | Registry URL or path to use in `radish.json`     |
+| `-y, --yes`        | Accept all defaults and skip interactive prompts |
+
+**Examples:**
+
+```bash
+# Interactive setup
+npx @radish-ui/cli init
+
+# Non-interactive (CI / scripts)
+npx @radish-ui/cli init --yes
+
+# Use a custom registry
+npx @radish-ui/cli init --registry https://my-org.github.io/my-registry
+```
+
+---
+
 ### `radish add`
 
 Copy one or more components from the registry into your project.

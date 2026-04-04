@@ -10,7 +10,24 @@ and own them — no fighting library styles or peer-dependency conflicts.
 - A react-admin project (or a new one you're starting)
 - [Tailwind CSS](https://tailwindcss.com/docs/installation) configured in your project
 
-## 1. Install the core package
+## 1. Initialize radish-ui
+
+If you're adding radish-ui to an **existing** project, run:
+
+```bash
+npx @radish-ui/cli init
+```
+
+This creates a `radish.json` configuration file and sets up the default
+components directory. Skip to step 4 once that's done.
+
+For a **new** project, scaffold everything at once with:
+
+```bash
+npx @radish-ui/cli new my-admin
+```
+
+## 2. Install the core package
 
 ```bash
 pnpm add @radish-ui/core ra-core react react-dom
@@ -23,7 +40,7 @@ npm install @radish-ui/core ra-core react react-dom
 yarn add @radish-ui/core ra-core react react-dom
 ```
 
-## 2. Add components with the CLI
+## 3. Add components with the CLI
 
 Use `npx` to run the CLI without installing it globally:
 
@@ -41,7 +58,7 @@ via `--target` or a `radish.json` file).
 A `radish.lock.json` file is created to track which registry version each file
 came from.
 
-## 3. Wire up your Admin
+## 4. Wire up your Admin
 
 ```tsx
 import { Admin } from "@radish-ui/core";
@@ -52,7 +69,7 @@ export default function App() {
 }
 ```
 
-## 4. Keep components up to date
+## 5. Keep components up to date
 
 ```bash
 # Update unmodified components to the latest registry versions
@@ -63,7 +80,7 @@ npx @radish-ui/cli sync
 npx @radish-ui/cli sync --force
 ```
 
-## 5. See upstream changes before syncing
+## 6. See upstream changes before syncing
 
 ```bash
 npx @radish-ui/cli diff datagrid
