@@ -19,6 +19,8 @@ export interface AddOptions {
   registry?: string;
   target?: string;
   force?: boolean;
+  /** Override the working directory (used in tests; defaults to process.cwd()). */
+  cwd?: string;
 }
 
 interface ResolvedFile {
@@ -89,6 +91,10 @@ function resolveComponentFiles(
 /**
  * Writes all resolved files for a component and returns the per-file lock
  * entries to record in the lockfile.
+ *
+ * Files marked skip=true are not written, but their registry hash (from the
+ * source) and local hash (of the pre-existing file) are still recorded so
+ * that `radish sync` and `radish diff` can detect upstream changes.
  */
 async function writeComponentFiles(
   resolvedFiles: ResolvedFile[],
@@ -100,25 +106,33 @@ async function writeComponentFiles(
   const fileLocks: Record<string, FileLock> = {};
 
   for (const { relPath, srcPath, registryFilePath, destPath, skip } of resolvedFiles) {
-    if (skip) continue;
-
-    let content: Buffer;
+    // Always read/fetch the registry content so we can record the registry hash,
+    // even for skipped files (needed for sync/diff to detect upstream changes).
+    let registryContent: Buffer;
     if (srcPath !== null) {
-      content = readFileSync(srcPath);
+      registryContent = readFileSync(srcPath);
     } else {
       try {
-        content = await fetchRegistryFile(config.registry, registryFilePath);
+        registryContent = await fetchRegistryFile(config.registry, registryFilePath);
       } catch (err) {
         throw new RadishError(
           `Failed to fetch registry file "${registryFilePath}" for component "${componentName}": ${err instanceof Error ? err.message : String(err)}`,
         );
       }
     }
-    const hash = hashContent(content);
+    const registryHash = hashContent(registryContent);
 
-    writeFileAtomic(resolve(cwd, config.outputDir), destPath, content, force);
+    if (skip) {
+      // File already exists locally. Record the registry hash together with the
+      // current local hash so sync/diff can compare against the upstream version.
+      const localHash = hashContent(readFileSync(destPath));
+      fileLocks[relPath] = { registryHash, localHash };
+      continue;
+    }
 
-    fileLocks[relPath] = { registryHash: hash, localHash: hash };
+    writeFileAtomic(resolve(cwd, config.outputDir), destPath, registryContent, force);
+
+    fileLocks[relPath] = { registryHash, localHash: registryHash };
     console.log(`✓ Added ${componentName} → ${config.outputDir}/${relPath}`);
   }
 
@@ -144,7 +158,7 @@ function printDependencyHint(deps: Set<string>): void {
 }
 
 export async function addCommand(components: string[], options: AddOptions): Promise<void> {
-  const cwd = process.cwd();
+  const cwd = options.cwd ?? process.cwd();
   const config = resolveConfig(cwd, {
     registry: options.registry,
     outputDir: options.target,
@@ -189,8 +203,8 @@ export async function addCommand(components: string[], options: AddOptions): Pro
       options.force ?? false,
     );
 
-    // fileLocks may be empty if every file was already present and --force was not passed.
-    // The component is still recorded in the lockfile so subsequent installs know it was added.
+    // fileLocks always contains an entry for every file, including skipped ones
+    // (which carry the pre-existing local hash alongside the registry hash).
     lockfile.components[componentName] = { files: fileLocks };
     componentsWritten++;
 
