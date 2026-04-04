@@ -97,10 +97,18 @@ async function writeComponentFiles(
   const fileLocks: Record<string, FileLock> = {};
 
   for (const { relPath, srcPath, registryFilePath, destPath } of resolvedFiles) {
-    const content =
-      srcPath !== null
-        ? readFileSync(srcPath)
-        : await fetchRegistryFile(config.registry, registryFilePath);
+    let content: Buffer;
+    if (srcPath !== null) {
+      content = readFileSync(srcPath);
+    } else {
+      try {
+        content = await fetchRegistryFile(config.registry, registryFilePath);
+      } catch (err) {
+        throw new RadishError(
+          `Failed to fetch registry file "${registryFilePath}" for component "${componentName}": ${err instanceof Error ? err.message : String(err)}`,
+        );
+      }
+    }
     const hash = hashContent(content);
 
     writeFileAtomic(resolve(cwd, config.outputDir), destPath, content, force);
