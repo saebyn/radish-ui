@@ -2,7 +2,7 @@ import { useInput } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 export interface SelectChoice {
-  id: string | number;
+  id: string;
   name: string;
 }
 
@@ -45,7 +45,12 @@ export function SelectInput({
     field,
     fieldState: { error },
     isRequired,
-  } = useInput({ source });
+  } = useInput({
+    source,
+    // HTML <select> always yields a string; normalise the stored value to string
+    format: (v: unknown) => (v == null ? "" : String(v)),
+    parse: (v: string) => (v === "" ? null : v),
+  });
 
   const fieldLabel = label ?? capitalize(source);
 

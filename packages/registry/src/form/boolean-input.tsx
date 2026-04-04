@@ -25,8 +25,10 @@ export function BooleanInput({ source, label, className }: BooleanInputProps) {
     isRequired,
   } = useInput({
     source,
-    // ra-core passes string values from the DOM; coerce to boolean
-    format: (v: unknown) => Boolean(v),
+    // Normalize any serialized boolean value to a real boolean
+    format: (v: unknown) => v === true || v === 1 || v === "true" || v === "1",
+    // Always store a boolean, not a string
+    parse: (v: boolean) => v,
   });
 
   const fieldLabel = label ?? capitalize(source);

@@ -88,15 +88,23 @@ CLI flags take precedence over the config file.
 
 ## Available components
 
-| Name         | Files                                                        |
-| ------------ | ------------------------------------------------------------ |
-| `layout`     | `layout/layout.tsx`, `layout/sidebar.tsx`, `layout/menu.tsx` |
-| `datagrid`   | `list/datagrid.tsx`                                          |
-| `list`       | `list/list.tsx`                                              |
-| `show`       | `detail/show.tsx`, `detail/simple-show-layout.tsx`           |
-| `edit`       | `detail/edit.tsx`                                            |
-| `create`     | `detail/create.tsx`                                          |
-| `text-field` | `field/text-field.tsx`                                       |
+| Name            | Files                                                                                                                     |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `layout`        | `layout/layout.tsx`, `layout/sidebar.tsx`, `layout/menu.tsx`                                                              |
+| `datagrid`      | `list/datagrid.tsx`                                                                                                       |
+| `list`          | `list/list.tsx`                                                                                                           |
+| `pagination`    | `list/pagination.tsx`                                                                                                     |
+| `show`          | `detail/show.tsx`, `detail/simple-show-layout.tsx`                                                                        |
+| `edit`          | `detail/edit.tsx`                                                                                                         |
+| `create`        | `detail/create.tsx`                                                                                                       |
+| `text-field`    | `field/text-field.tsx`                                                                                                    |
+| `boolean-field` | `field/boolean-field.tsx`                                                                                                 |
+| `number-field`  | `field/number-field.tsx`                                                                                                  |
+| `date-field`    | `field/date-field.tsx`                                                                                                    |
+| `edit-button`   | `button/edit-button.tsx`                                                                                                  |
+| `delete-button` | `button/delete-button.tsx`                                                                                                |
+| `create-button` | `button/create-button.tsx`                                                                                                |
+| `simple-form`   | `form/simple-form.tsx`, `form/text-input.tsx`, `form/number-input.tsx`, `form/select-input.tsx`, `form/boolean-input.tsx` |
 
 ## Storybook
 

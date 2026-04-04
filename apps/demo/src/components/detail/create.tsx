@@ -22,7 +22,12 @@ interface CreateProps {
    * Where to redirect after a successful save.
    * Default "edit". Pass false to stay on the page.
    */
-  redirect?: "edit" | "list" | "show" | false | ((resource: string | undefined, id: unknown, data: unknown) => string);
+  redirect?:
+    | "edit"
+    | "list"
+    | "show"
+    | false
+    | ((resource: string | undefined, id: unknown, data: unknown) => string);
   /** Transform the form data before calling dataProvider.create(). */
   transform?: (data: unknown) => unknown | Promise<unknown>;
   /** Toolbar rendered in the header. */
@@ -73,12 +78,7 @@ export function Create({
       redirect={redirect}
       transform={transform}
     >
-      <CreateLayout
-        actions={actions}
-        aside={aside}
-        title={title}
-        className={className}
-      >
+      <CreateLayout actions={actions} aside={aside} title={title} className={className}>
         {children}
       </CreateLayout>
     </CreateBase>
@@ -95,13 +95,7 @@ interface CreateLayoutProps {
   className?: string;
 }
 
-function CreateLayout({
-  children,
-  actions,
-  aside,
-  title,
-  className,
-}: CreateLayoutProps) {
+function CreateLayout({ children, actions, aside, title, className }: CreateLayoutProps) {
   const { defaultTitle } = useCreateContext();
 
   const displayTitle = title === false ? null : (title ?? defaultTitle);
@@ -109,9 +103,7 @@ function CreateLayout({
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
-        {displayTitle && (
-          <h1 className="text-2xl font-bold text-gray-800">{displayTitle}</h1>
-        )}
+        {displayTitle && <h1 className="text-2xl font-bold text-gray-800">{displayTitle}</h1>}
         {actions && <div>{actions}</div>}
       </div>
 

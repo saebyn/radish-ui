@@ -27,7 +27,11 @@ interface EditProps {
    * Where to redirect after a successful save.
    * Default "list". Pass false to stay on the page.
    */
-  redirect?: "list" | "show" | false | ((resource: string | undefined, id: unknown, data: unknown) => string);
+  redirect?:
+    | "list"
+    | "show"
+    | false
+    | ((resource: string | undefined, id: unknown, data: unknown) => string);
   /** Transform the form data before calling dataProvider.update(). */
   transform?: (data: unknown, options?: { previousData: unknown }) => unknown | Promise<unknown>;
   /** Toolbar rendered in the header. */
@@ -131,11 +135,7 @@ function EditLayout({
   }
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12 text-gray-500">
-        Loading…
-      </div>
-    );
+    return <div className="flex items-center justify-center py-12 text-gray-500">Loading…</div>;
   }
 
   const displayTitle = title === false ? null : (title ?? defaultTitle);
@@ -143,9 +143,7 @@ function EditLayout({
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
-        {displayTitle && (
-          <h1 className="text-2xl font-bold text-gray-800">{displayTitle}</h1>
-        )}
+        {displayTitle && <h1 className="text-2xl font-bold text-gray-800">{displayTitle}</h1>}
         {actions && <div>{actions}</div>}
       </div>
 

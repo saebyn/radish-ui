@@ -54,7 +54,11 @@ export function NumberInput({
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
         {fieldLabel}
-        {isRequired && <span className="text-red-500 ml-1" aria-hidden>*</span>}
+        {isRequired && (
+          <span className="text-red-500 ml-1" aria-hidden>
+            *
+          </span>
+        )}
       </label>
       <input
         {...field}
@@ -69,7 +73,7 @@ export function NumberInput({
           "placeholder:text-gray-400",
           "focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500",
           error && "border-red-500 focus:border-red-500 focus:ring-red-500",
-          className
+          className,
         )}
       />
       {error && (

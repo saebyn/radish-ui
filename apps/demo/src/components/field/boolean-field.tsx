@@ -26,16 +26,14 @@ export function BooleanField({
   className,
 }: BooleanFieldProps) {
   const value = useFieldValue({ source });
-  const isTrue = Boolean(value);
+  const isTrue = value === true || value === 1 || value === "true" || value === "1";
 
   return (
     <span
       className={cn(
         "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium",
-        isTrue
-          ? "bg-green-100 text-green-800"
-          : "bg-gray-100 text-gray-600",
-        className
+        isTrue ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-600",
+        className,
       )}
       aria-label={isTrue ? trueLabel : falseLabel}
     >
@@ -49,7 +47,12 @@ export function BooleanField({
       ) : (
         <>
           <svg className="h-3 w-3" viewBox="0 0 12 12" fill="currentColor" aria-hidden>
-            <path d="M9 3 3 9M3 3l6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            <path
+              d="M9 3 3 9M3 3l6 6"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
           </svg>
           {falseLabel}
         </>

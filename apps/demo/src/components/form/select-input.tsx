@@ -2,7 +2,7 @@ import { useInput } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 export interface SelectChoice {
-  id: string | number;
+  id: string;
   name: string;
 }
 
@@ -45,7 +45,12 @@ export function SelectInput({
     field,
     fieldState: { error },
     isRequired,
-  } = useInput({ source });
+  } = useInput({
+    source,
+    // HTML <select> always yields a string; normalise the stored value to string
+    format: (v: unknown) => (v == null ? "" : String(v)),
+    parse: (v: string) => (v === "" ? null : v),
+  });
 
   const fieldLabel = label ?? capitalize(source);
 
@@ -53,7 +58,11 @@ export function SelectInput({
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">
         {fieldLabel}
-        {isRequired && <span className="text-red-500 ml-1" aria-hidden>*</span>}
+        {isRequired && (
+          <span className="text-red-500 ml-1" aria-hidden>
+            *
+          </span>
+        )}
       </label>
       <select
         {...field}
@@ -62,7 +71,7 @@ export function SelectInput({
           "block w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 shadow-sm bg-white",
           "focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500",
           error && "border-red-500 focus:border-red-500 focus:ring-red-500",
-          className
+          className,
         )}
       >
         <option value="">{emptyText}</option>

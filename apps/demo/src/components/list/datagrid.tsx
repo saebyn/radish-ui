@@ -68,7 +68,10 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
               );
             })}
             {rowActions && (
-              <th scope="col" className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <th
+                scope="col"
+                className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500"
+              >
                 Actions
               </th>
             )}

@@ -26,7 +26,7 @@ export function BooleanField({
   className,
 }: BooleanFieldProps) {
   const value = useFieldValue({ source });
-  const isTrue = Boolean(value);
+  const isTrue = value === true || value === 1 || value === "true" || value === "1";
 
   return (
     <span

@@ -53,10 +53,7 @@ export function DateField({
   const formatted = new Intl.DateTimeFormat(locales, formatOptions).format(date);
 
   return (
-    <time
-      dateTime={date.toISOString()}
-      className={cn("text-sm text-gray-700", className)}
-    >
+    <time dateTime={date.toISOString()} className={cn("text-sm text-gray-700", className)}>
       {formatted}
     </time>
   );
