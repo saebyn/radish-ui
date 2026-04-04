@@ -13,12 +13,14 @@ import {
 import { loadLockfile, saveLockfile, type FileLock } from "../lib/lockfile.js";
 import { resolveConfig, type RadishConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
-import { assertWithinDir, writeFileAtomic } from "../lib/fs.js";
+import { assertWithinDir, readFileWithinDir, writeFileAtomic } from "../lib/fs.js";
 
 export interface AddOptions {
   registry?: string;
   target?: string;
   force?: boolean;
+  /** Override the working directory (used in tests; defaults to process.cwd()). */
+  cwd?: string;
 }
 
 interface ResolvedFile {
@@ -28,6 +30,8 @@ interface ResolvedFile {
   /** Registry-relative file path used to fetch from a remote registry. */
   registryFilePath: string;
   destPath: string;
+  /** When true the destination already exists and should be skipped at write time. */
+  skip: boolean;
 }
 
 /**
@@ -35,7 +39,8 @@ interface ResolvedFile {
  * For local registries, performs the assertWithinDir check on each srcPath here,
  * where the path is first constructed, rather than deferring it to write time.
  * For remote registries, srcPath is null and file content is fetched later.
- * Returns null if the component should be skipped (dest file exists, no --force).
+ * Files whose destination already exists are marked skip=true; the rest of the
+ * component's files are still resolved and written.
  */
 function resolveComponentFiles(
   component: RegistryComponent,
@@ -43,7 +48,7 @@ function resolveComponentFiles(
   config: Required<RadishConfig>,
   cwd: string,
   force: boolean,
-): ResolvedFile[] | null {
+): ResolvedFile[] {
   const resolvedFiles: ResolvedFile[] = [];
 
   for (const registryFilePath of component.files) {
@@ -70,14 +75,14 @@ function resolveComponentFiles(
     }
 
     const destPath = resolve(cwd, config.outputDir, relPath);
-    if (existsSync(destPath) && !force) {
+    const skip = existsSync(destPath) && !force;
+    if (skip) {
       console.warn(
-        `⚠ File "${destPath}" already exists. Use --force to overwrite. Skipping component "${componentName}".`,
+        `⚠ File "${destPath}" already exists. Use --force to overwrite. Skipping file "${relPath}" for component "${componentName}".`,
       );
-      return null;
     }
 
-    resolvedFiles.push({ relPath, srcPath, registryFilePath, destPath });
+    resolvedFiles.push({ relPath, srcPath, registryFilePath, destPath, skip });
   }
 
   return resolvedFiles;
@@ -86,6 +91,10 @@ function resolveComponentFiles(
 /**
  * Writes all resolved files for a component and returns the per-file lock
  * entries to record in the lockfile.
+ *
+ * Files marked skip=true are not written, but their registry hash (from the
+ * source) and local hash (of the pre-existing file) are still recorded so
+ * that `radish sync` and `radish diff` can detect upstream changes.
  */
 async function writeComponentFiles(
   resolvedFiles: ResolvedFile[],
@@ -96,24 +105,37 @@ async function writeComponentFiles(
 ): Promise<Record<string, FileLock>> {
   const fileLocks: Record<string, FileLock> = {};
 
-  for (const { relPath, srcPath, registryFilePath, destPath } of resolvedFiles) {
-    let content: Buffer;
+  for (const { relPath, srcPath, registryFilePath, destPath, skip } of resolvedFiles) {
+    // Always read/fetch the registry content so we can record the registry hash,
+    // even for skipped files (needed for sync/diff to detect upstream changes).
+    let registryContent: Buffer;
     if (srcPath !== null) {
-      content = readFileSync(srcPath);
+      registryContent = readFileSync(srcPath);
     } else {
       try {
-        content = await fetchRegistryFile(config.registry, registryFilePath);
+        registryContent = await fetchRegistryFile(config.registry, registryFilePath);
       } catch (err) {
         throw new RadishError(
           `Failed to fetch registry file "${registryFilePath}" for component "${componentName}": ${err instanceof Error ? err.message : String(err)}`,
         );
       }
     }
-    const hash = hashContent(content);
+    const registryHash = hashContent(registryContent);
 
-    writeFileAtomic(resolve(cwd, config.outputDir), destPath, content, force);
+    if (skip) {
+      // File already exists locally. Assert the destination is within the
+      // output directory before reading, to guard against symlink escapes.
+      // Record the registry hash together with the current local hash so
+      // sync/diff can compare against the upstream version.
+      const localContent = readFileWithinDir(resolve(cwd, config.outputDir), destPath);
+      const localHash = hashContent(localContent);
+      fileLocks[relPath] = { registryHash, localHash };
+      continue;
+    }
 
-    fileLocks[relPath] = { registryHash: hash, localHash: hash };
+    writeFileAtomic(resolve(cwd, config.outputDir), destPath, registryContent, force);
+
+    fileLocks[relPath] = { registryHash, localHash: registryHash };
     console.log(`✓ Added ${componentName} → ${config.outputDir}/${relPath}`);
   }
 
@@ -139,7 +161,7 @@ function printDependencyHint(deps: Set<string>): void {
 }
 
 export async function addCommand(components: string[], options: AddOptions): Promise<void> {
-  const cwd = process.cwd();
+  const cwd = options.cwd ?? process.cwd();
   const config = resolveConfig(cwd, {
     registry: options.registry,
     outputDir: options.target,
@@ -175,7 +197,6 @@ export async function addCommand(components: string[], options: AddOptions): Pro
       cwd,
       options.force ?? false,
     );
-    if (resolvedFiles === null) continue;
 
     const fileLocks = await writeComponentFiles(
       resolvedFiles,
@@ -185,6 +206,8 @@ export async function addCommand(components: string[], options: AddOptions): Pro
       options.force ?? false,
     );
 
+    // fileLocks always contains an entry for every file, including skipped ones
+    // (which carry the pre-existing local hash alongside the registry hash).
     lockfile.components[componentName] = { files: fileLocks };
     componentsWritten++;
 

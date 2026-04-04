@@ -1,13 +1,18 @@
 {
   "components": [
     {
+      "name": "skeleton",
+      "files": ["src/skeleton/skeleton.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
       "name": "layout",
       "files": ["src/layout/layout.tsx", "src/layout/sidebar.tsx", "src/layout/menu.tsx"],
       "dependencies": ["@radish-ui/core", "react-icons"]
     },
     {
       "name": "datagrid",
-      "files": ["src/list/datagrid.tsx"],
+      "files": ["src/list/datagrid.tsx", "src/skeleton/skeleton.tsx"],
       "dependencies": ["@radish-ui/core"]
     },
     {
@@ -57,12 +62,16 @@
     },
     {
       "name": "show",
-      "files": ["src/detail/show.tsx", "src/detail/simple-show-layout.tsx"],
+      "files": [
+        "src/detail/show.tsx",
+        "src/detail/simple-show-layout.tsx",
+        "src/skeleton/skeleton.tsx"
+      ],
       "dependencies": ["@radish-ui/core"]
     },
     {
       "name": "edit",
-      "files": ["src/detail/edit.tsx"],
+      "files": ["src/detail/edit.tsx", "src/skeleton/skeleton.tsx"],
       "dependencies": ["@radish-ui/core"]
     },
     {

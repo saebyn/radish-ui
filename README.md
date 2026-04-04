@@ -98,6 +98,7 @@ CLI flags take precedence over the config file.
 
 | Name            | Files                                                                                                                     |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `skeleton`      | `skeleton/skeleton.tsx`                                                                                                   |
 | `layout`        | `layout/layout.tsx`, `layout/sidebar.tsx`, `layout/menu.tsx`                                                              |
 | `datagrid`      | `list/datagrid.tsx`                                                                                                       |
 | `list`          | `list/list.tsx`                                                                                                           |
