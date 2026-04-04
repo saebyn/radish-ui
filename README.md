@@ -1,5 +1,9 @@
 # radish-ui
 
+[![npm: @radish-ui/core](https://img.shields.io/npm/v/%40radish-ui%2Fcore?label=%40radish-ui%2Fcore)](https://www.npmjs.com/package/@radish-ui/core)
+[![npm: @radish-ui/cli](https://img.shields.io/npm/v/%40radish-ui%2Fcli?label=%40radish-ui%2Fcli)](https://www.npmjs.com/package/@radish-ui/cli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Tailwind CSS components for react-admin. Like shadcn/ui, but for react-admin — use `ra-core` for the headless state management and own your UI components.
 
 > [!WARNING]
@@ -158,6 +162,10 @@ radish-ui/
 └── apps/
     └── demo/       # Working demo app
 ```
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for a list of notable changes.
 
 ## License
 
