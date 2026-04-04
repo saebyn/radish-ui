@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { initCommand } from "./init.js";
+import { DEFAULT_REGISTRY_URL, DEFAULT_OUTPUT_DIR } from "../lib/config.js";
 
 describe("initCommand", () => {
   let tmpDir: string;
@@ -23,8 +24,8 @@ describe("initCommand", () => {
       registry: string;
       outputDir: string;
     };
-    expect(config.registry).toBe("https://saebyn.github.io/radish-ui/registry");
-    expect(config.outputDir).toBe("src/components/radish");
+    expect(config.registry).toBe(DEFAULT_REGISTRY_URL);
+    expect(config.outputDir).toBe(DEFAULT_OUTPUT_DIR);
   });
 
   it("creates the default components directory (--yes)", async () => {
@@ -73,5 +74,16 @@ describe("initCommand", () => {
     const raw = readFileSync(join(tmpDir, "radish.json"), "utf-8");
     const parsed = JSON.parse(raw) as Record<string, unknown>;
     expect(Object.keys(parsed)).toEqual(["registry", "outputDir"]);
+  });
+
+  it.each([
+    ["absolute path", "/etc/evil"],
+    ["traversal path", "../outside"],
+    ["Windows backslash", "src\\components"],
+    ["Windows drive prefix", "C:/evil"],
+  ])("throws for unsafe outputDir: %s", async (_label, unsafePath) => {
+    await expect(initCommand({ yes: true, cwd: tmpDir, outputDir: unsafePath })).rejects.toThrow(
+      /Invalid outputDir/,
+    );
   });
 });

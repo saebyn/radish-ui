@@ -5,9 +5,12 @@ import chalk from "chalk";
 import { writeFileAtomic } from "../lib/fs.js";
 import { RadishError } from "../lib/errors.js";
 import { DEFAULT_OUTPUT_DIR, DEFAULT_REGISTRY_URL } from "../lib/config.js";
+import { validateRelativeDir } from "../lib/registry.js";
 
 export interface InitOptions {
   registry?: string;
+  /** Output directory for components. Validated against validateRelativeDir(). */
+  outputDir?: string;
   yes?: boolean;
   /** Override the working directory (used in tests; defaults to process.cwd()). */
   cwd?: string;
@@ -107,13 +110,28 @@ export async function initCommand(options: InitOptions): Promise<void> {
 
   // 3. Resolve output directory
   let outputDir: string;
-  if (useDefaults) {
-    outputDir = DEFAULT_OUTPUT_DIR;
+  if (options.outputDir !== undefined || useDefaults) {
+    outputDir = options.outputDir ?? DEFAULT_OUTPUT_DIR;
+    try {
+      validateRelativeDir(outputDir);
+    } catch {
+      throw new RadishError(
+        `Invalid outputDir "${outputDir}": must be a relative path that does not escape the project root.`,
+      );
+    }
   } else {
     const answer = await clack.text({
       message: "Components output directory",
       placeholder: DEFAULT_OUTPUT_DIR,
       defaultValue: DEFAULT_OUTPUT_DIR,
+      validate(value) {
+        const trimmed = value.trim() || DEFAULT_OUTPUT_DIR;
+        try {
+          validateRelativeDir(trimmed);
+        } catch {
+          return "Must be a relative path that does not escape the project root.";
+        }
+      },
     });
     if (clack.isCancel(answer)) {
       clack.cancel("Cancelled.");
