@@ -1,6 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ListContextProvider } from "ra-core";
+import { ListContextProvider, CoreAdminContext } from "ra-core";
+import { MemoryRouter } from "react-router-dom";
 import { ExportButton } from "./export-button";
+
+const noop = () => Promise.resolve({ data: [] as never });
+
+const mockDataProvider = {
+  getList: () => Promise.resolve({ data: [], total: 0 }),
+  getOne: () => Promise.resolve({ data: { id: 1 } as never }),
+  getMany: noop,
+  getManyReference: () => Promise.resolve({ data: [], total: 0 }),
+  create: () => Promise.resolve({ data: { id: 2 } as never }),
+  update: () => Promise.resolve({ data: { id: 1 } as never }),
+  updateMany: noop,
+  delete: noop,
+  deleteMany: noop,
+};
 
 const baseListContext = {
   total: 3,
@@ -37,6 +52,15 @@ const meta: Meta<typeof ExportButton> = {
   title: "List/ExportButton",
   component: ExportButton,
   parameters: { layout: "padded" },
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <CoreAdminContext dataProvider={mockDataProvider}>
+          <Story />
+        </CoreAdminContext>
+      </MemoryRouter>
+    ),
+  ],
 };
 
 export default meta;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { cn } from "@radish-ui/core";
 
 interface TabPanelProps {
@@ -52,6 +52,22 @@ interface TabbedShowLayoutProps {
 export function TabbedShowLayout({ children, className }: TabbedShowLayoutProps) {
   const tabs = React.Children.toArray(children) as React.ReactElement<TabPanelProps>[];
   const [activeIndex, setActiveIndex] = useState(0);
+  const uid = useId();
+
+  const tabId = (i: number) => `${uid}-tab-${i}`;
+  const panelId = (i: number) => `${uid}-panel-${i}`;
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "ArrowRight") {
+      setActiveIndex((prev) => (prev + 1) % tabs.length);
+    } else if (e.key === "ArrowLeft") {
+      setActiveIndex((prev) => (prev - 1 + tabs.length) % tabs.length);
+    } else if (e.key === "Home") {
+      setActiveIndex(0);
+    } else if (e.key === "End") {
+      setActiveIndex(tabs.length - 1);
+    }
+  };
 
   return (
     <div
@@ -61,15 +77,20 @@ export function TabbedShowLayout({ children, className }: TabbedShowLayoutProps)
       )}
     >
       {/* Tab bar */}
-      <div role="tablist" className="flex border-b border-gray-200 dark:border-gray-700">
+      <div
+        role="tablist"
+        className="flex border-b border-gray-200 dark:border-gray-700"
+        onKeyDown={handleKeyDown}
+      >
         {tabs.map((tab, i) => (
           <button
             key={i}
             role="tab"
             type="button"
-            id={`tab-${i}`}
+            id={tabId(i)}
             aria-selected={activeIndex === i}
-            aria-controls={`tabpanel-${i}`}
+            aria-controls={panelId(i)}
+            tabIndex={activeIndex === i ? 0 : -1}
             onClick={() => setActiveIndex(i)}
             className={cn(
               "px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500",
@@ -88,8 +109,8 @@ export function TabbedShowLayout({ children, className }: TabbedShowLayoutProps)
         <div
           key={i}
           role="tabpanel"
-          id={`tabpanel-${i}`}
-          aria-labelledby={`tab-${i}`}
+          id={panelId(i)}
+          aria-labelledby={tabId(i)}
           hidden={activeIndex !== i}
           className="px-6 pb-6"
         >

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useId, useRef } from "react";
 import { cn } from "@radish-ui/core";
 
 interface ConfirmProps {
@@ -50,14 +50,31 @@ export function Confirm({
   className,
 }: ConfirmProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const uid = useId();
+  const titleId = `${uid}-title`;
+  const contentId = `${uid}-content`;
 
   useEffect(() => {
     const el = dialogRef.current;
     if (!el) return;
     if (isOpen) {
-      if (!el.open) el.showModal?.();
+      if (!el.open) {
+        if (typeof el.showModal === "function") {
+          el.showModal();
+        } else if (typeof el.show === "function") {
+          el.show();
+        } else {
+          el.setAttribute("open", "");
+        }
+      }
     } else {
-      if (el.open) el.close?.();
+      if (el.open) {
+        if (typeof el.close === "function") {
+          el.close();
+        } else {
+          el.removeAttribute("open");
+        }
+      }
     }
   }, [isOpen]);
 
@@ -81,8 +98,8 @@ export function Confirm({
     <dialog
       ref={dialogRef}
       onClick={handleDialogClick}
-      aria-labelledby="confirm-title"
-      aria-describedby={content ? "confirm-content" : undefined}
+      aria-labelledby={titleId}
+      aria-describedby={content ? contentId : undefined}
       className={cn(
         "rounded-xl border border-gray-200 bg-white p-0 shadow-xl backdrop:bg-black/40",
         "dark:border-gray-700 dark:bg-gray-800",
@@ -92,12 +109,12 @@ export function Confirm({
       )}
     >
       <div className="flex flex-col gap-4 p-6">
-        <h2 id="confirm-title" className="text-base font-semibold text-gray-900 dark:text-gray-100">
+        <h2 id={titleId} className="text-base font-semibold text-gray-900 dark:text-gray-100">
           {title}
         </h2>
 
         {content && (
-          <p id="confirm-content" className="text-sm text-gray-600 dark:text-gray-300">
+          <p id={contentId} className="text-sm text-gray-600 dark:text-gray-300">
             {content}
           </p>
         )}

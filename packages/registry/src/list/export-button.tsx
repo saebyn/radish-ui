@@ -1,4 +1,4 @@
-import { useListContext, defaultExporter } from "ra-core";
+import { useListContext, defaultExporter, useDataProvider } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 interface ExportButtonProps {
@@ -11,8 +11,6 @@ interface ExportButtonProps {
    * Defaults to ra-core's `defaultExporter` which downloads a CSV.
    */
   exporter?: typeof defaultExporter;
-  /** Maximum number of records to export. Default: 1000. */
-  maxResults?: number;
   className?: string;
 }
 
@@ -32,12 +30,17 @@ export function ExportButton({
   className,
 }: ExportButtonProps) {
   const { data, resource: contextResource, isLoading } = useListContext();
+  const dataProvider = useDataProvider();
 
   const resourceName = resource ?? contextResource;
 
   const handleClick = () => {
     if (!data || data.length === 0) return;
-    exporter(data, () => Promise.resolve([]), null as never, resourceName);
+    const fetchRelated = (records: unknown[], relatedResource: string) =>
+      dataProvider
+        .getMany(relatedResource, { ids: records.map((r) => (r as { id: unknown }).id) })
+        .then(({ data: relatedData }: { data: unknown[] }) => relatedData);
+    exporter(data, fetchRelated, dataProvider, resourceName);
   };
 
   const disabled = isLoading || !data || data.length === 0;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { Form, useSaveContext } from "ra-core";
 import { cn } from "@radish-ui/core";
 
@@ -77,6 +77,22 @@ function TabbedFormContent({
   const { saving } = useSaveContext();
   const tabs = React.Children.toArray(children) as React.ReactElement<FormTabProps>[];
   const [activeIndex, setActiveIndex] = useState(0);
+  const uid = useId();
+
+  const tabId = (i: number) => `${uid}-tab-${i}`;
+  const panelId = (i: number) => `${uid}-panel-${i}`;
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "ArrowRight") {
+      setActiveIndex((prev) => (prev + 1) % tabs.length);
+    } else if (e.key === "ArrowLeft") {
+      setActiveIndex((prev) => (prev - 1 + tabs.length) % tabs.length);
+    } else if (e.key === "Home") {
+      setActiveIndex(0);
+    } else if (e.key === "End") {
+      setActiveIndex(tabs.length - 1);
+    }
+  };
 
   return (
     <div
@@ -86,15 +102,20 @@ function TabbedFormContent({
       )}
     >
       {/* Tab bar */}
-      <div role="tablist" className="flex border-b border-gray-200 dark:border-gray-700">
+      <div
+        role="tablist"
+        className="flex border-b border-gray-200 dark:border-gray-700"
+        onKeyDown={handleKeyDown}
+      >
         {tabs.map((tab, i) => (
           <button
             key={i}
             role="tab"
             type="button"
-            id={`form-tab-${i}`}
+            id={tabId(i)}
             aria-selected={activeIndex === i}
-            aria-controls={`form-tabpanel-${i}`}
+            aria-controls={panelId(i)}
+            tabIndex={activeIndex === i ? 0 : -1}
             onClick={() => setActiveIndex(i)}
             className={cn(
               "px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500",
@@ -113,8 +134,8 @@ function TabbedFormContent({
         <div
           key={i}
           role="tabpanel"
-          id={`form-tabpanel-${i}`}
-          aria-labelledby={`form-tab-${i}`}
+          id={panelId(i)}
+          aria-labelledby={tabId(i)}
           hidden={activeIndex !== i}
         >
           {tab}

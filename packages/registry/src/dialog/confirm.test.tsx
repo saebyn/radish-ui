@@ -1,16 +1,6 @@
-import { describe, it, expect, vi, beforeAll } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Confirm } from "./confirm";
-
-// jsdom doesn't implement showModal/close on HTMLDialogElement natively.
-beforeAll(() => {
-  HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
-    this.setAttribute("open", "");
-  });
-  HTMLDialogElement.prototype.close = vi.fn(function (this: HTMLDialogElement) {
-    this.removeAttribute("open");
-  });
-});
 
 describe("Confirm", () => {
   it("renders nothing interactive when isOpen is false", () => {

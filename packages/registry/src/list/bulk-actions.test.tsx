@@ -1,18 +1,9 @@
-import { describe, it, expect, vi, beforeAll } from "vitest";
+import { describe, it, expect } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ListContextProvider, ResourceContextProvider, CoreAdminContext } from "ra-core";
 import { MemoryRouter } from "react-router-dom";
 import { BulkActionsToolbar } from "./bulk-actions-toolbar";
 import { BulkDeleteButton } from "./bulk-delete-button";
-
-beforeAll(() => {
-  HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
-    this.setAttribute("open", "");
-  });
-  HTMLDialogElement.prototype.close = vi.fn(function (this: HTMLDialogElement) {
-    this.removeAttribute("open");
-  });
-});
 
 const noop = () => Promise.resolve({ data: [] as never });
 
