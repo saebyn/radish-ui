@@ -222,4 +222,59 @@ describe("removeCommand", () => {
     ) as LockFile;
     expect(lock.components["skeleton"]).toBeUndefined();
   });
+
+  it("deduplicates repeated component names without crashing", async () => {
+    await addCommand(["skeleton"], {
+      registry: registryDir,
+      target: "components",
+      cwd: projectDir,
+    });
+
+    // Passing the same name twice should behave identically to passing it once.
+    await removeCommand(["skeleton", "skeleton"], {
+      target: "components",
+      cwd: projectDir,
+    });
+
+    expect(existsSync(join(projectDir, "components", "skeleton", "skeleton.tsx"))).toBe(false);
+
+    const lock = JSON.parse(
+      readFileSync(join(projectDir, "radish.lock.json"), "utf-8"),
+    ) as LockFile;
+    expect(lock.components["skeleton"]).toBeUndefined();
+  });
+
+  it("keeps the lockfile entry when unlinkSync fails for a file", async () => {
+    await addCommand(["skeleton"], {
+      registry: registryDir,
+      target: "components",
+      cwd: projectDir,
+    });
+
+    const skeletonFile = join(projectDir, "components", "skeleton", "skeleton.tsx");
+
+    // Make the parent directory non-writable so unlinkSync will throw EACCES.
+    const { chmodSync } = await import("node:fs");
+    const skeletonDir = join(projectDir, "components", "skeleton");
+    chmodSync(skeletonDir, 0o555);
+
+    try {
+      await removeCommand(["skeleton"], {
+        target: "components",
+        cwd: projectDir,
+      });
+    } finally {
+      // Restore permissions so afterEach cleanup can delete the temp dir.
+      chmodSync(skeletonDir, 0o755);
+    }
+
+    // The file should still be on disk (unlink failed).
+    expect(existsSync(skeletonFile)).toBe(true);
+
+    // The lockfile entry must be preserved so the component stays tracked.
+    const lock = JSON.parse(
+      readFileSync(join(projectDir, "radish.lock.json"), "utf-8"),
+    ) as LockFile;
+    expect(lock.components["skeleton"]).toBeDefined();
+  });
 });

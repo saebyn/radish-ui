@@ -22,8 +22,12 @@ export async function removeCommand(components: string[], options: RemoveOptions
 
   const lockfile = loadLockfile(cwd);
 
+  // Deduplicate to avoid processing the same component twice when the caller
+  // accidentally passes the same name more than once.
+  const uniqueComponents = Array.from(new Set(components));
+
   // Pre-validate all component names and verify they are installed
-  for (const componentName of components) {
+  for (const componentName of uniqueComponents) {
     validateComponentName(componentName);
     if (!lockfile.components[componentName]) {
       throw new RadishError(
@@ -32,27 +36,30 @@ export async function removeCommand(components: string[], options: RemoveOptions
     }
   }
 
-  const componentsToRemove = new Set(components);
+  const componentsToRemove = new Set(uniqueComponents);
   let removedCount = 0;
 
-  for (const componentName of components) {
+  for (const componentName of uniqueComponents) {
     const componentLock = lockfile.components[componentName];
-    const filePaths = Object.keys(componentLock.files);
+    const filePathsSet = new Set(Object.keys(componentLock.files));
 
-    // Find files that are also used by other installed components not being removed.
-    // Such shared files must not be deleted.
+    // Find files that are also used by other installed components not being
+    // removed. Such shared files must not be deleted. Using a Set for
+    // filePathsSet keeps the lookup O(1) instead of O(N) per file.
     const sharedFiles = new Set<string>();
     for (const [otherName, otherLock] of Object.entries(lockfile.components)) {
       if (componentsToRemove.has(otherName)) continue;
       for (const relPath of Object.keys(otherLock.files)) {
-        if (filePaths.includes(relPath)) {
+        if (filePathsSet.has(relPath)) {
           sharedFiles.add(relPath);
         }
       }
     }
 
-    // Remove files from disk
-    for (const relPath of filePaths) {
+    // Remove files from disk. Track any unlink failures so we can decide
+    // whether it is safe to drop the lockfile entry afterwards.
+    let fileRemovalFailed = false;
+    for (const relPath of filePathsSet) {
       try {
         validateRelativePath(relPath);
       } catch (err) {
@@ -94,7 +101,17 @@ export async function removeCommand(components: string[], options: RemoveOptions
         console.warn(
           `⚠ Could not remove "${destPath}": ${err instanceof Error ? err.message : String(err)}`,
         );
+        fileRemovalFailed = true;
       }
+    }
+
+    if (fileRemovalFailed) {
+      // At least one file could not be deleted. Keep the lockfile entry so the
+      // component remains tracked and future remove/sync/diff calls stay correct.
+      console.warn(
+        `⚠ Component "${componentName}" was not removed from the lockfile because one or more files could not be deleted. Resolve any file permission issues and run \`radish remove ${componentName}\` again.`,
+      );
+      continue;
     }
 
     delete lockfile.components[componentName];
