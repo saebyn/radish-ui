@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNotificationContext } from "ra-core";
 import { cn } from "@radish-ui/core";
 import type { NotificationPayload } from "ra-core";
@@ -94,19 +94,19 @@ function NotificationIcon({ type }: { type: NotificationType }) {
 
 interface ToastProps {
   notification: ActiveNotification;
-  onDismiss: () => void;
+  dismiss: (key: number) => void;
 }
 
-function Toast({ notification, onDismiss }: ToastProps) {
+function Toast({ notification, dismiss }: ToastProps) {
   const type: NotificationType = (notification.type as NotificationType) ?? "info";
-  const { autoHideDuration } = notification;
+  const { autoHideDuration, key } = notification;
 
   useEffect(() => {
     if (autoHideDuration === null) return;
     const duration = autoHideDuration > 0 ? autoHideDuration : AUTO_HIDE_MS;
-    const id = setTimeout(onDismiss, duration);
+    const id = setTimeout(() => dismiss(key), duration);
     return () => clearTimeout(id);
-  }, [autoHideDuration, onDismiss]);
+  }, [autoHideDuration, dismiss, key]);
 
   return (
     <div
@@ -122,7 +122,7 @@ function Toast({ notification, onDismiss }: ToastProps) {
       <button
         type="button"
         aria-label="Dismiss notification"
-        onClick={onDismiss}
+        onClick={() => dismiss(key)}
         className="shrink-0 rounded p-0.5 opacity-60 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-current"
       >
         <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -181,7 +181,10 @@ export function Notification({ className }: { className?: string }) {
     setActive((prev) => [...prev, { ...payload, key, autoHideDuration: duration }]);
   }, [notifications, takeNotification]);
 
-  const dismiss = (key: number) => setActive((prev) => prev.filter((n) => n.key !== key));
+  const dismiss = useCallback(
+    (key: number) => setActive((prev) => prev.filter((n) => n.key !== key)),
+    [],
+  );
 
   if (active.length === 0) return null;
 
@@ -191,7 +194,7 @@ export function Notification({ className }: { className?: string }) {
       className={cn("fixed right-4 top-4 z-50 flex flex-col gap-2", className)}
     >
       {active.map((n) => (
-        <Toast key={n.key} notification={n} onDismiss={() => dismiss(n.key)} />
+        <Toast key={n.key} notification={n} dismiss={dismiss} />
       ))}
     </div>
   );

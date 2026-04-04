@@ -7,6 +7,7 @@ import { type ReactNode, useEffect } from "react";
 import { Notification } from "./notification";
 
 afterEach(cleanup);
+afterEach(() => vi.useRealTimers());
 
 // Minimal data provider required by CoreAdminContext
 const noop = () => Promise.resolve({ data: [] as never });
@@ -139,6 +140,5 @@ describe("Notification", () => {
       vi.advanceTimersByTime(4500);
     });
     expect(screen.queryByText("Auto dismiss")).toBeNull();
-    vi.useRealTimers();
   });
 });
