@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import { createRequire } from "node:module";
 import { addCommand } from "./commands/add.js";
+import { removeCommand } from "./commands/remove.js";
 import { syncCommand } from "./commands/sync.js";
 import { diffCommand } from "./commands/diff.js";
 import { newCommand } from "./commands/new.js";
@@ -28,6 +29,13 @@ program
   .option("--target <path>", `Output directory (default: ./${DEFAULT_OUTPUT_DIR})`)
   .option("--force", "Overwrite existing files")
   .action(addCommand);
+
+program
+  .command("remove <components...>")
+  .description("Remove one or more installed components from your project")
+  .option("--target <path>", `Output directory (default: ./${DEFAULT_OUTPUT_DIR})`)
+  .option("--force", "Remove files even if they have local modifications")
+  .action(removeCommand);
 
 program
   .command("sync")
