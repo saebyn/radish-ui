@@ -177,7 +177,6 @@ describe("newCommand", () => {
     expect(lock.components).toEqual({});
   });
 
-
   it("copies component files when --registry is provided", async () => {
     const registryDir = join(tmpDir, "registry");
     mkdirSync(registryDir);
