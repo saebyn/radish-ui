@@ -7,7 +7,7 @@ import {
   unlinkSync,
   writeFileSync,
 } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, relative, sep } from "node:path";
 import { randomBytes } from "node:crypto";
 import { RadishError } from "./errors.js";
 
@@ -15,11 +15,17 @@ import { RadishError } from "./errors.js";
  * Asserts that resolvedPath is contained within allowedRoot after resolving
  * all symlinks on both paths. Throws RadishError if it escapes.
  * Both paths must already exist on disk before calling this.
+ * Uses path.relative() for a platform-aware containment check that works
+ * correctly on both POSIX (forward slashes) and Windows (backslashes).
  */
 export function assertWithinDir(allowedRoot: string, resolvedPath: string): void {
   const realRoot = realpathSync(allowedRoot);
   const realTarget = realpathSync(resolvedPath);
-  if (!realTarget.startsWith(`${realRoot}/`) && realTarget !== realRoot) {
+  const rel = relative(realRoot, realTarget);
+  // An empty string means realTarget === realRoot (exact match, allowed).
+  // A path starting with ".." means it escapes the root.
+  // A path starting with sep on Windows (absolute) also escapes.
+  if (rel !== "" && (rel.startsWith("..") || rel.startsWith(sep))) {
     throw new RadishError(`Path "${resolvedPath}" escapes the allowed directory "${allowedRoot}".`);
   }
 }
