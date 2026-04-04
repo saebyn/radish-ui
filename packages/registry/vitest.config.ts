@@ -7,5 +7,10 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./src/test-setup.ts"],
     globals: false,
+    typecheck: {
+      enabled: true,
+      tsconfig: "./tsconfig.typecheck.json",
+      include: ["src/prop-parity/**/*.test.ts"],
+    },
   },
 });

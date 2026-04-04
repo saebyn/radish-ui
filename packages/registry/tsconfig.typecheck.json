@@ -1,0 +1,33 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "src/prop-parity",
+    "src/button/create-button.tsx",
+    "src/button/edit-button.tsx",
+    "src/button/delete-button.tsx",
+    "src/field/text-field.tsx",
+    "src/field/boolean-field.tsx",
+    "src/field/number-field.tsx",
+    "src/field/date-field.tsx",
+    "src/form/simple-form.tsx",
+    "src/form/text-input.tsx",
+    "src/form/number-input.tsx",
+    "src/form/boolean-input.tsx",
+    "src/form/select-input.tsx",
+    "src/list/list.tsx",
+    "src/list/datagrid.tsx",
+    "src/list/pagination.tsx",
+    "src/detail/show.tsx",
+    "src/detail/edit.tsx",
+    "src/detail/create.tsx",
+    "src/detail/simple-show-layout.tsx",
+    "src/notification/notification.tsx",
+    "src/skeleton/skeleton.tsx",
+    "src/layout/layout.tsx",
+    "src/layout/sidebar.tsx",
+    "src/layout/menu.tsx"
+  ]
+}
