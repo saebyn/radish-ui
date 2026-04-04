@@ -4,6 +4,7 @@ import { addCommand } from "./commands/add.js";
 import { syncCommand } from "./commands/sync.js";
 import { diffCommand } from "./commands/diff.js";
 import { newCommand } from "./commands/new.js";
+import { initCommand } from "./commands/init.js";
 import { RadishError } from "./lib/errors.js";
 import { DEFAULT_OUTPUT_DIR } from "./lib/config.js";
 
@@ -55,6 +56,13 @@ program
   .option("--registry <path>", "Path to a local registry directory to copy components from")
   .option("-y, --yes", "Accept all defaults and skip interactive prompts")
   .action(newCommand);
+
+program
+  .command("init")
+  .description("Initialize radish-ui in an existing project")
+  .option("--registry <url>", "Registry URL or path to use in radish.json")
+  .option("-y, --yes", "Accept all defaults and skip interactive prompts")
+  .action(initCommand);
 
 program.parseAsync(process.argv).catch((err) => {
   if (err instanceof RadishError) {
