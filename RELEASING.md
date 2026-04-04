@@ -26,12 +26,19 @@ new release section with today's date and the new version number, following the
 ## [x.y.z] - YYYY-MM-DD
 ```
 
-Update the comparison links at the bottom of `CHANGELOG.md`:
+Update the link references at the bottom of `CHANGELOG.md`:
 
 ```md
 [Unreleased]: https://github.com/saebyn/radish-ui/compare/vx.y.z...HEAD
 [x.y.z]: https://github.com/saebyn/radish-ui/compare/v<previous>...vx.y.z
 ```
+
+> **Note:** For the very first release (no prior version exists), use a tag
+> link instead of a compare URL:
+>
+> ```md
+> [0.1.0]: https://github.com/saebyn/radish-ui/releases/tag/v0.1.0
+> ```
 
 ### 2. Bump package versions
 
