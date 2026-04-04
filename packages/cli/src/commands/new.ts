@@ -1,5 +1,5 @@
 import { existsSync, lstatSync, mkdirSync, readFileSync } from "node:fs";
-import { basename, resolve, join } from "node:path";
+import { basename, relative, resolve, join } from "node:path";
 import * as clack from "@clack/prompts";
 import chalk from "chalk";
 import { hashContent } from "../lib/hash.js";
@@ -7,6 +7,7 @@ import { loadRegistry, registryFileToRelative, type RegistryComponent } from "..
 import { saveLockfile, type FileLock } from "../lib/lockfile.js";
 import { writeFileAtomic } from "../lib/fs.js";
 import { RadishError } from "../lib/errors.js";
+import { DEFAULT_REGISTRY_URL } from "../lib/config.js";
 
 export interface NewOptions {
   registry?: string;
@@ -541,9 +542,7 @@ export async function newCommand(
   mkdirSync(srcDir, { recursive: true });
 
   const registryJsonValue =
-    registryDir !== undefined
-      ? registryDir
-      : "https://raw.githubusercontent.com/saebyn/radish-ui/main/packages/registry";
+    registryDir !== undefined ? relative(projectDir, registryDir) : DEFAULT_REGISTRY_URL;
 
   const files: Array<{ path: string; content: string }> = [
     {

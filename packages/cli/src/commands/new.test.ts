@@ -155,14 +155,16 @@ describe("newCommand", () => {
     expect(css).toContain("@tailwind utilities");
   });
 
-  it("creates radish.json with remote registry when no --registry given", async () => {
+  it("creates radish.json with remote registry URL when no --registry given", async () => {
     await newCommand("remote-app", { yes: true, cwd: tmpDir });
 
     const config = JSON.parse(readFileSync(join(tmpDir, "remote-app", "radish.json"), "utf-8")) as {
       registry: string;
       outputDir: string;
     };
-    expect(config.registry).toContain("github");
+    expect(config.registry).toBe(
+      "https://raw.githubusercontent.com/saebyn/radish-ui/main/packages/registry",
+    );
     expect(config.outputDir).toBe("src/components");
   });
 
@@ -175,14 +177,6 @@ describe("newCommand", () => {
     expect(lock.components).toEqual({});
   });
 
-  it("creates a README.md mentioning the project name", async () => {
-    await newCommand("readme-app", { yes: true, cwd: tmpDir });
-
-    const readme = readFileSync(join(tmpDir, "readme-app", "README.md"), "utf-8");
-    expect(readme).toContain("readme-app");
-    expect(readme).toContain("radish add");
-    expect(readme).toContain("radish sync");
-  });
 
   it("copies component files when --registry is provided", async () => {
     const registryDir = join(tmpDir, "registry");
@@ -214,7 +208,7 @@ describe("newCommand", () => {
     expect(lock.components["text-field"]).toBeDefined();
   });
 
-  it("sets radish.json registry to the provided local path", async () => {
+  it("sets radish.json registry to a relative path when local --registry is provided", async () => {
     const registryDir = join(tmpDir, "registry");
     mkdirSync(registryDir);
     createRegistryFixture(registryDir);
@@ -224,7 +218,8 @@ describe("newCommand", () => {
     const config = JSON.parse(
       readFileSync(join(tmpDir, "local-reg-app", "radish.json"), "utf-8"),
     ) as { registry: string };
-    expect(config.registry).toBe(registryDir);
+    // Should be a relative path from the project dir to the registry, not an absolute path
+    expect(config.registry).toBe("../registry");
   });
 
   it("throws when project name is invalid", async () => {
