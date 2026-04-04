@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNotificationContext } from "ra-core";
 import { cn } from "@radish-ui/core";
 import type { NotificationPayload } from "ra-core";
@@ -133,8 +133,6 @@ function Toast({ notification, onDismiss }: ToastProps) {
   );
 }
 
-let keyCounter = 0;
-
 /**
  * Notification toast container.
  * Reads from ra-core's NotificationContext (which is provided by CoreAdminContext)
@@ -158,6 +156,7 @@ let keyCounter = 0;
 export function Notification({ className }: { className?: string }) {
   const { notifications, takeNotification } = useNotificationContext();
   const [active, setActive] = useState<ActiveNotification[]>([]);
+  const keyRef = useRef(0);
 
   // Drain the ra-core queue into local state whenever new items arrive.
   useEffect(() => {
@@ -171,7 +170,7 @@ export function Notification({ className }: { className?: string }) {
 
     // Generate the key before entering setState to avoid relying on mutation
     // inside a state updater function.
-    const key = ++keyCounter;
+    const key = ++keyRef.current;
     setActive((prev) => [...prev, { ...payload, key, autoHideDuration: duration }]);
   }, [notifications, takeNotification]);
 

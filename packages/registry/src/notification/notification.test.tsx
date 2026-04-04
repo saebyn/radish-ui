@@ -3,7 +3,7 @@ import { render, screen, act, fireEvent } from "@testing-library/react";
 import { cleanup } from "@testing-library/react";
 import { CoreAdminContext, useNotify } from "ra-core";
 import { MemoryRouter } from "react-router-dom";
-import React from "react";
+import { type ReactNode, useEffect } from "react";
 import { Notification } from "./notification";
 
 afterEach(cleanup);
@@ -22,7 +22,7 @@ const dataProvider = {
   deleteMany: noop,
 };
 
-function Wrapper({ children }: { children: React.ReactNode }) {
+function Wrapper({ children }: { children: ReactNode }) {
   return (
     <MemoryRouter>
       <CoreAdminContext dataProvider={dataProvider}>{children}</CoreAdminContext>
@@ -41,7 +41,7 @@ function NotifyTrigger({
   type?: "success" | "error" | "info" | "warning";
 }) {
   const notify = useNotify();
-  React.useEffect(() => {
+  useEffect(() => {
     notify(message, { type });
   }, [message, notify, type]);
   return null;
