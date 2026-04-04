@@ -135,7 +135,28 @@ function EditLayout({
   }
 
   if (isLoading) {
-    return <div className="flex items-center justify-center py-12 text-gray-500">Loading…</div>;
+    return (
+      <div className={cn("space-y-4", className)}>
+        <div className="flex items-center justify-between">
+          <div className="h-8 w-48 animate-pulse rounded-md bg-gray-200" />
+          {actions && <div className="h-8 w-24 animate-pulse rounded-md bg-gray-200" />}
+        </div>
+        <div className="flex gap-4">
+          <div className="flex-1 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="space-y-5">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="space-y-1.5">
+                  <div className="h-4 w-24 animate-pulse rounded-md bg-gray-200" />
+                  <div className="h-9 w-full animate-pulse rounded-md bg-gray-200" />
+                </div>
+              ))}
+              <div className="mt-2 h-9 w-28 animate-pulse rounded-md bg-gray-200" />
+            </div>
+          </div>
+          {aside && <div className="h-64 w-64 shrink-0 animate-pulse rounded-md bg-gray-200" />}
+        </div>
+      </div>
+    );
   }
 
   const displayTitle = title === false ? null : (title ?? defaultTitle);

@@ -34,7 +34,59 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
   }>[];
 
   if (isLoading) {
-    return <div className="flex items-center justify-center py-12 text-gray-500">Loading…</div>;
+    return (
+      <div
+        className={cn(
+          "overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm",
+          className,
+        )}
+      >
+        <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <thead className="bg-gray-50">
+            <tr>
+              {columns.map((col, i) => {
+                const header =
+                  col.props.label ??
+                  (col.props.source ? capitalize(col.props.source) : `Column ${i + 1}`);
+                return (
+                  <th
+                    key={col.props.source ?? i}
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"
+                  >
+                    {header}
+                  </th>
+                );
+              })}
+              {rowActions && (
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500"
+                >
+                  Actions
+                </th>
+              )}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {Array.from({ length: 5 }).map((_, rowIdx) => (
+              <tr key={rowIdx}>
+                {columns.map((col, colIdx) => (
+                  <td key={col.props.source ?? colIdx} className="px-4 py-3">
+                    <div className="h-4 animate-pulse rounded-md bg-gray-200" />
+                  </td>
+                ))}
+                {rowActions && (
+                  <td className="px-4 py-3 text-right">
+                    <div className="ml-auto h-4 w-16 animate-pulse rounded-md bg-gray-200" />
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
   }
 
   if (!data || data.length === 0) {
