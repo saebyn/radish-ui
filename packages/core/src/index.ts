@@ -11,3 +11,12 @@ export { useFieldValue } from "./hooks";
 
 // Utilities
 export { cn } from "./utils/cn";
+
+// Re-exports from ra-core for convenient single-package imports
+export {
+  EditBase,
+  CreateBase,
+  ShowBase,
+  ResourceContextProvider,
+  RecordContextProvider,
+} from "ra-core";

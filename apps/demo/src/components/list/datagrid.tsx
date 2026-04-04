@@ -5,6 +5,8 @@ import { cn } from "@radish-ui/core";
 interface DatagridProps {
   /** Field components (e.g. <TextField source="title" />) */
   children: React.ReactElement | React.ReactElement[];
+  /** Optional action buttons rendered at the end of each row (e.g. <EditButton /><DeleteButton />) */
+  rowActions?: React.ReactNode;
   className?: string;
 }
 
@@ -23,7 +25,7 @@ interface DatagridProps {
  *   <TextField source="title" />
  * </Datagrid>
  */
-export function Datagrid({ children, className }: DatagridProps) {
+export function Datagrid({ children, rowActions, className }: DatagridProps) {
   const { data, isLoading } = useListContext();
 
   const columns = React.Children.toArray(children) as React.ReactElement<{
@@ -65,6 +67,11 @@ export function Datagrid({ children, className }: DatagridProps) {
                 </th>
               );
             })}
+            {rowActions && (
+              <th scope="col" className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500">
+                Actions
+              </th>
+            )}
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
@@ -76,6 +83,11 @@ export function Datagrid({ children, className }: DatagridProps) {
                     {col}
                   </td>
                 ))}
+                {rowActions && (
+                  <td className="px-4 py-3 text-right">
+                    <div className="flex items-center justify-end gap-2">{rowActions}</div>
+                  </td>
+                )}
               </tr>
             </RecordContextProvider>
           ))}

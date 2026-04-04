@@ -11,13 +11,74 @@
       "dependencies": ["@radish-ui/core"]
     },
     {
-      "name": "list-view",
-      "files": ["src/list/list-view.tsx"],
+      "name": "list",
+      "files": ["src/list/list.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "pagination",
+      "files": ["src/list/pagination.tsx"],
       "dependencies": ["@radish-ui/core"]
     },
     {
       "name": "text-field",
       "files": ["src/field/text-field.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "boolean-field",
+      "files": ["src/field/boolean-field.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "number-field",
+      "files": ["src/field/number-field.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "date-field",
+      "files": ["src/field/date-field.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "edit-button",
+      "files": ["src/button/edit-button.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "delete-button",
+      "files": ["src/button/delete-button.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "create-button",
+      "files": ["src/button/create-button.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "show",
+      "files": ["src/detail/show.tsx", "src/detail/simple-show-layout.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "edit",
+      "files": ["src/detail/edit.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "create",
+      "files": ["src/detail/create.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "simple-form",
+      "files": [
+        "src/form/simple-form.tsx",
+        "src/form/text-input.tsx",
+        "src/form/number-input.tsx",
+        "src/form/select-input.tsx",
+        "src/form/boolean-input.tsx"
+      ],
       "dependencies": ["@radish-ui/core"]
     }
   ]
