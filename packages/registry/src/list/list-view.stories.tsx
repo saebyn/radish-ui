@@ -21,7 +21,6 @@ const baseListContext = {
   displayedFilters: {},
   defaultTitle: "Posts",
   resource: "posts",
-  error: undefined,
   refetch: () => {},
   setFilters: () => {},
   setPage: () => {},
