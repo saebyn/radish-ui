@@ -7,6 +7,7 @@ import {
   fetchRegistryFile,
   validateRelativePath,
   relativeToRegistryFile,
+  registryFileToRelative,
   validateComponentName,
 } from "../lib/registry.js";
 import { loadLockfile, saveLockfile, shouldUpdate } from "../lib/lockfile.js";
@@ -17,10 +18,12 @@ export interface SyncOptions {
   registry?: string;
   target?: string;
   force?: boolean;
+  /** Override the working directory (used in tests; defaults to process.cwd()). */
+  cwd?: string;
 }
 
 export async function syncCommand(options: SyncOptions): Promise<void> {
-  const cwd = process.cwd();
+  const cwd = options.cwd ?? process.cwd();
   const config = resolveConfig(cwd, {
     registry: options.registry,
     outputDir: options.target,
@@ -127,6 +130,64 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
       componentLock.files[relPath] = { registryHash: newRegistryHash, localHash: newRegistryHash };
       lockfileChanged++;
       console.log(`✓ Updated ${relPath}`);
+    }
+
+    // Install any new files that were added to the component's registry definition
+    // since the component was first installed (not yet tracked in the lockfile).
+    for (const registryFilePath of registryComponent.files) {
+      let relPath: string;
+      try {
+        relPath = registryFileToRelative(registryFilePath);
+      } catch (err) {
+        console.warn(
+          `⚠ Skipping invalid registry path for "${componentName}": ${registryFilePath} — ${err instanceof Error ? err.message : String(err)}`,
+        );
+        continue;
+      }
+
+      if (componentLock.files[relPath]) {
+        continue; // already tracked and handled above
+      }
+
+      const destPath = resolve(cwd, config.outputDir, relPath);
+
+      let registryContent: Buffer | string;
+      if (isRemoteRegistry(config.registry)) {
+        try {
+          registryContent = await fetchRegistryFile(config.registry, registryFilePath);
+        } catch (err) {
+          console.warn(
+            `⚠ Could not fetch new file "${relPath}" for "${componentName}": ${err instanceof Error ? err.message : String(err)}. Skipping.`,
+          );
+          continue;
+        }
+      } else {
+        const componentPath = resolve(config.registry, registryFilePath);
+        if (!existsSync(componentPath)) {
+          console.warn(`⚠ Registry file not found: ${componentPath}. Skipping.`);
+          continue;
+        }
+        registryContent = readFileWithinDir(config.registry, componentPath);
+      }
+
+      const newHash = hashContent(registryContent);
+
+      if (existsSync(destPath) && !(options.force ?? false)) {
+        console.warn(
+          `⚠ New file "${relPath}" for "${componentName}" already exists locally but is not tracked.\n  Run \`radish sync --force\` to overwrite.`,
+        );
+        continue;
+      }
+
+      writeFileAtomic(
+        resolve(cwd, config.outputDir),
+        destPath,
+        registryContent,
+        options.force ?? false,
+      );
+      componentLock.files[relPath] = { registryHash: newHash, localHash: newHash };
+      lockfileChanged++;
+      console.log(`✓ Added ${relPath} (new file for ${componentName})`);
     }
   }
 

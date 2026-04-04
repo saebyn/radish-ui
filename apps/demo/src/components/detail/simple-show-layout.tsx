@@ -28,8 +28,13 @@ export function SimpleShowLayout({ children, className }: SimpleShowLayoutProps)
   }>[];
 
   return (
-    <div className={cn("rounded-lg border border-gray-200 bg-white shadow-sm", className)}>
-      <dl className="divide-y divide-gray-100">
+    <div
+      className={cn(
+        "rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800",
+        className,
+      )}
+    >
+      <dl className="divide-y divide-gray-100 dark:divide-gray-700">
         {fields.map((field, i) => {
           const label =
             field.props.label ??
@@ -40,8 +45,10 @@ export function SimpleShowLayout({ children, className }: SimpleShowLayoutProps)
               key={field.props.source ?? i}
               className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4"
             >
-              <dt className="text-sm font-medium text-gray-500">{label}</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">{field}</dd>
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">{label}</dt>
+              <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100 sm:col-span-2 sm:mt-0">
+                {field}
+              </dd>
             </div>
           );
         })}

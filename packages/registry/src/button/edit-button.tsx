@@ -39,6 +39,7 @@ export function EditButton({ resource, label = "Edit", className }: EditButtonPr
       to={path}
       className={cn(
         "inline-flex items-center rounded-md px-2.5 py-1.5 text-xs font-medium text-indigo-600 hover:bg-indigo-50 hover:text-indigo-800 transition-colors",
+        "dark:text-indigo-400 dark:hover:bg-indigo-900/30 dark:hover:text-indigo-300",
         className,
       )}
     >

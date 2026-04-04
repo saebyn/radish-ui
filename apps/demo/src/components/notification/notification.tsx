@@ -16,10 +16,13 @@ interface ActiveNotification extends NotificationPayload {
 }
 
 const typeStyles: Record<NotificationType, string> = {
-  success: "bg-green-50 border-green-400 text-green-800 [&_[data-icon]]:text-green-500",
-  error: "bg-red-50 border-red-400 text-red-800 [&_[data-icon]]:text-red-500",
-  info: "bg-blue-50 border-blue-400 text-blue-800 [&_[data-icon]]:text-blue-500",
-  warning: "bg-yellow-50 border-yellow-400 text-yellow-800 [&_[data-icon]]:text-yellow-500",
+  success:
+    "bg-green-50 border-green-400 text-green-800 [&_[data-icon]]:text-green-500 dark:bg-green-900/30 dark:border-green-700 dark:text-green-300 dark:[&_[data-icon]]:text-green-400",
+  error:
+    "bg-red-50 border-red-400 text-red-800 [&_[data-icon]]:text-red-500 dark:bg-red-900/30 dark:border-red-700 dark:text-red-300 dark:[&_[data-icon]]:text-red-400",
+  info: "bg-blue-50 border-blue-400 text-blue-800 [&_[data-icon]]:text-blue-500 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-300 dark:[&_[data-icon]]:text-blue-400",
+  warning:
+    "bg-yellow-50 border-yellow-400 text-yellow-800 [&_[data-icon]]:text-yellow-500 dark:bg-yellow-900/30 dark:border-yellow-700 dark:text-yellow-300 dark:[&_[data-icon]]:text-yellow-400",
 };
 
 function NotificationIcon({ type }: { type: NotificationType }) {

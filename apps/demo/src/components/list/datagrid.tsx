@@ -39,12 +39,15 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
       <SkeletonContainer
         label="Loading table data…"
         className={cn(
-          "overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm",
+          "overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800",
           className,
         )}
       >
-        <table aria-hidden="true" className="min-w-full divide-y divide-gray-200 text-sm">
-          <thead className="bg-gray-50">
+        <table
+          aria-hidden="true"
+          className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm"
+        >
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
               {columns.map((col, i) => {
                 const header =
@@ -54,7 +57,7 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
                   <th
                     key={col.props.source ?? i}
                     scope="col"
-                    className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"
+                    className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
                   >
                     {header}
                   </th>
@@ -63,14 +66,14 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
               {rowActions && (
                 <th
                   scope="col"
-                  className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500"
+                  className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
                 >
                   Actions
                 </th>
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
             {Array.from({ length: 5 }).map((_, rowIdx) => (
               <tr key={rowIdx}>
                 {columns.map((col, colIdx) => (
@@ -93,19 +96,21 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
 
   if (!data || data.length === 0) {
     return (
-      <div className="flex items-center justify-center py-12 text-gray-400">No records found.</div>
+      <div className="flex items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+        No records found.
+      </div>
     );
   }
 
   return (
     <div
       className={cn(
-        "overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm",
+        "overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800",
         className,
       )}
     >
-      <table className="min-w-full divide-y divide-gray-200 text-sm">
-        <thead className="bg-gray-50">
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+        <thead className="bg-gray-50 dark:bg-gray-700">
           <tr>
             {columns.map((col, i) => {
               const header =
@@ -115,7 +120,7 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
                 <th
                   key={col.props.source ?? i}
                   scope="col"
-                  className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"
+                  className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
                 >
                   {header}
                 </th>
@@ -124,19 +129,22 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
             {rowActions && (
               <th
                 scope="col"
-                className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500"
+                className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
               >
                 Actions
               </th>
             )}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
           {data.map((record) => (
             <RecordContextProvider key={record.id} value={record}>
-              <tr className="hover:bg-indigo-50 transition-colors">
+              <tr className="hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors">
                 {columns.map((col, i) => (
-                  <td key={col.props.source ?? i} className="px-4 py-3 text-gray-700">
+                  <td
+                    key={col.props.source ?? i}
+                    className="px-4 py-3 text-gray-700 dark:text-gray-300"
+                  >
                     {col}
                   </td>
                 ))}

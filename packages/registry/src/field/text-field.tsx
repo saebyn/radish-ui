@@ -19,7 +19,7 @@ interface TextFieldProps {
 export function TextField({ source, className }: TextFieldProps) {
   const value = useFieldValue({ source });
   return (
-    <span className={cn("text-sm text-gray-700", className)}>
+    <span className={cn("text-sm text-gray-700 dark:text-gray-300", className)}>
       {value !== undefined && value !== null ? String(value) : "—"}
     </span>
   );

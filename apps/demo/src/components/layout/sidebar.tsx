@@ -18,14 +18,14 @@ export function Sidebar({ open, onToggle, children }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex flex-col bg-gray-900 text-white transition-all duration-200",
+        "flex flex-col bg-gray-900 dark:bg-gray-950 text-white transition-all duration-200",
         open ? "w-56" : "w-14",
       )}
     >
       {/* Toggle button */}
       <button
         onClick={onToggle}
-        className="flex items-center justify-center h-12 w-full text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
+        className="flex items-center justify-center h-12 w-full text-gray-400 hover:text-white hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
         aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
       >
         <MdMenu size={22} />

@@ -51,14 +51,17 @@ export function Skeleton({ label, className }: SkeletonProps) {
       <div
         role="status"
         aria-live="polite"
-        className={cn("animate-pulse rounded-md bg-gray-200", className)}
+        className={cn("animate-pulse rounded-md bg-gray-200 dark:bg-gray-700", className)}
       >
         <span className="sr-only">{label}</span>
       </div>
     );
   }
   return (
-    <div aria-hidden="true" className={cn("animate-pulse rounded-md bg-gray-200", className)} />
+    <div
+      aria-hidden="true"
+      className={cn("animate-pulse rounded-md bg-gray-200 dark:bg-gray-700", className)}
+    />
   );
 }
 
