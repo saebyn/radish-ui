@@ -1,6 +1,7 @@
 import React from "react";
 import { EditBase, useEditContext } from "ra-core";
 import { cn } from "@radish-ui/core";
+import { SkeletonContainer } from "../skeleton/skeleton";
 
 interface EditProps {
   /**
@@ -136,7 +137,7 @@ function EditLayout({
 
   if (isLoading) {
     return (
-      <div className={cn("space-y-4", className)}>
+      <SkeletonContainer label="Loading form…" className={cn("space-y-4", className)}>
         <div className="flex items-center justify-between">
           <div className="h-8 w-48 animate-pulse rounded-md bg-gray-200" />
           {actions && <div className="h-8 w-24 animate-pulse rounded-md bg-gray-200" />}
@@ -155,7 +156,7 @@ function EditLayout({
           </div>
           {aside && <div className="h-64 w-64 shrink-0 animate-pulse rounded-md bg-gray-200" />}
         </div>
-      </div>
+      </SkeletonContainer>
     );
   }
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { ShowBase, useShowContext } from "ra-core";
 import { cn } from "@radish-ui/core";
+import { SkeletonContainer } from "../skeleton/skeleton";
 
 interface ShowProps {
   /**
@@ -104,7 +105,7 @@ function ShowLayout({
 
   if (isLoading) {
     return (
-      <div className={cn("space-y-4", className)}>
+      <SkeletonContainer label="Loading record…" className={cn("space-y-4", className)}>
         <div className="flex items-center justify-between">
           <div className="h-8 w-48 animate-pulse rounded-md bg-gray-200" />
           {actions && <div className="h-8 w-24 animate-pulse rounded-md bg-gray-200" />}
@@ -122,7 +123,7 @@ function ShowLayout({
           </div>
           {aside && <div className="h-48 w-64 shrink-0 animate-pulse rounded-md bg-gray-200" />}
         </div>
-      </div>
+      </SkeletonContainer>
     );
   }
 

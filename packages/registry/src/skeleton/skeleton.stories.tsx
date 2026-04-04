@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Skeleton } from "./skeleton";
+import { Skeleton, SkeletonContainer } from "./skeleton";
 
 const meta: Meta<typeof Skeleton> = {
   title: "Feedback/Skeleton",
@@ -13,18 +13,23 @@ export default meta;
 type Story = StoryObj<typeof Skeleton>;
 
 export const Default: Story = {
-  name: "Single block",
+  name: "Single block (decorative)",
   render: () => <Skeleton className="h-4 w-48" />,
 };
 
+export const WithLabel: Story = {
+  name: "With label (status announcement)",
+  render: () => <Skeleton label="Loading content…" className="h-4 w-48" />,
+};
+
 export const TextLines: Story = {
-  name: "Text lines",
+  name: "Text lines (SkeletonContainer)",
   render: () => (
-    <div className="space-y-2">
+    <SkeletonContainer label="Loading content…" className="space-y-2">
       <Skeleton className="h-4 w-full" />
       <Skeleton className="h-4 w-full" />
       <Skeleton className="h-4 w-3/4" />
-    </div>
+    </SkeletonContainer>
   ),
 };
 

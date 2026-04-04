@@ -1,6 +1,7 @@
 import React from "react";
 import { useListContext, RecordContextProvider } from "ra-core";
 import { cn } from "@radish-ui/core";
+import { SkeletonContainer } from "../skeleton/skeleton";
 
 interface DatagridProps {
   /** Field components (e.g. <TextField source="title" />) */
@@ -35,7 +36,8 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
 
   if (isLoading) {
     return (
-      <div
+      <SkeletonContainer
+        label="Loading table data…"
         className={cn(
           "overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm",
           className,
@@ -85,7 +87,7 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
             ))}
           </tbody>
         </table>
-      </div>
+      </SkeletonContainer>
     );
   }
 
