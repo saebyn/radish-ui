@@ -12,7 +12,8 @@
     "sync": "pnpm --filter @radish-ui/cli build && pnpm --filter @radish-ui/demo sync",
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
-    "lint": "oxlint ."
+    "lint": "oxlint .",
+    "validate-registry": "node scripts/validate-registry.mjs"
   },
   "devDependencies": {
     "oxfmt": "^0.43.0",
