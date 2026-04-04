@@ -13,7 +13,60 @@ pnpm dev
 
 This project uses [JSON Server](https://jsonplaceholder.typicode.com) as a demo data provider.
 
-## Adding components
+## Dark mode and theming
+
+All radish-ui components ship with full `dark:` Tailwind variants. Dark mode is
+driven by the `dark` class on the root `<html>` element, which is the Tailwind
+[`darkMode: "class"`](https://tailwindcss.com/docs/dark-mode) strategy.
+
+### Built-in toggle
+
+The `layout` component includes a light/dark toggle button in the header that
+stores the user's preference in `localStorage` under the key `radish-dark-mode`.
+No extra wiring is needed — install the `layout` component and the toggle works
+out of the box:
+
+```bash
+radish add layout
+```
+
+### Customising the toggle
+
+Because every component is a local copy, you can adjust any style or behaviour
+freely. To add your own toggle logic anywhere in the tree, set or remove the
+`dark` class on the document root:
+
+```ts
+// Turn dark mode on
+document.documentElement.classList.add("dark");
+
+// Turn dark mode off
+document.documentElement.classList.remove("dark");
+
+// Toggle
+document.documentElement.classList.toggle("dark");
+```
+
+### Tailwind config requirement
+
+Your project's `tailwind.config.ts` (or `.js`) must include:
+
+```ts
+export default {
+  darkMode: "class",
+  // ...
+};
+```
+
+New projects created with `radish new` include this automatically.
+
+### Storybook
+
+The Storybook for the component registry has a **Dark mode** toolbar button
+(☀ / ☾) that applies the `dark` class to the preview iframe, letting you
+visually inspect every component in both light and dark mode without leaving the
+browser.
+
 
 Add new radish-ui components with:
 

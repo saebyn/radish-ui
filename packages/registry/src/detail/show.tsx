@@ -92,7 +92,7 @@ function ShowLayout({
 
   if (error) {
     return (
-      <div className="rounded-md bg-red-50 p-4 text-sm text-red-700">
+      <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-700 dark:text-red-400">
         <strong>Error loading record:</strong>{" "}
         {error instanceof Error ? error.message : String(error)}
       </div>
@@ -111,8 +111,8 @@ function ShowLayout({
           {actions && <Skeleton className="h-8 w-24" />}
         </div>
         <div className="flex gap-4">
-          <div className="flex-1 rounded-lg border border-gray-200 bg-white shadow-sm">
-            <dl className="divide-y divide-gray-100">
+          <div className="flex-1 rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 shadow-sm">
+            <dl className="divide-y divide-gray-100 dark:divide-gray-700">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">
                   <Skeleton className="h-4 w-24" />
@@ -132,7 +132,7 @@ function ShowLayout({
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
-        {displayTitle && <h1 className="text-2xl font-bold text-gray-800">{displayTitle}</h1>}
+        {displayTitle && <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{displayTitle}</h1>}
         {actions && <div>{actions}</div>}
       </div>
 

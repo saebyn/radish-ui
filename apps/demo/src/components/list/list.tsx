@@ -123,7 +123,7 @@ interface ListLayoutProps {
   className?: string;
 }
 
-function ListLayout({
+export function ListLayout({
   children,
   actions,
   aside,
@@ -138,7 +138,7 @@ function ListLayout({
 
   if (error) {
     return (
-      <div className="rounded-md bg-red-50 p-4 text-sm text-red-700">
+      <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-700 dark:text-red-400">
         <strong>Error loading data:</strong>{" "}
         {error instanceof Error ? error.message : String(error)}
       </div>
@@ -156,7 +156,7 @@ function ListLayout({
     <div className={cn("space-y-4", className)}>
       {/* Page header */}
       <div className="flex items-center justify-between">
-        {displayTitle && <h1 className="text-2xl font-bold text-gray-800">{displayTitle}</h1>}
+        {displayTitle && <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{displayTitle}</h1>}
         {actions && <div>{actions}</div>}
       </div>
 
@@ -166,13 +166,11 @@ function ListLayout({
       {/* Content + optional aside */}
       <div className="flex gap-4">
         <div className="flex-1">
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12 text-gray-500">Loading…</div>
-          ) : isEmpty && empty !== false ? (
+          {isEmpty && empty !== false ? (
             empty != null ? (
               <>{empty}</>
             ) : (
-              <div className="py-12 text-center text-gray-500">No records found.</div>
+              <div className="py-12 text-center text-gray-500 dark:text-gray-400">No records found.</div>
             )
           ) : (
             children
@@ -181,7 +179,7 @@ function ListLayout({
         {aside && <div className="w-64 shrink-0">{aside}</div>}
       </div>
 
-      {pagination && <div className="border-t border-gray-100 pt-3">{pagination}</div>}
+      {pagination && <div className="border-t border-gray-100 dark:border-gray-800 pt-3">{pagination}</div>}
     </div>
   );
 }

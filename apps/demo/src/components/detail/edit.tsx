@@ -1,6 +1,7 @@
 import React from "react";
 import { EditBase, useEditContext } from "ra-core";
 import { cn } from "@radish-ui/core";
+import { Skeleton, SkeletonContainer } from "../skeleton/skeleton";
 
 interface EditProps {
   /**
@@ -123,7 +124,7 @@ function EditLayout({
 
   if (error) {
     return (
-      <div className="rounded-md bg-red-50 p-4 text-sm text-red-700">
+      <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-700 dark:text-red-400">
         <strong>Error loading record:</strong>{" "}
         {error instanceof Error ? error.message : String(error)}
       </div>
@@ -135,7 +136,28 @@ function EditLayout({
   }
 
   if (isLoading) {
-    return <div className="flex items-center justify-center py-12 text-gray-500">Loading…</div>;
+    return (
+      <SkeletonContainer label="Loading form…" className={cn("space-y-4", className)}>
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-8 w-48" />
+          {actions && <Skeleton className="h-8 w-24" />}
+        </div>
+        <div className="flex gap-4">
+          <div className="flex-1 rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800 p-6 shadow-sm">
+            <div className="space-y-5">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="space-y-1.5">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-9 w-full" />
+                </div>
+              ))}
+              <Skeleton className="mt-2 h-9 w-28" />
+            </div>
+          </div>
+          {aside && <Skeleton className="h-64 w-64 shrink-0" />}
+        </div>
+      </SkeletonContainer>
+    );
   }
 
   const displayTitle = title === false ? null : (title ?? defaultTitle);
@@ -143,7 +165,7 @@ function EditLayout({
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
-        {displayTitle && <h1 className="text-2xl font-bold text-gray-800">{displayTitle}</h1>}
+        {displayTitle && <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{displayTitle}</h1>}
         {actions && <div>{actions}</div>}
       </div>
 

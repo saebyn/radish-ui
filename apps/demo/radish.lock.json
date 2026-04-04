@@ -3,148 +3,164 @@
     "layout": {
       "files": {
         "layout/layout.tsx": {
-          "registryHash": "sha256-f9e57bb944c77943843718ee94aa183425d986b1d96c82c555d294ae94b8f563",
-          "localHash": "sha256-f9e57bb944c77943843718ee94aa183425d986b1d96c82c555d294ae94b8f563"
+          "registryHash": "sha256-472095cef4d1ca8aff5ee070433f20c38dd5fbb7ae79e19dcc352bef1192b409",
+          "localHash": "sha256-472095cef4d1ca8aff5ee070433f20c38dd5fbb7ae79e19dcc352bef1192b409"
         },
         "layout/sidebar.tsx": {
-          "registryHash": "sha256-c05783fc799b849684076557fe3eabdf4c6660230a92d8f47f086e069c041ef5",
-          "localHash": "sha256-c05783fc799b849684076557fe3eabdf4c6660230a92d8f47f086e069c041ef5"
+          "registryHash": "sha256-c780977875bc73c66ed645578c486228815cd050d308d6f7ad6408eb940687b7",
+          "localHash": "sha256-c780977875bc73c66ed645578c486228815cd050d308d6f7ad6408eb940687b7"
         },
         "layout/menu.tsx": {
-          "registryHash": "sha256-02f673c0778f4b4e70fabbc5bddc43a70d03a4edb95bee0b237ecbb6c847190e",
-          "localHash": "sha256-02f673c0778f4b4e70fabbc5bddc43a70d03a4edb95bee0b237ecbb6c847190e"
+          "registryHash": "sha256-18944efca9e9471200aad90e5581424a6b86f5c1075e63909b4e11a3aa63b223",
+          "localHash": "sha256-18944efca9e9471200aad90e5581424a6b86f5c1075e63909b4e11a3aa63b223"
+        },
+        "notification/notification.tsx": {
+          "registryHash": "sha256-1515d9adfda65f2c15858559276e4bd061a01a783684632dc09fa3840cd26f0e",
+          "localHash": "sha256-1515d9adfda65f2c15858559276e4bd061a01a783684632dc09fa3840cd26f0e"
         }
       }
     },
     "datagrid": {
       "files": {
         "list/datagrid.tsx": {
-          "registryHash": "sha256-ad924ba769d8cb14a63be3c4aee3f7fdb21c589fcf2d53636b65bec881a621ad",
-          "localHash": "sha256-ad924ba769d8cb14a63be3c4aee3f7fdb21c589fcf2d53636b65bec881a621ad"
+          "registryHash": "sha256-50164382d6e51515b863f38fc5aacf5f0235076ca39ca453b23db52096e84e61",
+          "localHash": "sha256-50164382d6e51515b863f38fc5aacf5f0235076ca39ca453b23db52096e84e61"
+        },
+        "skeleton/skeleton.tsx": {
+          "registryHash": "sha256-cc21480e5f4afff26cabefbfee24a0d778b9e3b824c12f534ba449472f0c3be5",
+          "localHash": "sha256-cc21480e5f4afff26cabefbfee24a0d778b9e3b824c12f534ba449472f0c3be5"
         }
       }
     },
     "text-field": {
       "files": {
         "field/text-field.tsx": {
-          "registryHash": "sha256-45e8205b4c313a39ee963b695ae3d1c6ab8670edd565de5ad596163c3a12367b",
-          "localHash": "sha256-45e8205b4c313a39ee963b695ae3d1c6ab8670edd565de5ad596163c3a12367b"
+          "registryHash": "sha256-a3664b5c7b5496625301d2c58daa08f3c963c64abe4f7fcbecaef74fd63cc496",
+          "localHash": "sha256-a3664b5c7b5496625301d2c58daa08f3c963c64abe4f7fcbecaef74fd63cc496"
         }
       }
     },
     "edit-button": {
       "files": {
         "button/edit-button.tsx": {
-          "registryHash": "sha256-1c579ea3c528d2d221b6e43a52604cbe04804f2ba2e97a7405535693382021fa",
-          "localHash": "sha256-1c579ea3c528d2d221b6e43a52604cbe04804f2ba2e97a7405535693382021fa"
+          "registryHash": "sha256-4e8c2f47e9fa6648b407772fc1d2d9628a52d50371571956a668d9887cbaaaeb",
+          "localHash": "sha256-4e8c2f47e9fa6648b407772fc1d2d9628a52d50371571956a668d9887cbaaaeb"
         }
       }
     },
     "delete-button": {
       "files": {
         "button/delete-button.tsx": {
-          "registryHash": "sha256-7d21881a4974ab65ba91fe616f3a25b2f86a7b7260af7ec084263f549605cfeb",
-          "localHash": "sha256-7d21881a4974ab65ba91fe616f3a25b2f86a7b7260af7ec084263f549605cfeb"
+          "registryHash": "sha256-023e10865a2f46bd2e0b1ab8b9866ed155e3b78195a153306e47eb64716dc40d",
+          "localHash": "sha256-023e10865a2f46bd2e0b1ab8b9866ed155e3b78195a153306e47eb64716dc40d"
         }
       }
     },
     "create-button": {
       "files": {
         "button/create-button.tsx": {
-          "registryHash": "sha256-ed6df15a9fa3fb2ab5acec9ab101e5bf64a9997a878f57c2b497502cd77e1a23",
-          "localHash": "sha256-ed6df15a9fa3fb2ab5acec9ab101e5bf64a9997a878f57c2b497502cd77e1a23"
+          "registryHash": "sha256-e4f68e6ef4ad832447dd465fd1844130d673c9646cc140275bd858566f1f0900",
+          "localHash": "sha256-e4f68e6ef4ad832447dd465fd1844130d673c9646cc140275bd858566f1f0900"
         }
       }
     },
     "pagination": {
       "files": {
         "list/pagination.tsx": {
-          "registryHash": "sha256-12671f7c49db99789e18253e8405a6928e36c003a4105db8cd7bc0df96a45708",
-          "localHash": "sha256-12671f7c49db99789e18253e8405a6928e36c003a4105db8cd7bc0df96a45708"
+          "registryHash": "sha256-3657ee5169dcbed636b1d35ca13c27e4ab2c2c59511bc525990e4e1168f2b56f",
+          "localHash": "sha256-3657ee5169dcbed636b1d35ca13c27e4ab2c2c59511bc525990e4e1168f2b56f"
         }
       }
     },
     "simple-form": {
       "files": {
         "form/simple-form.tsx": {
-          "registryHash": "sha256-66f3a32258af93844f5e8d53925c3b25cb68195ce70ba5d7873c1719b0ff8579",
-          "localHash": "sha256-66f3a32258af93844f5e8d53925c3b25cb68195ce70ba5d7873c1719b0ff8579"
+          "registryHash": "sha256-620cb283fd27428078e6200995ded82be733ab425823ab6f819027567bc60dcc",
+          "localHash": "sha256-620cb283fd27428078e6200995ded82be733ab425823ab6f819027567bc60dcc"
         },
         "form/text-input.tsx": {
-          "registryHash": "sha256-aca12e23face17a252bbf45960dd68f438ba884d0d2f82c52a6f3fc4be4b6fb2",
-          "localHash": "sha256-aca12e23face17a252bbf45960dd68f438ba884d0d2f82c52a6f3fc4be4b6fb2"
+          "registryHash": "sha256-b1f86f00183e6ca9f4357f50b65c12383e938591da8c766479ce78efe38233b3",
+          "localHash": "sha256-b1f86f00183e6ca9f4357f50b65c12383e938591da8c766479ce78efe38233b3"
         },
         "form/number-input.tsx": {
-          "registryHash": "sha256-e36fd446c440320de4cb3d2fd1c62bb33fe7b7761ad45e723f2ec24058d760c0",
-          "localHash": "sha256-e36fd446c440320de4cb3d2fd1c62bb33fe7b7761ad45e723f2ec24058d760c0"
+          "registryHash": "sha256-9b027495a00aac14abd1304b00dbd4024f5d2793f8509047c1e2ef523cff0b85",
+          "localHash": "sha256-9b027495a00aac14abd1304b00dbd4024f5d2793f8509047c1e2ef523cff0b85"
         },
         "form/select-input.tsx": {
-          "registryHash": "sha256-b65ac157aa8667941a0a99dc6d2ce066f959e80a0a073ac53557a9ebee885ddb",
-          "localHash": "sha256-b65ac157aa8667941a0a99dc6d2ce066f959e80a0a073ac53557a9ebee885ddb"
+          "registryHash": "sha256-e7ff324360ca1e02d39b1f7e1d25555387be4a214d035f3161f1cd10215d0de8",
+          "localHash": "sha256-e7ff324360ca1e02d39b1f7e1d25555387be4a214d035f3161f1cd10215d0de8"
         },
         "form/boolean-input.tsx": {
-          "registryHash": "sha256-a6b6c921718c8b488205dfba9d51936620f210ab02fae24a5d2ab3165b63bfdd",
-          "localHash": "sha256-a6b6c921718c8b488205dfba9d51936620f210ab02fae24a5d2ab3165b63bfdd"
+          "registryHash": "sha256-ec9d4bd48723bff17cd925b664b820995c3270075afe1232d62a6ab83d652c87",
+          "localHash": "sha256-ec9d4bd48723bff17cd925b664b820995c3270075afe1232d62a6ab83d652c87"
         }
       }
     },
     "boolean-field": {
       "files": {
         "field/boolean-field.tsx": {
-          "registryHash": "sha256-718b112dfc7e777ab6948ded2c1ed0a00d9a6519934128f0bf722b7de83f5ccf",
-          "localHash": "sha256-718b112dfc7e777ab6948ded2c1ed0a00d9a6519934128f0bf722b7de83f5ccf"
+          "registryHash": "sha256-5186fa492784747e2b91c260c851b7be22d814c5568e2263699f15856d215b40",
+          "localHash": "sha256-5186fa492784747e2b91c260c851b7be22d814c5568e2263699f15856d215b40"
         }
       }
     },
     "number-field": {
       "files": {
         "field/number-field.tsx": {
-          "registryHash": "sha256-819bde3d849fdadd9bbf85174accb7ca8c01efa05fdd15aa53ddd4966b046f4b",
-          "localHash": "sha256-819bde3d849fdadd9bbf85174accb7ca8c01efa05fdd15aa53ddd4966b046f4b"
+          "registryHash": "sha256-7c7b4ad640cd1be46a13aa92a146fe829220358a61c361abc57d231956532b40",
+          "localHash": "sha256-7c7b4ad640cd1be46a13aa92a146fe829220358a61c361abc57d231956532b40"
         }
       }
     },
     "date-field": {
       "files": {
         "field/date-field.tsx": {
-          "registryHash": "sha256-6bcabc6e9dcdd5116970d9e4696fdfb7a7041cf9cc45c3884a06abd05e8901f3",
-          "localHash": "sha256-6bcabc6e9dcdd5116970d9e4696fdfb7a7041cf9cc45c3884a06abd05e8901f3"
+          "registryHash": "sha256-89e6a3774e3d2c7cd6c026a39976825dd69a950c95de9aaae28b439580e72908",
+          "localHash": "sha256-89e6a3774e3d2c7cd6c026a39976825dd69a950c95de9aaae28b439580e72908"
         }
       }
     },
     "list": {
       "files": {
         "list/list.tsx": {
-          "registryHash": "sha256-e341416003540de398599fcf436641a7ef2cfc522780ae1072e8eb38821e4d8a",
-          "localHash": "sha256-e341416003540de398599fcf436641a7ef2cfc522780ae1072e8eb38821e4d8a"
+          "registryHash": "sha256-c2800f139f22dafffe64451a3223a07f7a8baed7ec2fce6560dd18721a976819",
+          "localHash": "sha256-c2800f139f22dafffe64451a3223a07f7a8baed7ec2fce6560dd18721a976819"
         }
       }
     },
     "edit": {
       "files": {
         "detail/edit.tsx": {
-          "registryHash": "sha256-8e4cccd7518c834a042a9ff4befc105f3fd6a1b81e7693a990dd87c419c40e28",
-          "localHash": "sha256-8e4cccd7518c834a042a9ff4befc105f3fd6a1b81e7693a990dd87c419c40e28"
+          "registryHash": "sha256-8f7fe2e28b12342a5d30560e4b366a6f1b70cd6ef4e1d3bfa1f0c4193395ce50",
+          "localHash": "sha256-8f7fe2e28b12342a5d30560e4b366a6f1b70cd6ef4e1d3bfa1f0c4193395ce50"
+        },
+        "skeleton/skeleton.tsx": {
+          "registryHash": "sha256-cc21480e5f4afff26cabefbfee24a0d778b9e3b824c12f534ba449472f0c3be5",
+          "localHash": "sha256-cc21480e5f4afff26cabefbfee24a0d778b9e3b824c12f534ba449472f0c3be5"
         }
       }
     },
     "create": {
       "files": {
         "detail/create.tsx": {
-          "registryHash": "sha256-1196e89c8937dca8a56e33eb598720d398df4a51e9c3e89fdcd7d62e5d5aad27",
-          "localHash": "sha256-1196e89c8937dca8a56e33eb598720d398df4a51e9c3e89fdcd7d62e5d5aad27"
+          "registryHash": "sha256-d42e125f425c5a6dd37df3a139314805b63f0db4c2ea70151d08069db7549180",
+          "localHash": "sha256-d42e125f425c5a6dd37df3a139314805b63f0db4c2ea70151d08069db7549180"
         }
       }
     },
     "show": {
       "files": {
         "detail/show.tsx": {
-          "registryHash": "sha256-284574eeaac0ff8239f66efc6ae724afc3fc958e1a63e53471653ef147224dbb",
-          "localHash": "sha256-284574eeaac0ff8239f66efc6ae724afc3fc958e1a63e53471653ef147224dbb"
+          "registryHash": "sha256-75ba056d6fc82c979f9e2fe8ef357166ceb1eb5cd78cd12a495475a0b405a3ca",
+          "localHash": "sha256-75ba056d6fc82c979f9e2fe8ef357166ceb1eb5cd78cd12a495475a0b405a3ca"
         },
         "detail/simple-show-layout.tsx": {
-          "registryHash": "sha256-96fbf2ab169d3d4db5454794fe195b39cc2f256d3f1b85cd963df18646e4c067",
-          "localHash": "sha256-96fbf2ab169d3d4db5454794fe195b39cc2f256d3f1b85cd963df18646e4c067"
+          "registryHash": "sha256-796bd385510e6cce705f8d69a42a72028b12092d04b1cf65d171d898769b12c8",
+          "localHash": "sha256-796bd385510e6cce705f8d69a42a72028b12092d04b1cf65d171d898769b12c8"
+        },
+        "skeleton/skeleton.tsx": {
+          "registryHash": "sha256-cc21480e5f4afff26cabefbfee24a0d778b9e3b824c12f534ba449472f0c3be5",
+          "localHash": "sha256-cc21480e5f4afff26cabefbfee24a0d778b9e3b824c12f534ba449472f0c3be5"
         }
       }
     }
