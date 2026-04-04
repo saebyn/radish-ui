@@ -17,7 +17,8 @@
         "name": "err"
       }
     ],
-    // --- Rules that are too opinionated for this codebase, explicitly silenced ---
+    // CSS side-effect imports (e.g. in Storybook preview) are intentional
+    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css"] }],
     // Async functions are used intentionally in some places for readability, even if they don't `await`
     "require-await": "off",
     // The CLI intentionally uses Node.js built-ins everywhere
