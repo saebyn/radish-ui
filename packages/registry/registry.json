@@ -2,11 +2,7 @@
   "components": [
     {
       "name": "layout",
-      "files": [
-        "src/layout/layout.tsx",
-        "src/layout/sidebar.tsx",
-        "src/layout/menu.tsx"
-      ],
+      "files": ["src/layout/layout.tsx", "src/layout/sidebar.tsx", "src/layout/menu.tsx"],
       "dependencies": ["@radish-ui/core", "react-icons"]
     },
     {

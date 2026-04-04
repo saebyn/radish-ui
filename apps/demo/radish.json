@@ -1,0 +1,4 @@
+{
+  "registry": "../../packages/registry",
+  "outputDir": "src/components"
+}

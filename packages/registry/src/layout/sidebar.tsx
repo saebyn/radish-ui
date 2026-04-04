@@ -19,7 +19,7 @@ export function Sidebar({ open, onToggle, children }: SidebarProps) {
     <aside
       className={cn(
         "flex flex-col bg-gray-900 text-white transition-all duration-200",
-        open ? "w-56" : "w-14"
+        open ? "w-56" : "w-14",
       )}
     >
       {/* Toggle button */}

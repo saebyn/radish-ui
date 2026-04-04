@@ -29,13 +29,7 @@ interface ListViewProps {
  *   </ListView>
  * </ListBase>
  */
-export function ListView({
-  children,
-  actions,
-  filters,
-  aside,
-  className,
-}: ListViewProps) {
+export function ListView({ children, actions, filters, aside, className }: ListViewProps) {
   const { defaultTitle, error, isLoading } = useListContext();
 
   if (error) {
@@ -62,9 +56,7 @@ export function ListView({
       <div className="flex gap-4">
         <div className="flex-1">
           {isLoading ? (
-            <div className="flex items-center justify-center py-12 text-gray-500">
-              Loading…
-            </div>
+            <div className="flex items-center justify-center py-12 text-gray-500">Loading…</div>
           ) : (
             children
           )}

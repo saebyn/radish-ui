@@ -29,26 +29,17 @@ export function Layout({ children, title }: LayoutProps) {
     <div className="flex h-screen flex-col bg-gray-100">
       {/* Header */}
       <header className="flex h-12 shrink-0 items-center bg-indigo-700 px-4 shadow">
-        <span className="text-lg font-semibold text-white">
-          {title ?? "radish-ui"}
-        </span>
+        <span className="text-lg font-semibold text-white">{title ?? "radish-ui"}</span>
       </header>
 
       {/* Body: sidebar + content */}
       <div className="flex flex-1 overflow-hidden">
-        <Sidebar
-          open={sidebarOpen}
-          onToggle={() => setSidebarOpen((prev) => !prev)}
-        >
+        <Sidebar open={sidebarOpen} onToggle={() => setSidebarOpen((prev) => !prev)}>
           <Menu open={sidebarOpen} />
         </Sidebar>
 
         {/* Main content */}
-        <main
-          className={cn(
-            "flex-1 overflow-auto p-6 transition-all duration-200"
-          )}
-        >
+        <main className={cn("flex-1 overflow-auto p-6 transition-all duration-200")}>
           {children}
         </main>
       </div>

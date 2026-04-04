@@ -1,0 +1,44 @@
+{
+  "components": {
+    "layout": {
+      "files": {
+        "layout/layout.tsx": {
+          "registryHash": "sha256-f9e57bb944c77943843718ee94aa183425d986b1d96c82c555d294ae94b8f563",
+          "localHash": "sha256-f9e57bb944c77943843718ee94aa183425d986b1d96c82c555d294ae94b8f563"
+        },
+        "layout/sidebar.tsx": {
+          "registryHash": "sha256-c05783fc799b849684076557fe3eabdf4c6660230a92d8f47f086e069c041ef5",
+          "localHash": "sha256-c05783fc799b849684076557fe3eabdf4c6660230a92d8f47f086e069c041ef5"
+        },
+        "layout/menu.tsx": {
+          "registryHash": "sha256-02f673c0778f4b4e70fabbc5bddc43a70d03a4edb95bee0b237ecbb6c847190e",
+          "localHash": "sha256-02f673c0778f4b4e70fabbc5bddc43a70d03a4edb95bee0b237ecbb6c847190e"
+        }
+      }
+    },
+    "datagrid": {
+      "files": {
+        "list/datagrid.tsx": {
+          "registryHash": "sha256-ad924ba769d8cb14a63be3c4aee3f7fdb21c589fcf2d53636b65bec881a621ad",
+          "localHash": "sha256-ad924ba769d8cb14a63be3c4aee3f7fdb21c589fcf2d53636b65bec881a621ad"
+        }
+      }
+    },
+    "list-view": {
+      "files": {
+        "list/list-view.tsx": {
+          "registryHash": "sha256-13b26b1c444bb34e3f288838309e0c7b95f7774f89ddf6dcbffba7c5b008493c",
+          "localHash": "sha256-13b26b1c444bb34e3f288838309e0c7b95f7774f89ddf6dcbffba7c5b008493c"
+        }
+      }
+    },
+    "text-field": {
+      "files": {
+        "field/text-field.tsx": {
+          "registryHash": "sha256-45e8205b4c313a39ee963b695ae3d1c6ab8670edd565de5ad596163c3a12367b",
+          "localHash": "sha256-45e8205b4c313a39ee963b695ae3d1c6ab8670edd565de5ad596163c3a12367b"
+        }
+      }
+    }
+  }
+}

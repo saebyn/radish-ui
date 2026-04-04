@@ -32,9 +32,7 @@ export function Menu({ open = true, className }: MenuProps) {
                 {/* Resource icon placeholder */}
                 <span className="inline-block h-4 w-4 rounded-sm bg-indigo-500 shrink-0" />
                 {open && (
-                  <span className="truncate capitalize">
-                    {resource.options?.label ?? name}
-                  </span>
+                  <span className="truncate capitalize">{resource.options?.label ?? name}</span>
                 )}
               </a>
             </li>

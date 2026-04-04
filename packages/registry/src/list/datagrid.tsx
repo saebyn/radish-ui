@@ -32,32 +32,29 @@ export function Datagrid({ children, className }: DatagridProps) {
   }>[];
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12 text-gray-500">
-        Loading…
-      </div>
-    );
+    return <div className="flex items-center justify-center py-12 text-gray-500">Loading…</div>;
   }
 
   if (!data || data.length === 0) {
     return (
-      <div className="flex items-center justify-center py-12 text-gray-400">
-        No records found.
-      </div>
+      <div className="flex items-center justify-center py-12 text-gray-400">No records found.</div>
     );
   }
 
   return (
-    <div className={cn("overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm", className)}>
+    <div
+      className={cn(
+        "overflow-x-auto rounded-lg border border-gray-200 bg-white shadow-sm",
+        className,
+      )}
+    >
       <table className="min-w-full divide-y divide-gray-200 text-sm">
         <thead className="bg-gray-50">
           <tr>
             {columns.map((col, i) => {
               const header =
                 col.props.label ??
-                (col.props.source
-                  ? capitalize(col.props.source)
-                  : `Column ${i + 1}`);
+                (col.props.source ? capitalize(col.props.source) : `Column ${i + 1}`);
               return (
                 <th
                   key={col.props.source ?? i}
@@ -75,10 +72,7 @@ export function Datagrid({ children, className }: DatagridProps) {
             <RecordContextProvider key={record.id} value={record}>
               <tr className="hover:bg-indigo-50 transition-colors">
                 {columns.map((col, i) => (
-                  <td
-                    key={col.props.source ?? i}
-                    className="px-4 py-3 text-gray-700"
-                  >
+                  <td key={col.props.source ?? i} className="px-4 py-3 text-gray-700">
                     {col}
                   </td>
                 ))}

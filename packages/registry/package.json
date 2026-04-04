@@ -1,8 +1,8 @@
 {
   "name": "@radish-ui/registry",
   "version": "0.1.0",
-  "description": "Copy/paste Tailwind components for react-admin (radish-ui registry)",
   "private": true,
+  "description": "Copy/paste Tailwind components for react-admin (radish-ui registry)",
   "license": "MIT",
   "dependencies": {
     "@radish-ui/core": "workspace:*",
