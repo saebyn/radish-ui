@@ -71,9 +71,9 @@ interface SkeletonContainerProps {
 
 /**
  * Wrapper for composite skeleton loading states.
- * Renders a single `role="status"` live region with `aria-busy` so all
- * the decorative skeleton blocks inside it are announced by one label —
- * no need to label every individual block.
+ * Renders a `role="status"` / `aria-live="polite"` live region with `aria-busy`
+ * and a visually-hidden label so screen readers announce loading once — no need
+ * to label every individual `Skeleton` block inside.
  *
  * Copy this file into your project and customise freely.
  *
@@ -85,7 +85,8 @@ interface SkeletonContainerProps {
  */
 export function SkeletonContainer({ label, className, children }: SkeletonContainerProps) {
   return (
-    <div aria-busy="true" aria-label={label} className={className}>
+    <div role="status" aria-live="polite" aria-busy="true" className={className}>
+      <span className="sr-only">{label}</span>
       {children}
     </div>
   );

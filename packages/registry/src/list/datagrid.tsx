@@ -1,7 +1,7 @@
 import React from "react";
 import { useListContext, RecordContextProvider } from "ra-core";
 import { cn } from "@radish-ui/core";
-import { SkeletonContainer } from "../skeleton/skeleton";
+import { Skeleton, SkeletonContainer } from "../skeleton/skeleton";
 
 interface DatagridProps {
   /** Field components (e.g. <TextField source="title" />) */
@@ -75,12 +75,12 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
               <tr key={rowIdx}>
                 {columns.map((col, colIdx) => (
                   <td key={col.props.source ?? colIdx} className="px-4 py-3">
-                    <div className="h-4 animate-pulse rounded-md bg-gray-200" />
+                    <Skeleton className="h-4" />
                   </td>
                 ))}
                 {rowActions && (
                   <td className="px-4 py-3 text-right">
-                    <div className="ml-auto h-4 w-16 animate-pulse rounded-md bg-gray-200" />
+                    <Skeleton className="ml-auto h-4 w-16" />
                   </td>
                 )}
               </tr>

@@ -115,42 +115,6 @@ CLI flags take precedence over the config file.
 | `create-button` | `button/create-button.tsx`                                                                                                |
 | `simple-form`   | `form/simple-form.tsx`, `form/text-input.tsx`, `form/number-input.tsx`, `form/select-input.tsx`, `form/boolean-input.tsx` |
 
-## Loading states
-
-All major data components display a skeleton loading state while waiting for data from the server. The skeleton uses Tailwind's `animate-pulse` to create a pulsing placeholder that mirrors the component's final layout, preventing layout shift and improving perceived performance.
-
-### Built-in loading states
-
-| Component  | Loading behaviour                                                         |
-| ---------- | ------------------------------------------------------------------------- |
-| `Datagrid` | Shows the real column headers with animated placeholder rows              |
-| `Show`     | Shows a skeleton title bar and field rows that match `SimpleShowLayout`   |
-| `Edit`     | Shows a skeleton title bar and form field placeholders                    |
-| `List`     | Delegates to its child (typically `Datagrid`) so the table skeleton shows |
-
-### `Skeleton` primitive
-
-The standalone `Skeleton` component is a single animated `<div>` you can compose into any custom loading state:
-
-```tsx
-import { Skeleton } from "./components/radish/skeleton/skeleton";
-
-// Text-line placeholder
-<Skeleton className="h-4 w-48" />
-
-// Full-width input placeholder
-<Skeleton className="h-9 w-full" />
-
-// Avatar placeholder
-<Skeleton className="h-10 w-10 rounded-full" />
-```
-
-Add it with the CLI:
-
-```bash
-npx @radish-ui/cli add skeleton
-```
-
 ## Storybook
 
 Registry components can be previewed and developed in isolation using Storybook:

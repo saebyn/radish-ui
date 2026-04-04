@@ -1,7 +1,7 @@
 import React from "react";
 import { EditBase, useEditContext } from "ra-core";
 import { cn } from "@radish-ui/core";
-import { SkeletonContainer } from "../skeleton/skeleton";
+import { Skeleton, SkeletonContainer } from "../skeleton/skeleton";
 
 interface EditProps {
   /**
@@ -139,22 +139,22 @@ function EditLayout({
     return (
       <SkeletonContainer label="Loading form…" className={cn("space-y-4", className)}>
         <div className="flex items-center justify-between">
-          <div className="h-8 w-48 animate-pulse rounded-md bg-gray-200" />
-          {actions && <div className="h-8 w-24 animate-pulse rounded-md bg-gray-200" />}
+          <Skeleton className="h-8 w-48" />
+          {actions && <Skeleton className="h-8 w-24" />}
         </div>
         <div className="flex gap-4">
           <div className="flex-1 rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
             <div className="space-y-5">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="space-y-1.5">
-                  <div className="h-4 w-24 animate-pulse rounded-md bg-gray-200" />
-                  <div className="h-9 w-full animate-pulse rounded-md bg-gray-200" />
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-9 w-full" />
                 </div>
               ))}
-              <div className="mt-2 h-9 w-28 animate-pulse rounded-md bg-gray-200" />
+              <Skeleton className="mt-2 h-9 w-28" />
             </div>
           </div>
-          {aside && <div className="h-64 w-64 shrink-0 animate-pulse rounded-md bg-gray-200" />}
+          {aside && <Skeleton className="h-64 w-64 shrink-0" />}
         </div>
       </SkeletonContainer>
     );
