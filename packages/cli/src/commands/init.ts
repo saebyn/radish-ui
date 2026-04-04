@@ -37,15 +37,22 @@ export const SampleComponent: FC = () => {
 `;
 }
 
+const INSTALL_COMMANDS: Record<string, string> = {
+  yarn: "yarn add",
+  npm: "npm install",
+  pnpm: "pnpm add",
+};
+
 function detectPackageManager(): string {
   const agent = process.env["npm_config_user_agent"] ?? "";
-  if (agent.startsWith("yarn")) return "yarn";
-  if (agent.startsWith("npm")) return "npm";
+  for (const pm of ["yarn", "npm", "pnpm"] as const) {
+    if (agent.startsWith(pm)) return pm;
+  }
   return "pnpm";
 }
 
 function printInstallHint(pm: string): void {
-  const installCmd = pm === "npm" ? "npm install" : pm === "yarn" ? "yarn add" : "pnpm add";
+  const installCmd = INSTALL_COMMANDS[pm] ?? "pnpm add";
   const deps = ["@radish-ui/core", "ra-core", "ra-i18n-polyglot", "ra-language-english"];
   console.log("\nInstall recommended dependencies:");
   console.log(`  ${installCmd} ${deps.join(" ")}`);
