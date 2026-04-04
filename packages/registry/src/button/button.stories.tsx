@@ -60,13 +60,7 @@ interface WrapperProps {
   onDelete: (resource: string, params: { id: unknown }) => void;
 }
 
-interface WrapperContextValue {
-  children: React.ReactNode;
-  onNavigate: (path: string) => void;
-  onDelete: (resource: string, params: { id: unknown }) => void;
-}
-
-const WrapperContext = React.createContext<WrapperContextValue>({
+const WrapperContext = React.createContext<WrapperProps>({
   children: null,
   onNavigate: () => {},
   onDelete: () => {},
@@ -115,7 +109,7 @@ const defaultSpyArgs: SpyArgs = {
 // --- EditButton ---
 
 const editMeta: Meta<SpyArgs & { label?: string; resource?: string; className?: string }> = {
-  title: "Button/EditButton",
+  title: "Button",
   component: EditButton,
   args: defaultSpyArgs,
   decorators: [
@@ -131,11 +125,11 @@ export default editMeta;
 type EditStory = StoryObj<typeof editMeta>;
 
 export const DefaultEdit: EditStory = {
-  name: "Default",
+  name: "EditButton",
 };
 
 export const CustomLabel: EditStory = {
-  name: "Custom Label",
+  name: "EditButton with Custom Label",
   args: { label: "Edit Post" },
 };
 
