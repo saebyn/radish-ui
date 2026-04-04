@@ -41,7 +41,10 @@ export function ExportButton({
       const ids = Array.from(
         new Set(
           records
-            .map((r) => (r as RecordWithFields)[field])
+            .flatMap((r) => {
+              const value = (r as RecordWithFields)[field];
+              return Array.isArray(value) ? value : [value];
+            })
             .filter((id): id is NonNullable<typeof id> => id != null),
         ),
       );

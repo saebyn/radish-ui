@@ -14,6 +14,17 @@ interface ReferenceInputProps {
   emptyText?: string;
   /** Number of choices to load. Default: 25. */
   perPage?: number;
+  /**
+   * Convert the select's string value into the form field value.
+   * Defaults to numeric-aware parsing: integer strings are returned as numbers,
+   * other non-empty strings are returned as-is, and an empty string becomes `null`.
+   */
+  parse?: (value: string) => unknown;
+  /**
+   * Convert the form field value into the select's string value.
+   * Defaults to `String(v)` (empty string for null/undefined).
+   */
+  format?: (value: unknown) => string;
   className?: string;
 }
 
@@ -33,6 +44,8 @@ export function ReferenceInput({
   label,
   emptyText = "— select —",
   perPage = 25,
+  parse,
+  format,
   className,
 }: ReferenceInputProps) {
   const {
@@ -42,8 +55,14 @@ export function ReferenceInput({
     isRequired,
   } = useInput({
     source,
-    format: (v: unknown) => (v == null ? "" : String(v)),
-    parse: (v: string) => (v === "" ? null : v),
+    format: format ?? ((v: unknown) => (v == null ? "" : String(v))),
+    parse:
+      parse ??
+      ((v: string) => {
+        if (v === "") return null;
+        const n = Number(v);
+        return Number.isInteger(n) ? n : v;
+      }),
   });
 
   const { data: choices, isLoading } = useGetList(reference, {
