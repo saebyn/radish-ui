@@ -54,7 +54,8 @@ pnpm test
 git add CHANGELOG.md packages/core/package.json packages/cli/package.json
 git commit -m "chore: release vx.y.z"
 git tag vx.y.z
-git push origin main --tags
+git push origin main
+git push origin vx.y.z
 ```
 
 ### 5. Create a GitHub Release
