@@ -4,3 +4,5 @@ dist
 *.local
 apps/demo/dist
 packages/registry/storybook-static
+apps/demo/playwright-report
+apps/demo/test-results
