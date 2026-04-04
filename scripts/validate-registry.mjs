@@ -15,7 +15,7 @@
  *   - Every component name in the lockfile exists in registry.json
  */
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve, posix } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -97,8 +97,8 @@ for (const [index, component] of registry.components.entries()) {
   }
 
   // --- files ---
-  if (!Array.isArray(component.files) || component.files.length === 0) {
-    error(`${prefix}: "files" must be a non-empty array`);
+  if (!Array.isArray(component.files)) {
+    error(`${prefix}: "files" must be an array`);
   } else {
     const seenFiles = new Set();
     for (const file of component.files) {
@@ -131,9 +131,14 @@ for (const [index, component] of registry.components.entries()) {
         continue;
       }
 
-      // File must exist on disk
+      // File must exist on disk and be a regular file (not a directory or symlink)
       const absPath = resolve(REGISTRY_DIR, file);
-      if (!existsSync(absPath)) {
+      try {
+        const stat = statSync(absPath);
+        if (!stat.isFile()) {
+          error(`${prefix}: referenced path is not a regular file: "${absPath}"`);
+        }
+      } catch {
         error(`${prefix}: referenced file does not exist: "${absPath}"`);
       }
     }
@@ -196,7 +201,7 @@ if (!existsSync(LOCKFILE_PATH)) {
     } else {
       ok("radish.lock.json is valid JSON with a components object");
 
-      const registryNames = new Set(registry.components.map((c) => c.name));
+      const registryNames = seenNames;
 
       for (const componentName of Object.keys(lockfile.components)) {
         if (!registryNames.has(componentName)) {
