@@ -6,3 +6,6 @@ apps/demo/dist
 packages/registry/storybook-static
 apps/demo/playwright-report
 apps/demo/test-results
+apps/docs/.vitepress/dist
+apps/docs/.vitepress/cache
+apps/docs/public/registry

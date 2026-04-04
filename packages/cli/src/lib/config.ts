@@ -15,10 +15,9 @@ export const DEFAULT_OUTPUT_DIR = "src/components/radish";
 
 /**
  * Default registry base URL used when no --registry flag or radish.json entry is present.
- * Points to the registry package in the main branch of the radish-ui GitHub repository.
+ * Points to the hosted registry on the radish-ui documentation site.
  */
-export const DEFAULT_REGISTRY_URL =
-  "https://raw.githubusercontent.com/saebyn/radish-ui/main/packages/registry";
+export const DEFAULT_REGISTRY_URL = "https://saebyn.github.io/radish-ui/registry";
 
 export function loadConfig(cwd: string): RadishConfig {
   const configPath = resolve(cwd, "radish.json");
