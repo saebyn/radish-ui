@@ -59,12 +59,16 @@ export function TabbedShowLayout({ children, className }: TabbedShowLayoutProps)
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "ArrowRight") {
+      e.preventDefault();
       setActiveIndex((prev) => (prev + 1) % tabs.length);
     } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
       setActiveIndex((prev) => (prev - 1 + tabs.length) % tabs.length);
     } else if (e.key === "Home") {
+      e.preventDefault();
       setActiveIndex(0);
     } else if (e.key === "End") {
+      e.preventDefault();
       setActiveIndex(tabs.length - 1);
     }
   };
