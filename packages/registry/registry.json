@@ -7,7 +7,12 @@
     },
     {
       "name": "layout",
-      "files": ["src/layout/layout.tsx", "src/layout/sidebar.tsx", "src/layout/menu.tsx"],
+      "files": [
+        "src/layout/layout.tsx",
+        "src/layout/sidebar.tsx",
+        "src/layout/menu.tsx",
+        "src/notification/notification.tsx"
+      ],
       "dependencies": ["@radish-ui/core", "react-icons"]
     },
     {
@@ -88,6 +93,11 @@
         "src/form/select-input.tsx",
         "src/form/boolean-input.tsx"
       ],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "notification",
+      "files": ["src/notification/notification.tsx"],
       "dependencies": ["@radish-ui/core"]
     }
   ]

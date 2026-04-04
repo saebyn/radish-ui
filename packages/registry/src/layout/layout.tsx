@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { cn } from "@radish-ui/core";
 import { Sidebar } from "./sidebar";
 import { Menu } from "./menu";
+import { Notification } from "../notification/notification";
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -43,6 +44,9 @@ export function Layout({ children, title }: LayoutProps) {
           {children}
         </main>
       </div>
+
+      {/* Toast notifications */}
+      <Notification />
     </div>
   );
 }
