@@ -1,5 +1,5 @@
-import { existsSync, mkdirSync, readFileSync } from "node:fs";
-import { resolve, join } from "node:path";
+import { existsSync, lstatSync, mkdirSync, readFileSync } from "node:fs";
+import { basename, resolve, join } from "node:path";
 import * as clack from "@clack/prompts";
 import chalk from "chalk";
 import { hashContent } from "../lib/hash.js";
@@ -358,6 +358,7 @@ function copyComponent(
   component: RegistryComponent,
   registryDir: string,
   targetDir: string,
+  force = false,
 ): ComponentFileLock[] {
   const fileLocks: ComponentFileLock[] = [];
 
@@ -373,7 +374,7 @@ function copyComponent(
     const content = readFileSync(srcPath);
     const hash = hashContent(content);
     const destPath = join(targetDir, relPath);
-    writeFileAtomic(targetDir, destPath, content);
+    writeFileAtomic(targetDir, destPath, content, force);
 
     fileLocks.push({ relPath, lock: { registryHash: hash, localHash: hash } });
   }
@@ -400,10 +401,17 @@ export async function newCommand(
   const outDir =
     outDirArg !== undefined && outDirArg.trim().length > 0 ? outDirArg.trim() : "my-admin";
   const projectDir = resolve(cwd, outDir);
-  const dirBasename = outDir.split("/").at(-1) ?? outDir;
+  const dirBasename = basename(outDir) || outDir;
 
   // 2. Handle existing directory (before prompting for name, so the user can bail early)
+  let overwriteExisting = false;
   if (existsSync(projectDir)) {
+    const stat = lstatSync(projectDir);
+    if (!stat.isDirectory()) {
+      throw new RadishError(
+        `"${outDir}" already exists and is not a directory. Choose a different name.`,
+      );
+    }
     if (useDefaults) {
       throw new RadishError(
         `Directory "${outDir}" already exists. Remove it or choose a different name.`,
@@ -417,6 +425,7 @@ export async function newCommand(
       clack.cancel("Cancelled.");
       return;
     }
+    overwriteExisting = true;
   }
 
   // 3. Resolve project name (defaults to the directory basename)
@@ -460,13 +469,9 @@ export async function newCommand(
     try {
       const registry = loadRegistry(registryDir);
       availableComponents = registry.components.map((c) => c.name);
-    } catch {
-      if (!useDefaults) {
-        clack.log.warn(
-          `Could not load registry at "${registryDir}". Components will not be copied.`,
-        );
-      }
-      registryDir = undefined;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      throw new RadishError(`Could not load registry at "${registryDir}": ${message}`);
     }
   } else {
     // No registry provided; use the known default component names for the prompt
@@ -568,7 +573,7 @@ export async function newCommand(
   ];
 
   for (const { path, content } of files) {
-    writeFileAtomic(projectDir, path, content);
+    writeFileAtomic(projectDir, path, content, overwriteExisting);
   }
 
   // 9. Copy component files (if registry available)
@@ -587,7 +592,7 @@ export async function newCommand(
         continue;
       }
 
-      const fileLocks = copyComponent(component, registryDir, componentsDir);
+      const fileLocks = copyComponent(component, registryDir, componentsDir, overwriteExisting);
       if (fileLocks.length > 0) {
         const filesRecord: Record<string, FileLock> = {};
         for (const { relPath, lock } of fileLocks) {
@@ -597,10 +602,8 @@ export async function newCommand(
       }
     }
 
-    if (Object.keys(lockfileComponents).length > 0) {
-      saveLockfile(projectDir, { components: lockfileComponents });
-    }
-  } else if (selectedComponents.length > 0) {
+    saveLockfile(projectDir, { components: lockfileComponents });
+  } else {
     saveLockfile(projectDir, { components: {} });
   }
 
