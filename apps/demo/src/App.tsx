@@ -87,7 +87,6 @@ export default function App() {
       i18nProvider={i18nProvider}
       layout={Layout}
       title="radish-ui demo"
-      basename={import.meta.env.BASE_URL.replace(/\/$/, "")}
     >
       <Resource name="posts" list={PostList} show={PostShow} edit={PostEdit} create={PostCreate} />
     </Admin>
