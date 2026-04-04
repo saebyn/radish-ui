@@ -114,9 +114,9 @@ export async function initCommand(options: InitOptions): Promise<void> {
     outputDir = options.outputDir ?? DEFAULT_OUTPUT_DIR;
     try {
       validateRelativeDir(outputDir);
-    } catch {
+    } catch (err) {
       throw new RadishError(
-        `Invalid outputDir "${outputDir}": must be a relative path that does not escape the project root.`,
+        `Invalid outputDir "${outputDir}": ${err instanceof Error ? err.message : String(err)}`,
       );
     }
   } else {
@@ -128,8 +128,8 @@ export async function initCommand(options: InitOptions): Promise<void> {
         const trimmed = value.trim() || DEFAULT_OUTPUT_DIR;
         try {
           validateRelativeDir(trimmed);
-        } catch {
-          return "Must be a relative path that does not escape the project root.";
+        } catch (err) {
+          return err instanceof Error ? err.message : "Invalid path.";
         }
       },
     });
