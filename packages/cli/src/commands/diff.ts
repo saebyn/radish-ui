@@ -3,7 +3,9 @@ import { resolve } from "node:path";
 import { createPatch } from "diff";
 import { hashContent } from "../lib/hash.js";
 import {
-  loadRegistry,
+  loadRegistryAsync,
+  isRemoteRegistry,
+  fetchRegistryFile,
   validateRelativePath,
   relativeToRegistryFile,
   validateComponentName,
@@ -25,12 +27,6 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
     outputDir: options.target,
   });
 
-  if (!config.registry) {
-    throw new RadishError(
-      "No registry path specified. Use --registry <path> or set registry in radish.json",
-    );
-  }
-
   const lockfile = loadLockfile(cwd);
   validateComponentName(componentName);
   const componentLock = lockfile.components[componentName];
@@ -40,7 +36,7 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
     );
   }
 
-  const registry = loadRegistry(config.registry);
+  const registry = await loadRegistryAsync(config.registry);
   if (!registry.components.some((c) => c.name === componentName)) {
     throw new RadishError(`Component "${componentName}" not found in registry.`);
   }
@@ -56,15 +52,30 @@ export async function diffCommand(componentName: string, options: DiffOptions): 
     }
 
     const localPath = resolve(cwd, config.outputDir, relPath);
-    const registryPath = resolve(config.registry, relativeToRegistryFile(relPath));
+    const registryFilePath = relativeToRegistryFile(relPath);
 
-    if (!existsSync(registryPath)) {
-      console.warn(`⚠ Registry file not found: ${registryPath}`);
-      continue;
+    let registryContent: string;
+    if (isRemoteRegistry(config.registry)) {
+      let buf: Buffer;
+      try {
+        buf = await fetchRegistryFile(config.registry, registryFilePath);
+      } catch (err) {
+        console.warn(
+          `⚠ Could not fetch registry file for ${relPath}: ${err instanceof Error ? err.message : String(err)}`,
+        );
+        continue;
+      }
+      registryContent = buf.toString("utf-8");
+    } else {
+      const registryPath = resolve(config.registry, registryFilePath);
+      if (!existsSync(registryPath)) {
+        console.warn(`⚠ Registry file not found: ${registryPath}`);
+        continue;
+      }
+      assertWithinDir(config.registry, registryPath);
+      registryContent = readFileSync(registryPath, "utf-8");
     }
 
-    assertWithinDir(config.registry, registryPath);
-    const registryContent = readFileSync(registryPath, "utf-8");
     const newRegistryHash = hashContent(registryContent);
 
     if (newRegistryHash === fileLock.registryHash) {

@@ -2,14 +2,15 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { hashContent } from "../lib/hash.js";
 import {
-  loadRegistry,
+  loadRegistryAsync,
+  isRemoteRegistry,
+  fetchRegistryFile,
   validateRelativePath,
   relativeToRegistryFile,
   validateComponentName,
 } from "../lib/registry.js";
 import { loadLockfile, saveLockfile, shouldUpdate } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
-import { RadishError } from "../lib/errors.js";
 import { writeFileAtomic, readFileWithinDir } from "../lib/fs.js";
 
 export interface SyncOptions {
@@ -25,13 +26,7 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
     outputDir: options.target,
   });
 
-  if (!config.registry) {
-    throw new RadishError(
-      "No registry path specified. Use --registry <path> or set registry in radish.json",
-    );
-  }
-
-  const registry = loadRegistry(config.registry);
+  const registry = await loadRegistryAsync(config.registry);
   const lockfile = loadLockfile(cwd);
   let lockfileChanged = 0;
 
@@ -65,14 +60,27 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
       }
 
       const localPath = resolve(cwd, config.outputDir, relPath);
-      const componentPath = resolve(config.registry, relativeToRegistryFile(relPath));
+      const registryFilePath = relativeToRegistryFile(relPath);
 
-      if (!existsSync(componentPath)) {
-        console.warn(`⚠ Registry file not found: ${componentPath}. Skipping.`);
-        continue;
+      let registryContent: Buffer | string;
+      if (isRemoteRegistry(config.registry)) {
+        try {
+          registryContent = await fetchRegistryFile(config.registry, registryFilePath);
+        } catch (err) {
+          console.warn(
+            `⚠ Could not fetch registry file for ${relPath}: ${err instanceof Error ? err.message : String(err)}. Skipping.`,
+          );
+          continue;
+        }
+      } else {
+        const componentPath = resolve(config.registry, registryFilePath);
+        if (!existsSync(componentPath)) {
+          console.warn(`⚠ Registry file not found: ${componentPath}. Skipping.`);
+          continue;
+        }
+        registryContent = readFileWithinDir(config.registry, componentPath);
       }
 
-      const registryContent = readFileWithinDir(config.registry, componentPath);
       const newRegistryHash = hashContent(registryContent);
 
       if (!existsSync(localPath)) {

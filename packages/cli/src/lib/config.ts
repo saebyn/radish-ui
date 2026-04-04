@@ -13,6 +13,13 @@ export type RadishConfig = z.infer<typeof RadishConfigSchema>;
 
 export const DEFAULT_OUTPUT_DIR = "src/components/radish";
 
+/**
+ * Default registry base URL used when no --registry flag or radish.json entry is present.
+ * Points to the registry package in the main branch of the radish-ui GitHub repository.
+ */
+export const DEFAULT_REGISTRY_URL =
+  "https://raw.githubusercontent.com/saebyn/radish-ui/main/packages/registry";
+
 export function loadConfig(cwd: string): RadishConfig {
   const configPath = resolve(cwd, "radish.json");
   if (!existsSync(configPath)) {
@@ -39,7 +46,7 @@ export function resolveConfig(cwd: string, flags: Partial<RadishConfig>): Requir
     );
   }
   return {
-    registry: flags.registry ?? file.registry ?? "",
+    registry: flags.registry ?? file.registry ?? DEFAULT_REGISTRY_URL,
     outputDir,
   };
 }

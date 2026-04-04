@@ -2,7 +2,9 @@ import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { hashContent } from "../lib/hash.js";
 import {
-  loadRegistry,
+  loadRegistryAsync,
+  isRemoteRegistry,
+  fetchRegistryFile,
   findComponent,
   registryFileToRelative,
   validateComponentName,
@@ -21,14 +23,18 @@ export interface AddOptions {
 
 interface ResolvedFile {
   relPath: string;
-  srcPath: string;
+  /** Local source path (local registry only). Null for remote registries. */
+  srcPath: string | null;
+  /** Registry-relative file path used to fetch from a remote registry. */
+  registryFilePath: string;
   destPath: string;
 }
 
 /**
  * Resolves and validates all source/destination paths for a component's files.
- * Performs the assertWithinDir check on each srcPath here, where the path is
- * first constructed, rather than deferring it to write time.
+ * For local registries, performs the assertWithinDir check on each srcPath here,
+ * where the path is first constructed, rather than deferring it to write time.
+ * For remote registries, srcPath is null and file content is fetched later.
  * Returns null if the component should be skipped (dest file exists, no --force).
  */
 function resolveComponentFiles(
@@ -50,13 +56,18 @@ function resolveComponentFiles(
       );
     }
 
-    const srcPath = resolve(config.registry, registryFilePath);
-    if (!existsSync(srcPath)) {
-      throw new RadishError(`Registry file not found for component "${componentName}": ${srcPath}`);
+    let srcPath: string | null = null;
+    if (!isRemoteRegistry(config.registry)) {
+      srcPath = resolve(config.registry, registryFilePath);
+      if (!existsSync(srcPath)) {
+        throw new RadishError(
+          `Registry file not found for component "${componentName}": ${srcPath}`,
+        );
+      }
+      // Guard against registry file entries that are symlinks pointing outside
+      // the registry directory. Done here, as soon as the path is constructed.
+      assertWithinDir(config.registry, srcPath);
     }
-    // Guard against registry file entries that are symlinks pointing outside
-    // the registry directory. Done here, as soon as the path is constructed.
-    assertWithinDir(config.registry, srcPath);
 
     const destPath = resolve(cwd, config.outputDir, relPath);
     if (existsSync(destPath) && !force) {
@@ -66,7 +77,7 @@ function resolveComponentFiles(
       return null;
     }
 
-    resolvedFiles.push({ relPath, srcPath, destPath });
+    resolvedFiles.push({ relPath, srcPath, registryFilePath, destPath });
   }
 
   return resolvedFiles;
@@ -76,17 +87,20 @@ function resolveComponentFiles(
  * Writes all resolved files for a component and returns the per-file lock
  * entries to record in the lockfile.
  */
-function writeComponentFiles(
+async function writeComponentFiles(
   resolvedFiles: ResolvedFile[],
   componentName: string,
   config: Required<RadishConfig>,
   cwd: string,
   force: boolean,
-): Record<string, FileLock> {
+): Promise<Record<string, FileLock>> {
   const fileLocks: Record<string, FileLock> = {};
 
-  for (const { relPath, srcPath, destPath } of resolvedFiles) {
-    const content = readFileSync(srcPath);
+  for (const { relPath, srcPath, registryFilePath, destPath } of resolvedFiles) {
+    const content =
+      srcPath !== null
+        ? readFileSync(srcPath)
+        : await fetchRegistryFile(config.registry, registryFilePath);
     const hash = hashContent(content);
 
     writeFileAtomic(resolve(cwd, config.outputDir), destPath, content, force);
@@ -123,13 +137,7 @@ export async function addCommand(components: string[], options: AddOptions): Pro
     outputDir: options.target,
   });
 
-  if (!config.registry) {
-    throw new RadishError(
-      "No registry path specified. Use --registry <path> or set registry in radish.json",
-    );
-  }
-
-  const registry = loadRegistry(config.registry);
+  const registry = await loadRegistryAsync(config.registry);
   const lockfile = loadLockfile(cwd);
   const allDeps = new Set<string>();
   let componentsWritten = 0;
@@ -161,7 +169,7 @@ export async function addCommand(components: string[], options: AddOptions): Pro
     );
     if (resolvedFiles === null) continue;
 
-    const fileLocks = writeComponentFiles(
+    const fileLocks = await writeComponentFiles(
       resolvedFiles,
       componentName,
       config,

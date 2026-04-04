@@ -19,7 +19,10 @@ program
 program
   .command("add <components...>")
   .description("Copy one or more components from the registry into your project")
-  .option("--registry <path>", "Path to registry directory")
+  .option(
+    "--registry <path>",
+    "Path or URL to registry (local path or https:// URL; defaults to GitHub raw URL)",
+  )
   .option("--target <path>", `Output directory (default: ./${DEFAULT_OUTPUT_DIR})`)
   .option("--force", "Overwrite existing files")
   .action(addCommand);
@@ -27,7 +30,10 @@ program
 program
   .command("sync")
   .description("Update previously-added components to the latest registry versions")
-  .option("--registry <path>", "Path to registry directory")
+  .option(
+    "--registry <path>",
+    "Path or URL to registry (local path or https:// URL; defaults to GitHub raw URL)",
+  )
   .option("--target <path>", `Output directory (default: ./${DEFAULT_OUTPUT_DIR})`)
   .option("--force", "Overwrite all files, ignoring local modifications")
   .action(syncCommand);
@@ -35,7 +41,10 @@ program
 program
   .command("diff <component>")
   .description("Show what changed upstream since you last synced a component")
-  .option("--registry <path>", "Path to registry directory")
+  .option(
+    "--registry <path>",
+    "Path or URL to registry (local path or https:// URL; defaults to GitHub raw URL)",
+  )
   .option("--target <path>", `Output directory (default: ./${DEFAULT_OUTPUT_DIR})`)
   .action(diffCommand);
 
