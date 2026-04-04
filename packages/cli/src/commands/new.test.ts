@@ -159,9 +159,7 @@ describe("newCommand", () => {
       registry: string;
       outputDir: string;
     };
-    expect(config.registry).toBe(
-      "https://raw.githubusercontent.com/saebyn/radish-ui/main/packages/registry",
-    );
+    expect(config.registry).toBe("https://saebyn.github.io/radish-ui/registry");
     expect(config.outputDir).toBe("src/components");
   });
 
