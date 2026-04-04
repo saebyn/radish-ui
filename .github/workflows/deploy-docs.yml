@@ -39,6 +39,46 @@ jobs:
       - name: Build docs
         run: pnpm --filter @radish-ui/docs build
 
+      - name: Build demo
+        run: pnpm --filter @radish-ui/demo build
+
+      - name: Copy demo into docs output
+        run: |
+          mkdir -p apps/docs/.vitepress/dist/demo
+          cp -r apps/demo/dist/. apps/docs/.vitepress/dist/demo/
+          cat > apps/docs/.vitepress/dist/404.html <<'EOF'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <title>Page not found</title>
+              <script>
+                (function () {
+                  var path = window.location.pathname;
+                  var demoMarker = '/demo/';
+                  var demoIndex = path.indexOf(demoMarker);
+
+                  if (demoIndex !== -1) {
+                    var siteBase = path.slice(0, demoIndex);
+                    var demoBase = siteBase + demoMarker;
+                    var demoPath = path.slice(demoIndex + demoMarker.length - 1);
+                    var redirectUrl =
+                      demoBase +
+                      '?redirect=' +
+                      encodeURIComponent(demoPath + window.location.search + window.location.hash);
+
+                    window.location.replace(redirectUrl);
+                  }
+                })();
+              </script>
+            </head>
+            <body>
+              <h1>404 - Page not found</h1>
+              <p>The requested page could not be found.</p>
+            </body>
+          </html>
+          EOF
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

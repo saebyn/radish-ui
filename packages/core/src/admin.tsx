@@ -27,6 +27,7 @@ export function Admin({
   i18nProvider,
   store,
   queryClient,
+  basename,
   // CoreAdminUI props
   layout,
   dashboard,
@@ -45,6 +46,7 @@ export function Admin({
       i18nProvider={i18nProvider}
       store={store}
       queryClient={queryClient}
+      basename={basename}
     >
       <CoreAdminUI
         layout={layout}
