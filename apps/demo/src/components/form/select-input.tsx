@@ -56,7 +56,10 @@ export function SelectInput({
 
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+      <label
+        htmlFor={id}
+        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+      >
         {fieldLabel}
         {isRequired && (
           <span className="text-red-500 ml-1" aria-hidden>
@@ -72,7 +75,8 @@ export function SelectInput({
           "focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500",
           "dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100",
           "dark:focus:border-indigo-400 dark:focus:ring-indigo-400",
-          error && "border-red-500 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:focus:border-red-400 dark:focus:ring-red-400",
+          error &&
+            "border-red-500 focus:border-red-500 focus:ring-red-500 dark:border-red-400 dark:focus:border-red-400 dark:focus:ring-red-400",
           className,
         )}
       >

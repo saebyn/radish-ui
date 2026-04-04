@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 import { syncCommand } from "./sync.js";
+import { hashContent } from "../lib/hash.js";
 
 type LockFile = {
   components: Record<
@@ -21,7 +22,10 @@ const DATAGRID_CONTENT_V2 = `export function Datagrid({ children }: { children?:
  * When secondFile is true, "datagrid" also lists skeleton.tsx (simulating
  * a file added to the component definition after initial install).
  */
-function createRegistryFixture(dir: string, opts: { datagridIncludesSkeleton?: boolean } = {}): void {
+function createRegistryFixture(
+  dir: string,
+  opts: { datagridIncludesSkeleton?: boolean } = {},
+): void {
   mkdirSync(join(dir, "src", "list"), { recursive: true });
   mkdirSync(join(dir, "src", "skeleton"), { recursive: true });
 
@@ -94,15 +98,10 @@ describe("syncCommand", () => {
 
     await syncCommand({ registry: registryDir, target: "components", cwd: projectDir });
 
-    const updated = readFileSync(
-      join(projectDir, "components", "list", "datagrid.tsx"),
-      "utf-8",
-    );
+    const updated = readFileSync(join(projectDir, "components", "list", "datagrid.tsx"), "utf-8");
     expect(updated).toBe(DATAGRID_CONTENT_V2);
 
-    const lock: LockFile = JSON.parse(
-      readFileSync(join(projectDir, "radish.lock.json"), "utf-8"),
-    );
+    const lock: LockFile = JSON.parse(readFileSync(join(projectDir, "radish.lock.json"), "utf-8"));
     const newHash = computeHash(DATAGRID_CONTENT_V2);
     expect(lock.components.datagrid.files["list/datagrid.tsx"].registryHash).toBe(newHash);
     expect(lock.components.datagrid.files["list/datagrid.tsx"].localHash).toBe(newHash);
@@ -136,9 +135,7 @@ describe("syncCommand", () => {
       localContent,
     );
     // Lockfile unchanged
-    const lock: LockFile = JSON.parse(
-      readFileSync(join(projectDir, "radish.lock.json"), "utf-8"),
-    );
+    const lock: LockFile = JSON.parse(readFileSync(join(projectDir, "radish.lock.json"), "utf-8"));
     expect(lock.components.datagrid.files["list/datagrid.tsx"].localHash).toBe(origHash);
   });
 
@@ -163,7 +160,12 @@ describe("syncCommand", () => {
       }),
     );
 
-    await syncCommand({ registry: registryDir, target: "components", force: true, cwd: projectDir });
+    await syncCommand({
+      registry: registryDir,
+      target: "components",
+      force: true,
+      cwd: projectDir,
+    });
 
     expect(readFileSync(join(projectDir, "components", "list", "datagrid.tsx"), "utf-8")).toBe(
       DATAGRID_CONTENT_V2,
@@ -196,17 +198,13 @@ describe("syncCommand", () => {
     await syncCommand({ registry: registryDir, target: "components", cwd: projectDir });
 
     // skeleton.tsx should now be installed
-    expect(
-      existsSync(join(projectDir, "components", "skeleton", "skeleton.tsx")),
-    ).toBe(true);
-    expect(
-      readFileSync(join(projectDir, "components", "skeleton", "skeleton.tsx"), "utf-8"),
-    ).toBe(SKELETON_CONTENT_V2);
+    expect(existsSync(join(projectDir, "components", "skeleton", "skeleton.tsx"))).toBe(true);
+    expect(readFileSync(join(projectDir, "components", "skeleton", "skeleton.tsx"), "utf-8")).toBe(
+      SKELETON_CONTENT_V2,
+    );
 
     // Lockfile should record the new file under datagrid
-    const lock: LockFile = JSON.parse(
-      readFileSync(join(projectDir, "radish.lock.json"), "utf-8"),
-    );
+    const lock: LockFile = JSON.parse(readFileSync(join(projectDir, "radish.lock.json"), "utf-8"));
     expect(lock.components.datagrid.files["skeleton/skeleton.tsx"]).toBeDefined();
     const skeletonHash = computeHash(SKELETON_CONTENT_V2);
     expect(lock.components.datagrid.files["skeleton/skeleton.tsx"].registryHash).toBe(skeletonHash);
@@ -242,14 +240,12 @@ describe("syncCommand", () => {
     await syncCommand({ registry: registryDir, target: "components", cwd: projectDir });
 
     // File should NOT have been overwritten
-    expect(
-      readFileSync(join(projectDir, "components", "skeleton", "skeleton.tsx"), "utf-8"),
-    ).toBe(`// my custom skeleton`);
+    expect(readFileSync(join(projectDir, "components", "skeleton", "skeleton.tsx"), "utf-8")).toBe(
+      `// my custom skeleton`,
+    );
 
     // Lockfile should NOT track the new file (since it was skipped)
-    const lock: LockFile = JSON.parse(
-      readFileSync(join(projectDir, "radish.lock.json"), "utf-8"),
-    );
+    const lock: LockFile = JSON.parse(readFileSync(join(projectDir, "radish.lock.json"), "utf-8"));
     expect(lock.components.datagrid.files["skeleton/skeleton.tsx"]).toBeUndefined();
   });
 
@@ -278,21 +274,23 @@ describe("syncCommand", () => {
       }),
     );
 
-    await syncCommand({ registry: registryDir, target: "components", force: true, cwd: projectDir });
+    await syncCommand({
+      registry: registryDir,
+      target: "components",
+      force: true,
+      cwd: projectDir,
+    });
 
-    expect(
-      readFileSync(join(projectDir, "components", "skeleton", "skeleton.tsx"), "utf-8"),
-    ).toBe(SKELETON_CONTENT_V2);
-
-    const lock: LockFile = JSON.parse(
-      readFileSync(join(projectDir, "radish.lock.json"), "utf-8"),
+    expect(readFileSync(join(projectDir, "components", "skeleton", "skeleton.tsx"), "utf-8")).toBe(
+      SKELETON_CONTENT_V2,
     );
+
+    const lock: LockFile = JSON.parse(readFileSync(join(projectDir, "radish.lock.json"), "utf-8"));
     expect(lock.components.datagrid.files["skeleton/skeleton.tsx"]).toBeDefined();
   });
 });
 
 /** Inline hash helper matching the CLI's hashContent implementation. */
 function computeHash(content: string): string {
-  const { createHash } = require("node:crypto") as { createHash: (alg: string) => { update: (c: string) => { digest: (enc: string) => string } } };
-  return `sha256-${createHash("sha256").update(content).digest("hex")}`;
+  return hashContent(content);
 }

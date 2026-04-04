@@ -132,7 +132,9 @@ function ShowLayout({
   return (
     <div className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
-        {displayTitle && <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{displayTitle}</h1>}
+        {displayTitle && (
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{displayTitle}</h1>
+        )}
         {actions && <div>{actions}</div>}
       </div>
 

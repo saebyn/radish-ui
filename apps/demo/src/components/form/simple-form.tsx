@@ -49,7 +49,12 @@ function SimpleFormContent({
   const { saving } = useSaveContext();
 
   return (
-    <div className={cn("rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800", className)}>
+    <div
+      className={cn(
+        "rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800",
+        className,
+      )}
+    >
       <div className="space-y-5 px-6 py-6">{children}</div>
       <div className="flex items-center justify-end gap-3 border-t border-gray-100 dark:border-gray-700 px-6 py-4">
         <button

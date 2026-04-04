@@ -179,7 +179,12 @@ export async function syncCommand(options: SyncOptions): Promise<void> {
         continue;
       }
 
-      writeFileAtomic(resolve(cwd, config.outputDir), destPath, registryContent, options.force ?? false);
+      writeFileAtomic(
+        resolve(cwd, config.outputDir),
+        destPath,
+        registryContent,
+        options.force ?? false,
+      );
       componentLock.files[relPath] = { registryHash: newHash, localHash: newHash };
       lockfileChanged++;
       console.log(`✓ Added ${relPath} (new file for ${componentName})`);

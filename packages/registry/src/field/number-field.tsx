@@ -29,10 +29,18 @@ export function NumberField({ source, options, locales, className }: NumberField
 
   const num = Number(value);
   if (isNaN(num)) {
-    return <span className={cn("text-sm text-gray-700 dark:text-gray-300", className)}>{String(value)}</span>;
+    return (
+      <span className={cn("text-sm text-gray-700 dark:text-gray-300", className)}>
+        {String(value)}
+      </span>
+    );
   }
 
   const formatted = new Intl.NumberFormat(locales, options).format(num);
 
-  return <span className={cn("text-sm text-gray-700 dark:text-gray-300 tabular-nums", className)}>{formatted}</span>;
+  return (
+    <span className={cn("text-sm text-gray-700 dark:text-gray-300 tabular-nums", className)}>
+      {formatted}
+    </span>
+  );
 }

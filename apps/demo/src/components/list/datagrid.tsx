@@ -43,7 +43,10 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
           className,
         )}
       >
-        <table aria-hidden="true" className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+        <table
+          aria-hidden="true"
+          className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm"
+        >
           <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
               {columns.map((col, i) => {
@@ -93,7 +96,9 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
 
   if (!data || data.length === 0) {
     return (
-      <div className="flex items-center justify-center py-12 text-gray-400 dark:text-gray-500">No records found.</div>
+      <div className="flex items-center justify-center py-12 text-gray-400 dark:text-gray-500">
+        No records found.
+      </div>
     );
   }
 
@@ -136,7 +141,10 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
             <RecordContextProvider key={record.id} value={record}>
               <tr className="hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors">
                 {columns.map((col, i) => (
-                  <td key={col.props.source ?? i} className="px-4 py-3 text-gray-700 dark:text-gray-300">
+                  <td
+                    key={col.props.source ?? i}
+                    className="px-4 py-3 text-gray-700 dark:text-gray-300"
+                  >
                     {col}
                   </td>
                 ))}

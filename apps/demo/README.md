@@ -67,7 +67,6 @@ The Storybook for the component registry has a **Dark mode** toolbar button
 visually inspect every component in both light and dark mode without leaving the
 browser.
 
-
 Add new radish-ui components with:
 
 ```bash
