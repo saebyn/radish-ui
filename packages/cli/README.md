@@ -83,6 +83,42 @@ npx @radish-ui/cli add <component> [component...] [options]
 
 ---
 
+### `radish remove <components...>`
+
+Remove one or more installed components from your project. Files are deleted from disk and the component entries are removed from `radish.lock.json`.
+
+```bash
+npx @radish-ui/cli remove <component> [component...] [options]
+```
+
+**Options:**
+
+| Option            | Description                                         |
+| ----------------- | --------------------------------------------------- |
+| `--target <path>` | Output directory (default: `src/components/radish`) |
+| `--force`         | Remove files even if they have local modifications  |
+
+**Behaviour:**
+
+- Files that are **shared** with another installed component are skipped and not deleted (the other component still depends on them).
+- Files that have **local modifications** are skipped unless `--force` is passed — you will see a warning for each skipped file.
+- The component entry is always removed from `radish.lock.json` regardless of whether individual files were skipped.
+
+**Example:**
+
+```bash
+# Remove a single component
+npx @radish-ui/cli remove skeleton
+
+# Remove multiple components at once
+npx @radish-ui/cli remove skeleton datagrid
+
+# Remove even if files have been locally modified
+npx @radish-ui/cli remove skeleton --force
+```
+
+---
+
 ### `radish sync`
 
 Update previously-added components to the latest registry versions.
