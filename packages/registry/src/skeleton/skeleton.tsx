@@ -87,7 +87,7 @@ export function SkeletonContainer({ label, className, children }: SkeletonContai
   return (
     <div role="status" aria-live="polite" aria-busy="true" className={className}>
       <span className="sr-only">{label}</span>
-      {children}
+      <div aria-hidden="true">{children}</div>
     </div>
   );
 }
