@@ -10,7 +10,8 @@
  *   - Dependency names are valid npm package names
  *
  * Checks performed on radish.lock.json (if present):
- *   - Valid JSON and expected schema
+ *   - Valid JSON
+ *   - Top-level "components" value is a non-array object
  *   - Every component name in the lockfile exists in registry.json
  */
 
@@ -67,7 +68,14 @@ ok("registry.json is valid JSON with a components array");
 
 const seenNames = new Set();
 
-for (const component of registry.components) {
+for (const [index, component] of registry.components.entries()) {
+  const componentIndexPrefix = `component at index ${index}`;
+
+  if (component === null || typeof component !== "object") {
+    error(`${componentIndexPrefix}: must be an object`);
+    continue;
+  }
+
   const prefix = `component "${component.name ?? "<unnamed>"}"`;
 
   // --- name ---
@@ -132,13 +140,14 @@ for (const component of registry.components) {
   }
 
   // --- dependencies ---
-  // An omitted dependencies field is treated as an empty array (no dependencies).
-  const deps = component.dependencies ?? [];
-  if (!Array.isArray(deps)) {
+  // Must be present and be an array, matching the CLI RegistryComponentSchema requirement.
+  if (!Object.prototype.hasOwnProperty.call(component, "dependencies")) {
+    error(`${prefix}: missing "dependencies" field`);
+  } else if (!Array.isArray(component.dependencies)) {
     error(`${prefix}: "dependencies" must be an array`);
   } else {
     const seenDeps = new Set();
-    for (const dep of deps) {
+    for (const dep of component.dependencies) {
       if (typeof dep !== "string") {
         error(`${prefix}: dependency entry is not a string: ${JSON.stringify(dep)}`);
         continue;
@@ -180,6 +189,7 @@ if (!existsSync(LOCKFILE_PATH)) {
     if (
       !lockfile ||
       typeof lockfile.components !== "object" ||
+      lockfile.components === null ||
       Array.isArray(lockfile.components)
     ) {
       error('radish.lock.json must have a "components" object at the top level');
