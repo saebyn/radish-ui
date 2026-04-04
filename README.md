@@ -95,6 +95,27 @@ CLI flags take precedence over the config file.
 | `list-view`  | `list/list-view.tsx`                                         |
 | `text-field` | `field/text-field.tsx`                                       |
 
+## Storybook
+
+Registry components can be previewed and developed in isolation using Storybook:
+
+```bash
+pnpm install
+cd packages/registry
+pnpm storybook
+```
+
+This starts a local Storybook instance at [http://localhost:6006](http://localhost:6006) with stories for all key components (Datagrid, ListView, Layout, TextField).
+
+To build a static Storybook site:
+
+```bash
+cd packages/registry
+pnpm storybook:build
+```
+
+Stories use mock `ra-core` providers (`ListContextProvider`, `RecordContextProvider`) so components render without a real data source. Find the story files alongside their components in `packages/registry/src/`.
+
 ## Demo
 
 ```bash
