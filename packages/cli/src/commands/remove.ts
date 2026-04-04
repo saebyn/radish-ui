@@ -36,23 +36,25 @@ export async function removeCommand(components: string[], options: RemoveOptions
     }
   }
 
-  // componentsToRemove is mutated as we go: if a component fails to remove we
-  // delete it from this set so that subsequent components in the same
-  // invocation still treat its files as "owned by another installed component"
-  // and therefore protected from deletion.
-  const componentsToRemove = new Set(uniqueComponents);
   let removedCount = 0;
 
   for (const componentName of uniqueComponents) {
     const componentLock = lockfile.components[componentName];
     const filePathsSet = new Set(Object.keys(componentLock.files));
 
-    // Find files that are also used by other installed components not being
-    // removed. Such shared files must not be deleted. Using a Set for
-    // filePathsSet keeps the lookup O(1) instead of O(N) per file.
+    // Find files also referenced by any other component currently in the
+    // lockfile (whether or not it is being removed in this invocation).
+    // Checking ALL other entries — not just those outside the removal set —
+    // prevents a file shared between two components being removed from being
+    // deleted by the first successful removal before the second one finishes:
+    // if the second component then fails and keeps its lockfile entry, the
+    // shared file is still on disk. Successful removals delete their lockfile
+    // entry, so they no longer protect any file; failed removals remain in the
+    // lockfile and naturally continue to protect their files.
+    // Using a Set for filePathsSet keeps the inner lookup O(1) per file.
     const sharedFiles = new Set<string>();
     for (const [otherName, otherLock] of Object.entries(lockfile.components)) {
-      if (componentsToRemove.has(otherName)) continue;
+      if (otherName === componentName) continue;
       for (const relPath of Object.keys(otherLock.files)) {
         if (filePathsSet.has(relPath)) {
           sharedFiles.add(relPath);
@@ -127,10 +129,9 @@ export async function removeCommand(components: string[], options: RemoveOptions
     if (fileRemovalFailed) {
       // At least one file could not be deleted or read. Keep the lockfile
       // entry so the component remains tracked and future remove/sync/diff
-      // calls stay correct. Also remove it from componentsToRemove so that
-      // subsequent components in this invocation still treat its files as
-      // owned by an installed component (and therefore protected).
-      componentsToRemove.delete(componentName);
+      // calls stay correct. Because this component's entry is still present in
+      // lockfile.components, subsequent components in the same invocation will
+      // naturally treat its files as shared and leave them on disk.
       console.warn(
         `⚠ Component "${componentName}" was not removed from the lockfile because one or more files could not be deleted. Resolve any file permission issues and run \`radish remove ${componentName}\` again.`,
       );

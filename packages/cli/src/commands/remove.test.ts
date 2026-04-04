@@ -278,7 +278,49 @@ describe("removeCommand", () => {
     expect(lock.components["skeleton"]).toBeDefined();
   });
 
-  it("protects shared files of a failed component when removing subsequent components", async () => {
+  it("preserves a shared file when the first removal succeeds but a later one fails", async () => {
+    // Install both components: datagrid and skeleton share skeleton.tsx.
+    await addCommand(["skeleton", "datagrid"], {
+      registry: registryDir,
+      target: "components",
+      cwd: projectDir,
+    });
+
+    const { chmodSync } = await import("node:fs");
+    const skeletonDir = join(projectDir, "components", "skeleton");
+
+    // Make skeleton's directory non-writable so its files cannot be deleted.
+    chmodSync(skeletonDir, 0o555);
+
+    try {
+      // Remove datagrid first (will succeed), then skeleton (will fail).
+      // datagrid shares skeleton.tsx with skeleton — with correct shared-file
+      // detection datagrid must NOT delete skeleton.tsx even though skeleton
+      // is also in the removal set, because skeleton may still end up tracked.
+      await removeCommand(["datagrid", "skeleton"], {
+        target: "components",
+        cwd: projectDir,
+      });
+    } finally {
+      chmodSync(skeletonDir, 0o755);
+    }
+
+    // datagrid.tsx should be gone (datagrid removed successfully).
+    expect(existsSync(join(projectDir, "components", "list", "datagrid.tsx"))).toBe(false);
+    // skeleton.tsx must still be on disk: datagrid preserved it (shared with
+    // skeleton), and skeleton's own removal failed.
+    expect(existsSync(join(projectDir, "components", "skeleton", "skeleton.tsx"))).toBe(true);
+
+    const lock = JSON.parse(
+      readFileSync(join(projectDir, "radish.lock.json"), "utf-8"),
+    ) as LockFile;
+    // datagrid was successfully removed.
+    expect(lock.components["datagrid"]).toBeUndefined();
+    // skeleton remains tracked because its removal failed.
+    expect(lock.components["skeleton"]).toBeDefined();
+  });
+
+  it("protects shared files when a component is removed and a later one fails", async () => {
     // Install both components: skeleton and datagrid share skeleton.tsx.
     await addCommand(["skeleton", "datagrid"], {
       registry: registryDir,
@@ -293,9 +335,12 @@ describe("removeCommand", () => {
     chmodSync(skeletonDir, 0o555);
 
     try {
-      // Remove skeleton first (will fail), then datagrid.
-      // datagrid shares skeleton.tsx — because skeleton failed it is still
-      // tracked, so skeleton.tsx must NOT be deleted when datagrid is removed.
+      // Remove ["skeleton", "datagrid"]:
+      // - skeleton is processed first: skeleton.tsx is shared (datagrid still
+      //   references it), so it is skipped and skeleton succeeds.
+      // - datagrid is processed second: skeleton is now gone from the lockfile,
+      //   so skeleton.tsx is no longer shared — datagrid tries to delete it but
+      //   FAILS (directory non-writable), keeping datagrid in the lockfile.
       await removeCommand(["skeleton", "datagrid"], {
         target: "components",
         cwd: projectDir,
@@ -304,17 +349,17 @@ describe("removeCommand", () => {
       chmodSync(skeletonDir, 0o755);
     }
 
-    // skeleton.tsx must still exist: skeleton removal failed (can't delete)
-    // and datagrid correctly preserved it as a shared file.
+    // skeleton.tsx is still on disk because datagrid's attempt to delete it
+    // failed (non-writable directory).
     expect(existsSync(join(projectDir, "components", "skeleton", "skeleton.tsx"))).toBe(true);
-    // datagrid.tsx should be gone.
+    // datagrid.tsx is in a different (writable) directory and was deleted.
     expect(existsSync(join(projectDir, "components", "list", "datagrid.tsx"))).toBe(false);
 
     const lock = JSON.parse(
       readFileSync(join(projectDir, "radish.lock.json"), "utf-8"),
     ) as LockFile;
-    // skeleton remains tracked; datagrid was successfully removed.
-    expect(lock.components["skeleton"]).toBeDefined();
-    expect(lock.components["datagrid"]).toBeUndefined();
+    // skeleton succeeded (its file was shared and skipped); datagrid failed.
+    expect(lock.components["skeleton"]).toBeUndefined();
+    expect(lock.components["datagrid"]).toBeDefined();
   });
 });
