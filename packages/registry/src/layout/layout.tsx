@@ -53,6 +53,7 @@ export function Layout({ children, title }: LayoutProps) {
           onClick={() => setDarkMode((prev) => !prev)}
           className="ml-auto rounded p-1.5 text-white/70 hover:text-white hover:bg-white/10 transition-colors"
           aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          aria-pressed={darkMode}
         >
           {darkMode ? (
             <svg
