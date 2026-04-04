@@ -5,7 +5,7 @@ import { validateComponentName, validateRelativePath } from "../lib/registry.js"
 import { loadLockfile, saveLockfile } from "../lib/lockfile.js";
 import { resolveConfig } from "../lib/config.js";
 import { RadishError } from "../lib/errors.js";
-import { readFileWithinDir } from "../lib/fs.js";
+import { assertWithinDir, readFileWithinDir } from "../lib/fs.js";
 
 export interface RemoveOptions {
   target?: string;
@@ -113,6 +113,7 @@ export async function removeCommand(components: string[], options: RemoveOptions
       }
 
       try {
+        assertWithinDir(resolve(cwd, config.outputDir), destPath);
         unlinkSync(destPath);
         console.log(`✓ Removed ${relPath}`);
       } catch (err) {
