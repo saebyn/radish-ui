@@ -185,7 +185,7 @@ function generateAppTsx(
   projectName: string,
 ): string {
   const imports: string[] = [
-    `import { Admin, ListBase } from "@radish-ui/core";`,
+    `import { Admin } from "@radish-ui/core";`,
     `import { Resource } from "ra-core";`,
     `import polyglotI18nProvider from "ra-i18n-polyglot";`,
     `import englishMessages from "ra-language-english";`,
@@ -197,14 +197,14 @@ function generateAppTsx(
 
   const hasLayout = selectedComponents.includes("layout");
   const hasDatagrid = selectedComponents.includes("datagrid");
-  const hasListView = selectedComponents.includes("list-view");
+  const hasList = selectedComponents.includes("list");
   const hasTextField = selectedComponents.includes("text-field");
 
   if (hasLayout) {
     imports.push(`import { Layout } from "./components/layout/layout";`);
   }
-  if (hasListView) {
-    imports.push(`import { ListView } from "./components/list/list-view";`);
+  if (hasList) {
+    imports.push(`import { List } from "./components/list/list";`);
   }
   if (hasDatagrid) {
     imports.push(`import { Datagrid } from "./components/list/datagrid";`);
@@ -221,30 +221,26 @@ function generateAppTsx(
   const i18nLine = `const i18nProvider = polyglotI18nProvider(() => englishMessages, "en");`;
 
   let postListBody: string;
-  if (hasListView && hasDatagrid && hasTextField) {
+  if (hasList && hasDatagrid && hasTextField) {
     postListBody = `  return (
-    <ListBase resource="posts">
-      <ListView>
-        <Datagrid>
+    <List resource="posts">
+      <Datagrid>
           <TextField source="id" label="ID" />
           <TextField source="title" label="Title" />
           <TextField source="body" label="Body" />
           <TextField source="userId" label="User ID" />
         </Datagrid>
-      </ListView>
-    </ListBase>
+    </List>
   );`;
-  } else if (hasListView && hasTextField) {
+  } else if (hasList && hasTextField) {
     postListBody = `  return (
-    <ListBase resource="posts">
-      <ListView>
-        <TextField source="title" label="Title" />
-      </ListView>
-    </ListBase>
+    <List resource="posts">
+      <TextField source="title" label="Title" />
+    </List>
   );`;
   } else {
     postListBody = `  // TODO: Add your list components here
-  return <ListBase resource="posts">{/* add components here */}</ListBase>;`;
+  return <div>{/* add components here */}</div>;`;
   }
 
   const layoutProp = hasLayout ? `\n      layout={Layout}` : "";
@@ -476,7 +472,7 @@ export async function newCommand(
     }
   } else {
     // No registry provided; use the known default component names for the prompt
-    availableComponents = ["layout", "datagrid", "list-view", "text-field"];
+    availableComponents = ["layout", "datagrid", "list", "text-field"];
   }
 
   // 5. Select components

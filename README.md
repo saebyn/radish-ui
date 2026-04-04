@@ -8,7 +8,7 @@ Tailwind CSS components for react-admin. Like shadcn/ui, but for react-admin —
 
 - **`@radish-ui/core`** — A small npm package that wraps `ra-core` primitives (Admin, ListBase, hooks) and provides a `cn()` utility for Tailwind class merging.
 - **`@radish-ui/cli`** — A CLI tool for copying registry components into your project and keeping them in sync with upstream changes.
-- **Registry components** — Copy/paste Tailwind-styled components (Layout, Datagrid, ListView, TextField, etc.) that you own and can customize freely.
+- **Registry components** — Copy/paste Tailwind-styled components (Layout, Datagrid, List, TextField, etc.) that you own and can customize freely.
 
 ## Philosophy
 
@@ -31,7 +31,7 @@ pnpm add @radish-ui/core ra-core react react-dom
 npx @radish-ui/cli add datagrid
 
 # Add multiple components at once
-npx @radish-ui/cli add layout datagrid list-view text-field
+npx @radish-ui/cli add layout datagrid list text-field
 ```
 
 Components are copied into `./src/components/radish/` by default (configurable via `--target` or `radish.json`).
@@ -88,12 +88,23 @@ CLI flags take precedence over the config file.
 
 ## Available components
 
-| Name         | Files                                                        |
-| ------------ | ------------------------------------------------------------ |
-| `layout`     | `layout/layout.tsx`, `layout/sidebar.tsx`, `layout/menu.tsx` |
-| `datagrid`   | `list/datagrid.tsx`                                          |
-| `list-view`  | `list/list-view.tsx`                                         |
-| `text-field` | `field/text-field.tsx`                                       |
+| Name            | Files                                                                                                                     |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `layout`        | `layout/layout.tsx`, `layout/sidebar.tsx`, `layout/menu.tsx`                                                              |
+| `datagrid`      | `list/datagrid.tsx`                                                                                                       |
+| `list`          | `list/list.tsx`                                                                                                           |
+| `pagination`    | `list/pagination.tsx`                                                                                                     |
+| `show`          | `detail/show.tsx`, `detail/simple-show-layout.tsx`                                                                        |
+| `edit`          | `detail/edit.tsx`                                                                                                         |
+| `create`        | `detail/create.tsx`                                                                                                       |
+| `text-field`    | `field/text-field.tsx`                                                                                                    |
+| `boolean-field` | `field/boolean-field.tsx`                                                                                                 |
+| `number-field`  | `field/number-field.tsx`                                                                                                  |
+| `date-field`    | `field/date-field.tsx`                                                                                                    |
+| `edit-button`   | `button/edit-button.tsx`                                                                                                  |
+| `delete-button` | `button/delete-button.tsx`                                                                                                |
+| `create-button` | `button/create-button.tsx`                                                                                                |
+| `simple-form`   | `form/simple-form.tsx`, `form/text-input.tsx`, `form/number-input.tsx`, `form/select-input.tsx`, `form/boolean-input.tsx` |
 
 ## Storybook
 
@@ -105,7 +116,7 @@ cd packages/registry
 pnpm storybook
 ```
 
-This starts a local Storybook instance at [http://localhost:6006](http://localhost:6006) with stories for all key components (Datagrid, ListView, Layout, TextField).
+This starts a local Storybook instance at [http://localhost:6006](http://localhost:6006) with stories for all key components (Datagrid, List, Layout, TextField).
 
 To build a static Storybook site:
 

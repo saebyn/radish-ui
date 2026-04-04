@@ -29,8 +29,8 @@ function createRegistryFixture(dir: string): void {
           dependencies: ["@radish-ui/core"],
         },
         {
-          name: "list-view",
-          files: ["src/list/list-view.tsx"],
+          name: "list",
+          files: ["src/list/list.tsx"],
           dependencies: ["@radish-ui/core"],
         },
         {
@@ -55,10 +55,7 @@ function createRegistryFixture(dir: string): void {
     join(dir, "src", "list", "datagrid.tsx"),
     `export function Datagrid() { return null; }`,
   );
-  writeFileSync(
-    join(dir, "src", "list", "list-view.tsx"),
-    `export function ListView() { return null; }`,
-  );
+  writeFileSync(join(dir, "src", "list", "list.tsx"), `export function List() { return null; }`);
   writeFileSync(
     join(dir, "src", "field", "text-field.tsx"),
     `export function TextField() { return null; }`,
@@ -187,7 +184,7 @@ describe("newCommand", () => {
     const projectDir = join(tmpDir, "with-components");
     expect(existsSync(join(projectDir, "src", "components", "layout", "layout.tsx"))).toBe(true);
     expect(existsSync(join(projectDir, "src", "components", "list", "datagrid.tsx"))).toBe(true);
-    expect(existsSync(join(projectDir, "src", "components", "list", "list-view.tsx"))).toBe(true);
+    expect(existsSync(join(projectDir, "src", "components", "list", "list.tsx"))).toBe(true);
     expect(existsSync(join(projectDir, "src", "components", "field", "text-field.tsx"))).toBe(true);
   });
 
@@ -203,7 +200,7 @@ describe("newCommand", () => {
     ) as { components: Record<string, { files: Record<string, unknown> }> };
     expect(lock.components["layout"]).toBeDefined();
     expect(lock.components["datagrid"]).toBeDefined();
-    expect(lock.components["list-view"]).toBeDefined();
+    expect(lock.components["list"]).toBeDefined();
     expect(lock.components["text-field"]).toBeDefined();
   });
 
