@@ -1,0 +1,156 @@
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { ListContextProvider } from "ra-core";
+import { Datagrid } from "./datagrid";
+import { TextField } from "../field/text-field";
+
+const records = [
+  { id: 1, title: "First Post", author: "Alice" },
+  { id: 2, title: "Second Post", author: "Bob" },
+];
+
+const baseListContext = {
+  total: 0,
+  isPending: false,
+  isFetching: false,
+  page: 1,
+  perPage: 10,
+  sort: { field: "id", order: "ASC" as const },
+  filterValues: {},
+  displayedFilters: {},
+  defaultTitle: "Posts",
+  resource: "posts",
+  refetch: () => {},
+  setFilters: () => {},
+  setPage: () => {},
+  setPerPage: () => {},
+  setSort: () => {},
+  showFilter: () => {},
+  hideFilter: () => {},
+  onSelect: () => {},
+  onToggleItem: () => {},
+  onUnselectItems: () => {},
+  selectedIds: [],
+  hasNextPage: false,
+  hasPreviousPage: false,
+};
+
+describe("Datagrid", () => {
+  it("renders column headers derived from child label props", () => {
+    render(
+      <ListContextProvider
+        value={{ ...baseListContext, data: records, total: records.length, isLoading: false }}
+      >
+        <Datagrid>
+          <TextField source="title" label="Title" />
+          <TextField source="author" label="Author" />
+        </Datagrid>
+      </ListContextProvider>,
+    );
+    expect(screen.getByText("Title")).toBeInTheDocument();
+    expect(screen.getByText("Author")).toBeInTheDocument();
+  });
+
+  it("capitalises source as header when no label prop is given", () => {
+    render(
+      <ListContextProvider
+        value={{ ...baseListContext, data: records, total: records.length, isLoading: false }}
+      >
+        <Datagrid>
+          <TextField source="title" />
+        </Datagrid>
+      </ListContextProvider>,
+    );
+    expect(screen.getByText("Title")).toBeInTheDocument();
+  });
+
+  it("renders one row per record", () => {
+    render(
+      <ListContextProvider
+        value={{ ...baseListContext, data: records, total: records.length, isLoading: false }}
+      >
+        <Datagrid>
+          <TextField source="title" label="Title" />
+        </Datagrid>
+      </ListContextProvider>,
+    );
+    expect(screen.getByText("First Post")).toBeInTheDocument();
+    expect(screen.getByText("Second Post")).toBeInTheDocument();
+  });
+
+  it("shows loading indicator while isLoading is true", () => {
+    render(
+      <ListContextProvider value={{ ...baseListContext, data: [], isLoading: true }}>
+        <Datagrid>
+          <TextField source="title" label="Title" />
+        </Datagrid>
+      </ListContextProvider>,
+    );
+    expect(screen.getByText(/Loading/)).toBeInTheDocument();
+  });
+
+  it("shows empty state when data is empty and not loading", () => {
+    render(
+      <ListContextProvider value={{ ...baseListContext, data: [], isLoading: false }}>
+        <Datagrid>
+          <TextField source="title" label="Title" />
+        </Datagrid>
+      </ListContextProvider>,
+    );
+    expect(screen.getByText(/No records found/)).toBeInTheDocument();
+  });
+
+  it("renders row actions column when rowActions prop is provided", () => {
+    render(
+      <ListContextProvider
+        value={{ ...baseListContext, data: records, total: records.length, isLoading: false }}
+      >
+        <Datagrid rowActions={<button>Edit</button>}>
+          <TextField source="title" label="Title" />
+        </Datagrid>
+      </ListContextProvider>,
+    );
+    expect(screen.getByText("Actions")).toBeInTheDocument();
+  });
+
+  it("renders row actions for each row", () => {
+    render(
+      <ListContextProvider
+        value={{ ...baseListContext, data: records, total: records.length, isLoading: false }}
+      >
+        <Datagrid rowActions={<button>Edit</button>}>
+          <TextField source="title" label="Title" />
+        </Datagrid>
+      </ListContextProvider>,
+    );
+    // One action button per row
+    expect(screen.getAllByText("Edit")).toHaveLength(records.length);
+  });
+
+  it("provides a RecordContextProvider for each row so fields resolve correctly", () => {
+    render(
+      <ListContextProvider
+        value={{ ...baseListContext, data: records, total: records.length, isLoading: false }}
+      >
+        <Datagrid>
+          <TextField source="author" label="Author" />
+        </Datagrid>
+      </ListContextProvider>,
+    );
+    expect(screen.getByText("Alice")).toBeInTheDocument();
+    expect(screen.getByText("Bob")).toBeInTheDocument();
+  });
+
+  it("renders row actions via the rowActions prop", () => {
+    render(
+      <ListContextProvider
+        value={{ ...baseListContext, data: [{ id: 99, title: "T" }], total: 1, isLoading: false }}
+      >
+        <Datagrid rowActions={<span>action</span>}>
+          <TextField source="title" label="Title" />
+        </Datagrid>
+      </ListContextProvider>,
+    );
+    expect(screen.getByText("action")).toBeInTheDocument();
+  });
+});
