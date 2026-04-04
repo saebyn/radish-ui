@@ -39,6 +39,15 @@ jobs:
       - name: Build docs
         run: pnpm --filter @radish-ui/docs build
 
+      - name: Build demo
+        run: pnpm --filter @radish-ui/demo build
+
+      - name: Copy demo into docs output
+        run: |
+          mkdir -p apps/docs/.vitepress/dist/demo
+          cp -r apps/demo/dist/. apps/docs/.vitepress/dist/demo/
+          cp apps/docs/.vitepress/dist/demo/index.html apps/docs/.vitepress/dist/demo/404.html
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

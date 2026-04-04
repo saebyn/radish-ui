@@ -9,6 +9,7 @@ export default defineConfig({
       { text: "Guide", link: "/guide/getting-started" },
       { text: "Components", link: "/guide/components" },
       { text: "CLI", link: "/guide/cli" },
+      { text: "Demo", link: "/demo/" },
       {
         text: "GitHub",
         link: "https://github.com/saebyn/radish-ui",
