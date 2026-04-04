@@ -5,7 +5,6 @@ export default defineConfig({
   description: "Tailwind CSS components for react-admin",
   base: "/radish-ui/",
   themeConfig: {
-    logo: "/logo.svg",
     nav: [
       { text: "Guide", link: "/guide/getting-started" },
       { text: "Components", link: "/guide/components" },
