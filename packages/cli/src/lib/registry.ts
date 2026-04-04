@@ -3,6 +3,13 @@ import { resolve, posix } from "node:path";
 import { z } from "zod";
 import { RadishError, getErrorMessage } from "./errors.js";
 
+/**
+ * Returns true if the registry string is a remote URL (http or https).
+ */
+export function isRemoteRegistry(registry: string): boolean {
+  return registry.startsWith("http://") || registry.startsWith("https://");
+}
+
 const COMPONENT_NAME_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*(?:\/[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
 
 const RegistryFilePathSchema = z.string().refine(
@@ -64,6 +71,82 @@ export function loadRegistry(registryDir: string): Registry {
       `Failed to read or parse registry at "${registryPath}": ${getErrorMessage(err)}`,
     );
   }
+}
+
+/**
+ * Loads the registry from a local path or a remote URL.
+ * For remote URLs (http/https), fetches registry.json from `${baseUrl}/registry.json`.
+ * For local paths, delegates to `loadRegistry`.
+ */
+export async function loadRegistryAsync(registry: string): Promise<Registry> {
+  if (!isRemoteRegistry(registry)) {
+    return loadRegistry(registry);
+  }
+  if (typeof globalThis.fetch !== "function") {
+    throw new RadishError(
+      `Remote registries require a Node.js runtime with built-in fetch support. Upgrade Node.js or use a local registry path instead: "${registry}"`,
+    );
+  }
+  const baseUrl = new URL(registry.replace(/\/?$/, "/"));
+  const url = new URL("registry.json", baseUrl).toString();
+  let response: Response;
+  try {
+    response = await globalThis.fetch(url);
+  } catch (err) {
+    throw new RadishError(`Network error fetching registry from "${url}": ${getErrorMessage(err)}`);
+  }
+  if (!response.ok) {
+    throw new RadishError(
+      `Failed to fetch registry from "${url}": HTTP ${response.status} ${response.statusText}`,
+    );
+  }
+  let data: unknown;
+  try {
+    data = await response.json();
+  } catch (err) {
+    throw new RadishError(`Failed to parse registry JSON from "${url}": ${getErrorMessage(err)}`);
+  }
+  try {
+    return RegistrySchema.parse(data);
+  } catch (err) {
+    throw new RadishError(`Invalid registry data from "${url}": ${getErrorMessage(err)}`);
+  }
+}
+
+/**
+ * Fetches the content of a registry file from a remote base URL.
+ * `registryFilePath` is relative to the registry root (e.g. "src/button.tsx").
+ */
+export async function fetchRegistryFile(
+  registry: string,
+  registryFilePath: string,
+): Promise<Buffer> {
+  if (typeof globalThis.fetch !== "function") {
+    throw new RadishError(
+      `Remote registries require a Node.js runtime with built-in fetch support. Upgrade Node.js or use a local registry path instead: "${registry}"`,
+    );
+  }
+  const baseUrl = new URL(registry.replace(/\/?$/, "/"));
+  const encodedRegistryFilePath = registryFilePath
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  const url = new URL(encodedRegistryFilePath, baseUrl).toString();
+  let response: Response;
+  try {
+    response = await globalThis.fetch(url);
+  } catch (err) {
+    throw new RadishError(
+      `Network error fetching "${registryFilePath}" from registry: ${getErrorMessage(err)}`,
+    );
+  }
+  if (!response.ok) {
+    throw new RadishError(
+      `Failed to fetch "${registryFilePath}" from registry: HTTP ${response.status} ${response.statusText}`,
+    );
+  }
+  const ab = await response.arrayBuffer();
+  return Buffer.from(ab);
 }
 
 export function findComponent(registry: Registry, name: string): RegistryComponent | undefined {
