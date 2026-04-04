@@ -18,7 +18,7 @@ the project locally, run the development tools, and submit changes.
 
 - **Node.js** — version specified in [`.node-version`](.node-version) (Node 24
   or the range declared in `package.json` `engines`). We recommend using a
-  version manager such as [fnm](https://github.com/Schniz/fnm) or
+  version manager such as [mise](https://mise.jdx.dev/) or
   [nvm](https://github.com/nvm-sh/nvm) so the right version is selected
   automatically.
 - **pnpm** — version declared in `package.json` `packageManager` field. Install
