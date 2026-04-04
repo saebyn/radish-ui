@@ -7,6 +7,7 @@
     "build": "pnpm --filter @radish-ui/core build && pnpm --filter @radish-ui/cli build",
     "dev": "pnpm --filter @radish-ui/demo dev",
     "test": "pnpm -r test",
+    "test:e2e": "pnpm --filter @radish-ui/demo test:e2e",
     "preview": "pnpm --filter @radish-ui/demo preview",
     "sync": "pnpm --filter @radish-ui/cli build && pnpm --filter @radish-ui/demo sync",
     "format": "oxfmt .",
