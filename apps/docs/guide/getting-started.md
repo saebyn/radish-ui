@@ -19,7 +19,7 @@ npx @radish-ui/cli init
 ```
 
 This creates a `radish.json` configuration file and sets up the default
-components directory. Skip to step 4 once that's done.
+components directory. Continue to step 2 once that's done.
 
 For a **new** project, scaffold everything at once with:
 
