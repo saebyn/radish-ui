@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNotificationContext } from "ra-core";
+import { useNotificationContext, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 import type { NotificationPayload } from "ra-core";
 
@@ -103,6 +103,7 @@ interface ToastProps {
 function Toast({ notification, dismiss }: ToastProps) {
   const type: NotificationType = (notification.type as NotificationType) ?? "info";
   const { autoHideDuration, key } = notification;
+  const translate = useTranslate();
 
   useEffect(() => {
     if (autoHideDuration === null) return;
@@ -121,7 +122,14 @@ function Toast({ notification, dismiss }: ToastProps) {
       )}
     >
       <NotificationIcon type={type} />
-      <p className="flex-1 text-sm font-medium leading-5">{String(notification.message)}</p>
+      <p className="flex-1 text-sm font-medium leading-5">
+        {typeof notification.message === "string"
+          ? translate(notification.message, {
+              _: notification.message,
+              ...notification.notificationOptions?.messageArgs,
+            })
+          : notification.message}
+      </p>
       <button
         type="button"
         aria-label="Dismiss notification"

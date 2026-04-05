@@ -104,6 +104,7 @@ function Toast({ notification, dismiss }: ToastProps) {
   const translate = useTranslate();
   const type: NotificationType = (notification.type as NotificationType) ?? "info";
   const { autoHideDuration, key } = notification;
+  const translate = useTranslate();
 
   useEffect(() => {
     if (autoHideDuration === null) return;
@@ -122,7 +123,14 @@ function Toast({ notification, dismiss }: ToastProps) {
       )}
     >
       <NotificationIcon type={type} />
-      <p className="flex-1 text-sm font-medium leading-5">{String(notification.message)}</p>
+      <p className="flex-1 text-sm font-medium leading-5">
+        {typeof notification.message === "string"
+          ? translate(notification.message, {
+              _: notification.message,
+              ...notification.notificationOptions?.messageArgs,
+            })
+          : notification.message}
+      </p>
       <button
         type="button"
         aria-label={translate("radish.notification.dismiss", { _: "Dismiss notification" })}
