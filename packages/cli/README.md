@@ -186,7 +186,7 @@ Available components (5 available, 2 installed):
 **Example:**
 
 ```bash
-# List all components (uses registry and outputDir from radish.json if present)
+# List all components (uses registry from radish.json if present)
 npx @radish-ui/cli list
 
 # List using a specific registry
