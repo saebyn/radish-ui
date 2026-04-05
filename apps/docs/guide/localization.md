@@ -37,7 +37,7 @@ export default function App() {
 
 A small set of strings used by radish-ui components have no equivalent in
 `ra-language-english`. These live in the `radish.*` namespace and are provided
-by the `radish-messages` bundle that ships with every installed component.
+by the `radishMessages` message bundle exported by `@radish-ui/core`.
 
 Merge it into your existing messages so those strings are also translatable:
 
