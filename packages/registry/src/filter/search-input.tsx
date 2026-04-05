@@ -32,6 +32,10 @@ export function SearchInput({
   const { filterValues, setFilters, displayedFilters } = useListContext();
   const [value, setValue] = useState<string>((filterValues[source] as string) ?? "");
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Always reflects the latest filterValues so the debounce callback doesn't
+  // close over a stale snapshot and accidentally overwrite concurrent filter changes.
+  const filterValuesRef = useRef(filterValues);
+  filterValuesRef.current = filterValues;
 
   // Keep local value in sync when filterValues changes externally
   useEffect(() => {
@@ -43,7 +47,7 @@ export function SearchInput({
     setValue(next);
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
-      const newFilters = { ...filterValues, [source]: next };
+      const newFilters = { ...filterValuesRef.current, [source]: next };
       if (!next) delete newFilters[source];
       setFilters(newFilters, displayedFilters);
     }, debounce);

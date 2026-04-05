@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { vi, afterEach } from "vitest";
+import { afterEach } from "vitest";
 
 afterEach(() => {
   cleanup();
@@ -9,15 +9,16 @@ afterEach(() => {
 // jsdom doesn't implement showModal/close on HTMLDialogElement natively.
 // Guard so we only install the polyfill when the methods are actually missing,
 // and we don't clobber a real implementation (or throw if the class is absent).
+// Plain functions (not vi.fn) are used so mock call counts don't leak across tests.
 if (typeof HTMLDialogElement !== "undefined") {
   if (typeof HTMLDialogElement.prototype.showModal !== "function") {
-    HTMLDialogElement.prototype.showModal = vi.fn(function (this: HTMLDialogElement) {
+    HTMLDialogElement.prototype.showModal = function (this: HTMLDialogElement) {
       this.setAttribute("open", "");
-    });
+    };
   }
   if (typeof HTMLDialogElement.prototype.close !== "function") {
-    HTMLDialogElement.prototype.close = vi.fn(function (this: HTMLDialogElement) {
+    HTMLDialogElement.prototype.close = function (this: HTMLDialogElement) {
       this.removeAttribute("open");
-    });
+    };
   }
 }

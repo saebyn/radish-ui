@@ -16,8 +16,8 @@ interface ReferenceInputProps {
   perPage?: number;
   /**
    * Convert the select's string value into the form field value.
-   * Defaults to numeric-aware parsing: integer strings are returned as numbers,
-   * other non-empty strings are returned as-is, and an empty string becomes `null`.
+   * Defaults to returning the raw string as-is, with an empty string becoming `null`.
+   * Pass a custom `parse` prop if you need numeric IDs (e.g. `(v) => v === "" ? null : Number(v)`).
    */
   parse?: (value: string) => unknown;
   /**
@@ -60,7 +60,7 @@ export function ReferenceInput({
       parse ??
       ((v: string) => {
         if (v === "") return null;
-        return /^\d+$/.test(v) ? Number(v) : v;
+        return v;
       }),
   });
 
