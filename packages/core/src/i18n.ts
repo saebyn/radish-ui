@@ -1,4 +1,40 @@
 /**
+ * The shape of the `radish.*` translation namespace.
+ *
+ * Use this type when building a translated bundle for a language other than
+ * English so TypeScript can catch missing or misspelled keys:
+ *
+ * @example
+ * import type { RadishMessages } from "@radish-ui/core";
+ *
+ * const frenchRadishMessages: RadishMessages = {
+ *   radish: {
+ *     action: { deleting: "Suppression…" },
+ *     message: { delete_confirm_title: "Êtes-vous sûr de vouloir supprimer cet enregistrement ?" },
+ *     notification: { dismiss: "Fermer la notification", label: "Notifications" },
+ *   },
+ * };
+ */
+export interface RadishMessages {
+  radish: {
+    action: {
+      /** Label shown on a delete button while the deletion is in progress. */
+      deleting: string;
+    };
+    message: {
+      /** Confirm dialog title shown by <DeleteButton>. */
+      delete_confirm_title: string;
+    };
+    notification: {
+      /** aria-label for the dismiss button inside each toast. */
+      dismiss: string;
+      /** aria-label for the notifications container. */
+      label: string;
+    };
+  };
+}
+
+/**
  * Default English message bundle for the `radish.*` i18n namespace.
  *
  * These keys have no direct equivalent in `ra-language-english` and are
@@ -15,7 +51,7 @@
  *   "en",
  * );
  */
-export const radishMessages = {
+export const radishMessages: RadishMessages = {
   radish: {
     action: {
       /** Label shown on a delete button while the deletion is in progress. */

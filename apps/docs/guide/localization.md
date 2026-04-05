@@ -21,7 +21,6 @@ radish-ui components will automatically pick up the correct translations.
 ```tsx
 import polyglotI18nProvider from "ra-i18n-polyglot";
 import englishMessages from "ra-language-english";
-import { radishMessages } from "@radish-ui/core";
 
 const i18nProvider = polyglotI18nProvider(() => englishMessages, "en");
 
@@ -100,9 +99,15 @@ for full coverage:
 
 ```tsx
 import frenchMessages from "ra-language-french";
+import { radishMessages } from "@radish-ui/core";
+import type { RadishMessages } from "@radish-ui/core";
 
-const frenchRadishMessages = {
+// RadishMessages gives you a type-checked shape for all radish.* keys
+const frenchRadishMessages: RadishMessages = {
   radish: {
+    action: {
+      deleting: "Suppression…",
+    },
     message: {
       delete_confirm_title: "Êtes-vous sûr de vouloir supprimer cet enregistrement ?",
     },
