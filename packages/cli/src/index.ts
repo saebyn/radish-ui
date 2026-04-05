@@ -80,7 +80,6 @@ program
     "--registry <path>",
     "Path or URL to registry (local path or https:// URL; defaults to GitHub raw URL)",
   )
-  .option("--target <path>", `Output directory (default: ./${DEFAULT_OUTPUT_DIR})`)
   .action(listCommand);
 
 program.parseAsync(process.argv).catch((err) => {
