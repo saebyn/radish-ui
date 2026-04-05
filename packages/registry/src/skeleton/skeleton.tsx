@@ -51,7 +51,7 @@ export function Skeleton({ label, className }: SkeletonProps) {
       <div
         role="status"
         aria-live="polite"
-        className={cn("animate-pulse rounded-md bg-gray-200 dark:bg-gray-700", className)}
+        className={cn("animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700", className)}
       >
         <span className="sr-only">{label}</span>
       </div>
@@ -60,7 +60,7 @@ export function Skeleton({ label, className }: SkeletonProps) {
   return (
     <div
       aria-hidden="true"
-      className={cn("animate-pulse rounded-md bg-gray-200 dark:bg-gray-700", className)}
+      className={cn("animate-pulse rounded-md bg-neutral-200 dark:bg-neutral-700", className)}
     />
   );
 }

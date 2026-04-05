@@ -54,7 +54,7 @@ export function FilterForm({ children, alwaysOpen = false, className }: FilterFo
     <form
       onSubmit={(e) => e.preventDefault()}
       className={cn(
-        "flex flex-wrap items-end gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800/50",
+        "flex flex-wrap items-end gap-3 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3 dark:border-neutral-700 dark:bg-neutral-800/50",
         className,
       )}
     >
@@ -64,7 +64,7 @@ export function FilterForm({ children, alwaysOpen = false, className }: FilterFo
         <button
           type="button"
           onClick={handleReset}
-          className="self-end rounded-md px-3 py-2 text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          className="self-end rounded-md px-3 py-2 text-xs font-medium text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
         >
           Clear filters
         </button>

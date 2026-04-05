@@ -51,16 +51,16 @@ function SimpleFormContent({
   return (
     <div
       className={cn(
-        "rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800",
+        "rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800",
         className,
       )}
     >
       <div className="space-y-5 px-6 py-6">{children}</div>
-      <div className="flex items-center justify-end gap-3 border-t border-gray-100 dark:border-gray-700 px-6 py-4">
+      <div className="flex items-center justify-end gap-3 border-t border-neutral-100 dark:border-neutral-700 px-6 py-4">
         <button
           type="submit"
           disabled={saving}
-          className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {saving ? "Saving…" : submitLabel}
         </button>
