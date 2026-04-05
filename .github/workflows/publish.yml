@@ -31,13 +31,24 @@ jobs:
       - name: Build packages
         run: pnpm build
 
+      # Resolve the npm dist-tag: pre-releases publish under "next" so they
+      # don't become the default "latest" install for new users.
+      - name: Resolve dist-tag
+        id: dist-tag
+        run: |
+          if [ "${{ github.event.release.prerelease }}" = "true" ]; then
+            echo "tag=next" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=latest" >> "$GITHUB_OUTPUT"
+          fi
+
       # Authentication uses GitHub's OIDC token via npm Trusted Publishers
       # (https://docs.npmjs.com/trusted-publishers). No NPM_TOKEN secret is
       # needed. The id-token: write permission above enables the OIDC flow.
       # @radish-ui/cli does not depend on @radish-ui/core at runtime, so the
       # two publishes are independent and order does not matter.
       - name: Publish @radish-ui/core
-        run: pnpm --filter @radish-ui/core publish --provenance --access public --no-git-checks
+        run: pnpm --filter @radish-ui/core publish --provenance --access public --no-git-checks --tag ${{ steps.dist-tag.outputs.tag }}
 
       - name: Publish @radish-ui/cli
-        run: pnpm --filter @radish-ui/cli publish --provenance --access public --no-git-checks
+        run: pnpm --filter @radish-ui/cli publish --provenance --access public --no-git-checks --tag ${{ steps.dist-tag.outputs.tag }}
