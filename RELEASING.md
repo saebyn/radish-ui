@@ -39,7 +39,7 @@ Once this is set up, the publish workflow runs automatically on every GitHub Rel
 
 ### Friendly reminder: you still need a "release prep" PR
 
-CI takes care of *publishing*, but it doesn’t magically know what version you want to ship or what should go in the release notes. Before you publish a GitHub Release, open and merge a small "release prep" PR to get the repo into a releasable state.
+CI takes care of _publishing_, but it doesn’t magically know what version you want to ship or what should go in the release notes. Before you publish a GitHub Release, open and merge a small "release prep" PR to get the repo into a releasable state.
 
 **Release prep PR checklist:**
 
@@ -51,6 +51,7 @@ CI takes care of *publishing*, but it doesn’t magically know what version you 
     ```
 
   - Update the compare links at the bottom of the file.
+
 - [ ] Bump versions in:
   - `packages/core/package.json`
   - `packages/cli/package.json`
