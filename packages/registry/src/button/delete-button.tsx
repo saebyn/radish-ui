@@ -65,7 +65,7 @@ export function DeleteButton({
         className,
       )}
     >
-      {isPending ? translate("ra.action.delete", { _: "Delete" }) : resolvedLabel}
+      {isPending ? translate("radish.action.deleting", { _: "Deleting…" }) : resolvedLabel}
     </button>
   );
 }

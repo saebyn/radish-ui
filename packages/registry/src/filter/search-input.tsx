@@ -30,7 +30,7 @@ export function SearchInput({
   className,
 }: SearchInputProps) {
   const translate = useTranslate();
-  const resolvedPlaceholder = placeholder ?? translate("ra.action.search", { _: "Search\u2026" });
+  const resolvedPlaceholder = placeholder ?? translate("ra.action.search", { _: "Search…" });
   const { filterValues, setFilters, displayedFilters } = useListContext();
   const [value, setValue] = useState<string>((filterValues[source] as string) ?? "");
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);

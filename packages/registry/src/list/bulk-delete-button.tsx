@@ -78,7 +78,7 @@ export function BulkDeleteButton({
           className,
         )}
       >
-        {isPending ? translate("ra.action.delete", { _: "Delete" }) : resolvedLabel}
+        {isPending ? translate("radish.action.deleting", { _: "Deleting…" }) : resolvedLabel}
       </button>
       <Confirm
         isOpen={open}

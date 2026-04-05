@@ -106,7 +106,7 @@ function ShowLayout({
 
   if (isLoading) {
     return (
-      <SkeletonContainer label={translate("ra.page.loading", { _: "Loading record\u2026" })} className={cn("space-y-4", className)}>
+      <SkeletonContainer label={translate("ra.page.loading", { _: "Loading record…" })} className={cn("space-y-4", className)}>
         <div className="flex items-center justify-between">
           <Skeleton className="h-8 w-48" />
           {actions && <Skeleton className="h-8 w-24" />}

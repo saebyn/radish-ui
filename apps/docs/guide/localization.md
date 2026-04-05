@@ -57,6 +57,7 @@ const i18nProvider = polyglotI18nProvider(
 
 | Key | Default (English) | Used in |
 |---|---|---|
+| `radish.action.deleting` | `"Deleting…"` | `<DeleteButton>`, `<BulkDeleteButton>` (pending state) |
 | `radish.message.delete_confirm_title` | `"Are you sure you want to delete this record?"` | `<DeleteButton>` |
 | `radish.notification.dismiss` | `"Dismiss notification"` | `<Notification>` (dismiss button aria-label) |
 | `radish.notification.label` | `"Notifications"` | `<Notification>` (container aria-label) |

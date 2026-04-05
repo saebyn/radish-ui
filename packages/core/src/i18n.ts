@@ -17,6 +17,10 @@
  */
 export const radishMessages = {
   radish: {
+    action: {
+      /** Label shown on a delete button while the deletion is in progress. */
+      deleting: "Deleting…",
+    },
     message: {
       /** Confirm dialog title shown by <DeleteButton>. */
       delete_confirm_title: "Are you sure you want to delete this record?",

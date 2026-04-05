@@ -38,7 +38,7 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
   if (isLoading) {
     return (
       <SkeletonContainer
-        label={translate("ra.page.loading", { _: "Loading table data\u2026" })}
+        label={translate("ra.page.loading", { _: "Loading table data…" })}
         className={cn(
           "overflow-x-auto rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800",
           className,
