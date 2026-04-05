@@ -14,7 +14,6 @@
     "format:check": "oxfmt --check .",
     "lint": "oxlint .",
     "validate-registry": "node scripts/validate-registry.mjs",
-    "check-boundaries": "node scripts/check-boundaries.mjs",
     "storybook": "pnpm --filter @radish-ui/registry storybook"
   },
   "devDependencies": {

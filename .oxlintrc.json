@@ -20,7 +20,9 @@
     // CSS side-effect imports (e.g. in Storybook preview) are intentional; testing setup imports are too
     "import/no-unassigned-import": [
       "warn",
-      { "allow": ["**/*.css", "@testing-library/jest-dom/*"] }
+      {
+        "allow": ["**/*.css", "@testing-library/jest-dom/*"]
+      }
     ],
     // Async functions are used intentionally in some places for readability, even if they don't `await`
     "require-await": "off",
@@ -47,5 +49,114 @@
   },
   "env": {
     "builtin": true
-  }
+  },
+  // ---------------------------------------------------------------------------
+  // Package dependency boundary enforcement
+  //
+  // Each override restricts which @radish-ui/* packages may be imported within
+  // a given workspace package, enforcing the intended one-way dependency graph:
+  //
+  //   @radish-ui/core        ← no internal dependencies
+  //   @radish-ui/cli         ← may depend on @radish-ui/core only
+  //   @radish-ui/registry    ← may depend on @radish-ui/core only
+  //   apps/demo              ← may depend on @radish-ui/core only
+  // ---------------------------------------------------------------------------
+  "overrides": [
+    {
+      // @radish-ui/core must not import from @radish-ui/cli or @radish-ui/registry
+      "files": ["packages/core/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "@radish-ui/cli",
+                "message": "@radish-ui/core must not depend on @radish-ui/cli or @radish-ui/registry"
+              },
+              {
+                "name": "@radish-ui/registry",
+                "message": "@radish-ui/core must not depend on @radish-ui/cli or @radish-ui/registry"
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["@radish-ui/cli/*", "@radish-ui/registry/*"],
+                "message": "@radish-ui/core must not depend on @radish-ui/cli or @radish-ui/registry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // @radish-ui/cli must not import from @radish-ui/registry
+      "files": ["packages/cli/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "@radish-ui/registry",
+                "message": "@radish-ui/cli must not depend on @radish-ui/registry"
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["@radish-ui/registry/*"],
+                "message": "@radish-ui/cli must not depend on @radish-ui/registry"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // @radish-ui/registry must not import from @radish-ui/cli
+      "files": ["packages/registry/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "@radish-ui/cli",
+                "message": "@radish-ui/registry must not depend on @radish-ui/cli"
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["@radish-ui/cli/*"],
+                "message": "@radish-ui/registry must not depend on @radish-ui/cli"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // apps/demo must not import directly from @radish-ui/registry — use pnpm sync instead
+      "files": ["apps/demo/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "@radish-ui/registry",
+                "message": "apps/demo must not import directly from @radish-ui/registry — use the CLI copy/paste model (pnpm sync) instead"
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["@radish-ui/registry/*"],
+                "message": "apps/demo must not import directly from @radish-ui/registry — use the CLI copy/paste model (pnpm sync) instead"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

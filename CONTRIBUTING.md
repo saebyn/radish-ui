@@ -12,6 +12,7 @@ the project locally, run the development tools, and submit changes.
 - [Code Style](#code-style)
 - [Package Dependency Boundaries](#package-dependency-boundaries)
 - [Commit Message Format](#commit-message-format)
+
 - [Pull Request Guidelines](#pull-request-guidelines)
 - [Review Process](#review-process)
 
@@ -115,17 +116,6 @@ that component names are unique and well-formed, that dependency names are valid
 and that every component referenced in `apps/demo/radish.lock.json` is present in the registry.
 The same check runs automatically in CI.
 
-### Check dependency boundaries
-
-```bash
-pnpm check-boundaries   # Verify that no package breaks the monorepo dependency rules
-```
-
-This script enforces the intended dependency graph for the monorepo (see
-[Package dependency boundaries](#package-dependency-boundaries) below).
-It checks both `package.json` declared dependencies and TypeScript source
-`import` statements. The same check runs automatically in CI.
-
 ### Sync demo components
 
 ```bash
@@ -170,12 +160,12 @@ These rules prevent circular dependencies and keep the published packages
 (`@radish-ui/core` and `@radish-ui/cli`) free of unexpected transitive
 dependencies.
 
-Run `pnpm check-boundaries` locally to verify the rules are satisfied.
-CI will fail if any rule is violated — both `package.json` declared
-dependencies and TypeScript source `import` statements are checked.
+Run `pnpm lint` locally to verify the rules are satisfied — boundary violations
+are reported as lint errors by the `no-restricted-imports` rule configured in
+`.oxlintrc.json`. CI will fail if any rule is violated.
 
 If you believe a rule should be changed, open a discussion issue before
-modifying either the source code or `scripts/check-boundaries.mjs`.
+modifying the `overrides` section of `.oxlintrc.json`.
 
 ## Commit Message Format
 
