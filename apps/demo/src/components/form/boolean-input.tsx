@@ -44,19 +44,19 @@ export function BooleanInput({ source, label, className }: BooleanInputProps) {
           checked={!!value}
           onChange={(e) => onChange(e.target.checked)}
           onBlur={onBlur}
-          className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-400"
+          className="h-4 w-4 rounded border-neutral-300 dark:border-neutral-600 text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-400"
         />
-        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
           {fieldLabel}
           {isRequired && (
-            <span className="text-red-500 ml-1" aria-hidden>
+            <span className="text-danger-500 ml-1" aria-hidden>
               *
             </span>
           )}
         </span>
       </label>
       {error && (
-        <p className="mt-1 text-xs text-red-600 dark:text-red-400" role="alert">
+        <p className="mt-1 text-xs text-danger-600 dark:text-danger-400" role="alert">
           {error.message}
         </p>
       )}

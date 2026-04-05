@@ -138,7 +138,7 @@ export function ListLayout({
 
   if (error) {
     return (
-      <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-700 dark:text-red-400">
+      <div className="rounded-md bg-danger-50 dark:bg-danger-900/20 p-4 text-sm text-danger-700 dark:text-danger-400">
         <strong>Error loading data:</strong>{" "}
         {error instanceof Error ? error.message : String(error)}
       </div>
@@ -157,7 +157,9 @@ export function ListLayout({
       {/* Page header */}
       <div className="flex items-center justify-between">
         {displayTitle && (
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{displayTitle}</h1>
+          <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+            {displayTitle}
+          </h1>
         )}
         {actions && <div>{actions}</div>}
       </div>
@@ -172,7 +174,7 @@ export function ListLayout({
             empty != null ? (
               <>{empty}</>
             ) : (
-              <div className="py-12 text-center text-gray-500 dark:text-gray-400">
+              <div className="py-12 text-center text-neutral-500 dark:text-neutral-400">
                 No records found.
               </div>
             )
@@ -184,7 +186,7 @@ export function ListLayout({
       </div>
 
       {pagination && (
-        <div className="border-t border-gray-100 dark:border-gray-800 pt-3">{pagination}</div>
+        <div className="border-t border-neutral-100 dark:border-neutral-800 pt-3">{pagination}</div>
       )}
     </div>
   );
