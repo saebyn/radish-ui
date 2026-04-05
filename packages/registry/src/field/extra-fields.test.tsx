@@ -141,7 +141,13 @@ describe("ArrayField", () => {
   it("renders items inside a semantic list element", () => {
     const { container } = render(
       <RecordContextProvider
-        value={{ id: 1, tags: [{ id: 1, name: "React" }, { id: 2, name: "TypeScript" }] }}
+        value={{
+          id: 1,
+          tags: [
+            { id: 1, name: "React" },
+            { id: 2, name: "TypeScript" },
+          ],
+        }}
       >
         <ArrayField source="tags">
           <ChipField source="name" />

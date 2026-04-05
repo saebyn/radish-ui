@@ -18,7 +18,6 @@ export function Sidebar({ open, onToggle, children }: SidebarProps) {
   return (
     <aside
       aria-label="Sidebar navigation"
-      aria-expanded={open}
       className={cn(
         "flex flex-col bg-canvas-900 dark:bg-canvas-950 text-white transition-all duration-200",
         open ? "w-56" : "w-14",
@@ -29,6 +28,7 @@ export function Sidebar({ open, onToggle, children }: SidebarProps) {
         onClick={onToggle}
         className="flex items-center justify-center h-12 w-full text-neutral-400 hover:text-white hover:bg-canvas-800 dark:hover:bg-canvas-700 transition-colors"
         aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
+        aria-expanded={open}
       >
         <MdMenu size={22} />
       </button>

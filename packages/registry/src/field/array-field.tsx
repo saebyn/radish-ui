@@ -45,11 +45,7 @@ export function ArrayField({ source, children, className }: ArrayFieldProps) {
             : { id: index, value: item };
         return (
           <li key={record.id !== undefined ? String(record.id) : index}>
-            <RecordContextProvider
-              value={record}
-            >
-              {children}
-            </RecordContextProvider>
+            <RecordContextProvider value={record}>{children}</RecordContextProvider>
           </li>
         );
       })}

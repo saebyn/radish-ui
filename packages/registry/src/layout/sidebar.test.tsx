@@ -51,21 +51,21 @@ describe("Sidebar", () => {
     expect(aside).toHaveAttribute("aria-label", "Sidebar navigation");
   });
 
-  it("aside has aria-expanded=true when open", () => {
-    const { container } = render(
+  it("toggle button has aria-expanded=true when open", () => {
+    render(
       <Sidebar open={true} onToggle={() => {}}>
         <div />
       </Sidebar>,
     );
-    expect(container.querySelector("aside")).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByLabelText("Collapse sidebar")).toHaveAttribute("aria-expanded", "true");
   });
 
-  it("aside has aria-expanded=false when closed", () => {
-    const { container } = render(
+  it("toggle button has aria-expanded=false when closed", () => {
+    render(
       <Sidebar open={false} onToggle={() => {}}>
         <div />
       </Sidebar>,
     );
-    expect(container.querySelector("aside")).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByLabelText("Expand sidebar")).toHaveAttribute("aria-expanded", "false");
   });
 });

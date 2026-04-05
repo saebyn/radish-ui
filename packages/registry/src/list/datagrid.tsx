@@ -46,9 +46,7 @@ export function Datagrid({ children, rowActions, label, className }: DatagridPro
           className,
         )}
       >
-      <table
-          className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700 text-sm"
-        >
+        <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700 text-sm">
           <thead className="bg-canvas-50 dark:bg-canvas-700">
             <tr>
               {columns.map((col, i) => {
