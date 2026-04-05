@@ -155,6 +155,47 @@ npx @radish-ui/cli diff <component> [options]
 
 ---
 
+### `radish list`
+
+Show all components available in the registry and which ones are currently installed in your project.
+
+```bash
+npx @radish-ui/cli list [options]
+```
+
+**Options:**
+
+| Option              | Description                                         |
+| ------------------- | --------------------------------------------------- |
+| `--registry <path>` | Path or URL to the registry                         |
+| `--target <path>`   | Output directory (default: `src/components/radish`) |
+
+**Example output:**
+
+```
+Available components (5 available, 2 installed):
+
+  Component    Status
+  ───────────  ─────────
+  ✓ skeleton    installed
+  - datagrid    available
+  ✓ form/input  installed
+  - dialog      available
+  - reference   available
+```
+
+**Example:**
+
+```bash
+# List all components (uses registry and outputDir from radish.json if present)
+npx @radish-ui/cli list
+
+# List using a specific registry
+npx @radish-ui/cli list --registry ./my-local-registry
+```
+
+---
+
 ## Configuration (`radish.json`)
 
 The `radish.json` file at the project root configures the CLI. It is created by `radish init` or `radish new`.

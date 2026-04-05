@@ -6,6 +6,7 @@ import { syncCommand } from "./commands/sync.js";
 import { diffCommand } from "./commands/diff.js";
 import { newCommand } from "./commands/new.js";
 import { initCommand } from "./commands/init.js";
+import { listCommand } from "./commands/list.js";
 import { RadishError } from "./lib/errors.js";
 import { DEFAULT_OUTPUT_DIR } from "./lib/config.js";
 
@@ -71,6 +72,16 @@ program
   .option("--registry <url>", "Registry URL or path to use in radish.json")
   .option("-y, --yes", "Accept all defaults and skip interactive prompts")
   .action(initCommand);
+
+program
+  .command("list")
+  .description("Show all components available in the registry and which ones are installed")
+  .option(
+    "--registry <path>",
+    "Path or URL to registry (local path or https:// URL; defaults to GitHub raw URL)",
+  )
+  .option("--target <path>", `Output directory (default: ./${DEFAULT_OUTPUT_DIR})`)
+  .action(listCommand);
 
 program.parseAsync(process.argv).catch((err) => {
   if (err instanceof RadishError) {
