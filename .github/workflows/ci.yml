@@ -32,6 +32,9 @@ jobs:
       - name: Validate registry
         run: pnpm validate-registry
 
+      - name: Check dependency boundaries
+        run: pnpm check-boundaries
+
       - name: Build
         run: pnpm build
 

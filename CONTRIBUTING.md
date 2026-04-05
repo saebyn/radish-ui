@@ -10,6 +10,7 @@ the project locally, run the development tools, and submit changes.
 - [Project Structure](#project-structure)
 - [Development Scripts](#development-scripts)
 - [Code Style](#code-style)
+- [Package Dependency Boundaries](#package-dependency-boundaries)
 - [Commit Message Format](#commit-message-format)
 - [Pull Request Guidelines](#pull-request-guidelines)
 - [Review Process](#review-process)
@@ -114,6 +115,17 @@ that component names are unique and well-formed, that dependency names are valid
 and that every component referenced in `apps/demo/radish.lock.json` is present in the registry.
 The same check runs automatically in CI.
 
+### Check dependency boundaries
+
+```bash
+pnpm check-boundaries   # Verify that no package breaks the monorepo dependency rules
+```
+
+This script enforces the intended dependency graph for the monorepo (see
+[Package dependency boundaries](#package-dependency-boundaries) below).
+It checks both `package.json` declared dependencies and TypeScript source
+`import` statements. The same check runs automatically in CI.
+
 ### Sync demo components
 
 ```bash
@@ -131,6 +143,39 @@ pnpm sync           # Re-copy registry components into the demo app
 - Prefer named exports over default exports for components.
 - Co-locate Storybook story files with their components inside
   `packages/registry/src/`.
+
+## Package Dependency Boundaries
+
+To prevent accidental architecture drift, the monorepo enforces a strict
+one-way dependency graph between its packages.  The allowed dependency
+directions are:
+
+```
+@radish-ui/core        ← no internal dependencies
+@radish-ui/cli         ← may depend on @radish-ui/core
+@radish-ui/registry    ← may depend on @radish-ui/core
+apps/demo              ← may depend on @radish-ui/core
+```
+
+The following are **explicitly forbidden**:
+
+| Package / app         | Must NOT import from               |
+| --------------------- | ---------------------------------- |
+| `@radish-ui/core`     | `@radish-ui/cli`, `@radish-ui/registry` |
+| `@radish-ui/cli`      | `@radish-ui/registry`              |
+| `@radish-ui/registry` | `@radish-ui/cli`                   |
+| `apps/demo`           | `@radish-ui/registry` (use `pnpm sync` instead) |
+
+These rules prevent circular dependencies and keep the published packages
+(`@radish-ui/core` and `@radish-ui/cli`) free of unexpected transitive
+dependencies.
+
+Run `pnpm check-boundaries` locally to verify the rules are satisfied.
+CI will fail if any rule is violated — both `package.json` declared
+dependencies and TypeScript source `import` statements are checked.
+
+If you believe a rule should be changed, open a discussion issue before
+modifying either the source code or `scripts/check-boundaries.mjs`.
 
 ## Commit Message Format
 
