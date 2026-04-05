@@ -25,7 +25,7 @@ export function Menu({ open = true, className }: MenuProps) {
         {Object.keys(resources).map((name) => {
           const resource = resources[name];
           const path = createPath({ resource: name, type: "list" });
-          const isCurrent = pathname.startsWith(path);
+          const isCurrent = pathname === path || pathname.startsWith(path + "/");
           return (
             <li key={name}>
               <a
