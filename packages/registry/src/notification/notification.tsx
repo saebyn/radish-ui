@@ -101,7 +101,6 @@ interface ToastProps {
 }
 
 function Toast({ notification, dismiss }: ToastProps) {
-  const translate = useTranslate();
   const type: NotificationType = (notification.type as NotificationType) ?? "info";
   const { autoHideDuration, key } = notification;
   const translate = useTranslate();
