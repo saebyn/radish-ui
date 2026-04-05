@@ -99,6 +99,81 @@
       "name": "notification",
       "files": ["src/notification/notification.tsx"],
       "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "search-input",
+      "files": ["src/filter/search-input.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "filter-button",
+      "files": ["src/filter/filter-button.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "filter-form",
+      "files": ["src/filter/filter-form.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "url-field",
+      "files": ["src/field/url-field.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "email-field",
+      "files": ["src/field/email-field.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "chip-field",
+      "files": ["src/field/chip-field.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "array-field",
+      "files": ["src/field/array-field.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "confirm",
+      "files": ["src/dialog/confirm.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "bulk-actions-toolbar",
+      "files": ["src/list/bulk-actions-toolbar.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "bulk-delete-button",
+      "files": ["src/list/bulk-delete-button.tsx", "src/dialog/confirm.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "export-button",
+      "files": ["src/list/export-button.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "reference-field",
+      "files": ["src/reference/reference-field.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "reference-input",
+      "files": ["src/reference/reference-input.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "tabbed-show-layout",
+      "files": ["src/detail/tabbed-show-layout.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "tabbed-form",
+      "files": ["src/detail/tabbed-form.tsx"],
+      "dependencies": ["@radish-ui/core"]
     }
   ]
 }
