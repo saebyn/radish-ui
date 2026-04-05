@@ -52,9 +52,9 @@
     "ra-core": "^5.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tailwindcss": "^3.4.4",
+    "tailwindcss": "^4.2.2",
     "tsup": "^8.1.0",
-    "typescript": "^5.4.5"
+    "typescript": "^6.0.2"
   },
   "peerDependencies": {
     "ra-core": "^5",
