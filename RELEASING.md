@@ -37,7 +37,9 @@ Release and uses the GitHub OIDC token instead of a stored secret.
 
 ## Manual Publishing (fallback)
 
-If you need to publish outside of the automated workflow, follow these steps.
+Use this process only if the automated publish workflow cannot be used or if CI
+publishing fails and a maintainer needs to publish the packages directly to npm.
+This section describes a manual npm publish fallback.
 
 ### Prerequisites
 
