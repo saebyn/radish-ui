@@ -6,11 +6,5 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: [
-    "ra-core",
-    "react",
-    "react-dom",
-    "tailwindcss",
-    "tailwindcss/*"
-  ],
+  external: ["ra-core", "react", "react-dom", "tailwindcss", "tailwindcss/*"],
 });
