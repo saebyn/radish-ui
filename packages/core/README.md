@@ -42,15 +42,15 @@ import { useFieldValue } from "@radish-ui/core";
 
 A Tailwind preset that registers semantic color tokens. Registry components use these tokens so you can retheme everything by overriding one value in your config.
 
-| Token     | Default palette | Purpose                                  |
-| --------- | --------------- | ---------------------------------------- |
-| `primary` | indigo          | Brand / interactive color                |
-| `neutral` | gray            | Borders, dividers, muted text            |
-| `danger`  | red             | Destructive actions and error states     |
-| `success` | green           | Positive states and confirmations        |
-| `info`    | blue            | Informational states                     |
-| `warning` | yellow          | Warning states                           |
-| `canvas`  | gray + white    | Surface backgrounds (page, card, input)  |
+| Token     | Default palette | Purpose                                 |
+| --------- | --------------- | --------------------------------------- |
+| `primary` | indigo          | Brand / interactive color               |
+| `neutral` | gray            | Borders, dividers, muted text           |
+| `danger`  | red             | Destructive actions and error states    |
+| `success` | green           | Positive states and confirmations       |
+| `info`    | blue            | Informational states                    |
+| `warning` | yellow          | Warning states                          |
+| `canvas`  | gray + white    | Surface backgrounds (page, card, input) |
 
 ```ts
 // tailwind.config.ts

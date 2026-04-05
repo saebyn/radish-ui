@@ -3,21 +3,21 @@
   "version": "0.1.0",
   "description": "Headless react-admin wrappers and Tailwind utilities for radish-ui",
   "keywords": [
-    "react-admin",
-    "tailwindcss",
-    "radish-ui",
+    "components",
     "headless",
     "ra-core",
-    "ui",
-    "components"
+    "radish-ui",
+    "react-admin",
+    "tailwindcss",
+    "ui"
   ],
   "homepage": "https://saebyn.github.io/radish-ui/",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/saebyn/radish-ui.git",
     "directory": "packages/core"
   },
-  "license": "MIT",
   "files": [
     "dist",
     "README.md"

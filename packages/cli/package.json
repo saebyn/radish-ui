@@ -3,20 +3,20 @@
   "version": "0.1.0",
   "description": "CLI for copying radish-ui registry components into your project",
   "keywords": [
-    "react-admin",
-    "tailwindcss",
-    "radish-ui",
     "cli",
     "code-generation",
-    "components"
+    "components",
+    "radish-ui",
+    "react-admin",
+    "tailwindcss"
   ],
   "homepage": "https://saebyn.github.io/radish-ui/",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/saebyn/radish-ui.git",
     "directory": "packages/cli"
   },
-  "license": "MIT",
   "bin": {
     "radish": "./dist/index.js"
   },
