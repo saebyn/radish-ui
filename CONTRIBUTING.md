@@ -147,7 +147,7 @@ pnpm sync           # Re-copy registry components into the demo app
 ## Package Dependency Boundaries
 
 To prevent accidental architecture drift, the monorepo enforces a strict
-one-way dependency graph between its packages.  The allowed dependency
+one-way dependency graph between its packages. The allowed dependency
 directions are:
 
 ```
@@ -159,11 +159,11 @@ apps/demo              ← may depend on @radish-ui/core
 
 The following are **explicitly forbidden**:
 
-| Package / app         | Must NOT import from               |
-| --------------------- | ---------------------------------- |
-| `@radish-ui/core`     | `@radish-ui/cli`, `@radish-ui/registry` |
-| `@radish-ui/cli`      | `@radish-ui/registry`              |
-| `@radish-ui/registry` | `@radish-ui/cli`                   |
+| Package / app         | Must NOT import from                            |
+| --------------------- | ----------------------------------------------- |
+| `@radish-ui/core`     | `@radish-ui/cli`, `@radish-ui/registry`         |
+| `@radish-ui/cli`      | `@radish-ui/registry`                           |
+| `@radish-ui/registry` | `@radish-ui/cli`                                |
 | `apps/demo`           | `@radish-ui/registry` (use `pnpm sync` instead) |
 
 These rules prevent circular dependencies and keep the published packages

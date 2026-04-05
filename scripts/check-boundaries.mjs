@@ -30,8 +30,7 @@ const BOUNDARY_RULES = [
   {
     package: "packages/core",
     forbidden: ["@radish-ui/cli", "@radish-ui/registry"],
-    description:
-      "@radish-ui/core must not depend on @radish-ui/cli or @radish-ui/registry",
+    description: "@radish-ui/core must not depend on @radish-ui/cli or @radish-ui/registry",
   },
   {
     package: "packages/cli",
