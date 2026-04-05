@@ -37,6 +37,11 @@ updates:
     directory: /packages/core
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "react"
+      - dependency-name: "react-dom"
+      - dependency-name: "@types/react"
+      - dependency-name: "@types/react-dom"
     groups:
       dependencies:
         patterns:
@@ -47,6 +52,11 @@ updates:
     directory: /packages/registry
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "react"
+      - dependency-name: "react-dom"
+      - dependency-name: "@types/react"
+      - dependency-name: "@types/react-dom"
     groups:
       dependencies:
         patterns:
@@ -57,6 +67,11 @@ updates:
     directory: /apps/demo
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "react"
+      - dependency-name: "react-dom"
+      - dependency-name: "@types/react"
+      - dependency-name: "@types/react-dom"
     groups:
       dependencies:
         patterns:
@@ -67,6 +82,11 @@ updates:
     directory: /apps/docs
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "react"
+      - dependency-name: "react-dom"
+      - dependency-name: "@types/react"
+      - dependency-name: "@types/react-dom"
     groups:
       dependencies:
         patterns:
