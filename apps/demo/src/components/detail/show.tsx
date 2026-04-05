@@ -111,7 +111,7 @@ function ShowLayout({
           {actions && <Skeleton className="h-8 w-24" />}
         </div>
         <div className="flex gap-4">
-          <div className="flex-1 rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800 shadow-sm">
+          <div className="flex-1 rounded-lg border border-neutral-200 bg-canvas-0 dark:border-neutral-700 dark:bg-canvas-800 shadow-sm">
             <dl className="divide-y divide-neutral-100 dark:divide-neutral-700">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="px-6 py-4 sm:grid sm:grid-cols-3 sm:gap-4">

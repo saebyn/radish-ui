@@ -143,7 +143,7 @@ function EditLayout({
           {actions && <Skeleton className="h-8 w-24" />}
         </div>
         <div className="flex gap-4">
-          <div className="flex-1 rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800 p-6 shadow-sm">
+          <div className="flex-1 rounded-lg border border-neutral-200 bg-canvas-0 dark:border-neutral-700 dark:bg-canvas-800 p-6 shadow-sm">
             <div className="space-y-5">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="space-y-1.5">
