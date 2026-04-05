@@ -79,15 +79,15 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
         <div
           role="alert"
           className={cn(
-            "rounded-xl border border-red-200 bg-red-50 p-6",
-            "dark:border-red-800 dark:bg-red-900/20",
+            "rounded-xl border border-danger-200 bg-danger-50 p-6",
+            "dark:border-danger-800 dark:bg-danger-900/20",
             className,
           )}
         >
           <div className="flex items-start gap-3">
             <svg
               aria-hidden="true"
-              className="mt-0.5 h-5 w-5 shrink-0 text-red-500 dark:text-red-400"
+              className="mt-0.5 h-5 w-5 shrink-0 text-danger-500 dark:text-danger-400"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -99,10 +99,10 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             </svg>
 
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-red-800 dark:text-red-300">
+              <p className="text-sm font-semibold text-danger-800 dark:text-danger-300">
                 Something went wrong
               </p>
-              <p className="mt-1 break-words text-sm text-red-700 dark:text-red-400">
+              <p className="mt-1 break-words text-sm text-danger-700 dark:text-danger-400">
                 {error.message}
               </p>
             </div>
@@ -113,9 +113,9 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               type="button"
               onClick={this.reset}
               className={cn(
-                "rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm",
-                "hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1",
-                "dark:bg-red-700 dark:hover:bg-red-600",
+                "rounded-md bg-danger-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm",
+                "hover:bg-danger-700 focus:outline-none focus:ring-2 focus:ring-danger-500 focus:ring-offset-1",
+                "dark:bg-danger-700 dark:hover:bg-danger-600",
               )}
             >
               Try again
