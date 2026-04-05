@@ -1,11 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { ErrorBoundary } from "./error-boundary";
-
-afterEach(() => {
-  cleanup();
-});
-
 /** A component that throws unconditionally, used to trigger the boundary. */
 function Bomb({ message = "test error" }: { message?: string }) {
   throw new Error(message);
