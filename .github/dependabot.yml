@@ -1,0 +1,73 @@
+version: 2
+
+updates:
+  # GitHub Actions
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  # Root workspace
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      dev-dependencies:
+        dependency-type: development
+        patterns:
+          - "*"
+
+  # packages/cli
+  - package-ecosystem: npm
+    directory: /packages/cli
+    schedule:
+      interval: weekly
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+
+  # packages/core
+  - package-ecosystem: npm
+    directory: /packages/core
+    schedule:
+      interval: weekly
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+
+  # packages/registry
+  - package-ecosystem: npm
+    directory: /packages/registry
+    schedule:
+      interval: weekly
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+
+  # apps/demo
+  - package-ecosystem: npm
+    directory: /apps/demo
+    schedule:
+      interval: weekly
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+
+  # apps/docs
+  - package-ecosystem: npm
+    directory: /apps/docs
+    schedule:
+      interval: weekly
+    groups:
+      dependencies:
+        patterns:
+          - "*"
