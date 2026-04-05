@@ -104,7 +104,9 @@ function CreateLayout({ children, actions, aside, title, className }: CreateLayo
     <div className={cn("space-y-4", className)}>
       <div className="flex items-center justify-between">
         {displayTitle && (
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{displayTitle}</h1>
+          <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
+            {displayTitle}
+          </h1>
         )}
         {actions && <div>{actions}</div>}
       </div>
