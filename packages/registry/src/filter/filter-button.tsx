@@ -1,4 +1,4 @@
-import { useListContext } from "ra-core";
+import { useListContext, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 interface FilterButtonProps {
@@ -20,8 +20,10 @@ interface FilterButtonProps {
  *   ...
  * </List>
  */
-export function FilterButton({ label = "Filters", className }: FilterButtonProps) {
+export function FilterButton({ label, className }: FilterButtonProps) {
+  const translate = useTranslate();
   const { showFilter, hideFilter, displayedFilters } = useListContext();
+  const resolvedLabel = label ?? translate("ra.action.add_filter", { _: "Filters" });
 
   const isOpen = !!displayedFilters["__filterForm"];
 
@@ -54,7 +56,7 @@ export function FilterButton({ label = "Filters", className }: FilterButtonProps
           clipRule="evenodd"
         />
       </svg>
-      {label}
+      {resolvedLabel}
     </button>
   );
 }

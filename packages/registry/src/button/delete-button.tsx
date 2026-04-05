@@ -1,4 +1,4 @@
-import { useRecordContext, useResourceContext, useDeleteController } from "ra-core";
+import { useRecordContext, useResourceContext, useDeleteController, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 interface DeleteButtonProps {
@@ -25,10 +25,11 @@ interface DeleteButtonProps {
  */
 export function DeleteButton({
   resource,
-  label = "Delete",
-  confirmTitle = "Are you sure you want to delete this record?",
+  label,
+  confirmTitle,
   className,
 }: DeleteButtonProps) {
+  const translate = useTranslate();
   const record = useRecordContext();
   const resourceContext = useResourceContext();
   const { isPending, handleDelete } = useDeleteController({
@@ -40,8 +41,15 @@ export function DeleteButton({
 
   if (!record) return null;
 
+  const resolvedLabel = label ?? translate("ra.action.delete", { _: "Delete" });
+  const resolvedConfirmTitle =
+    confirmTitle ??
+    translate("radish.message.delete_confirm_title", {
+      _: "Are you sure you want to delete this record?",
+    });
+
   const onClick = () => {
-    if (window.confirm(confirmTitle)) {
+    if (window.confirm(resolvedConfirmTitle)) {
       handleDelete();
     }
   };
@@ -57,7 +65,7 @@ export function DeleteButton({
         className,
       )}
     >
-      {isPending ? "Deleting…" : label}
+      {isPending ? translate("ra.action.delete", { _: "Delete" }) : resolvedLabel}
     </button>
   );
 }

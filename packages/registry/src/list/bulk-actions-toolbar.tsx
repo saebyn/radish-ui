@@ -1,5 +1,5 @@
 import React from "react";
-import { useListContext } from "ra-core";
+import { useListContext, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 interface BulkActionsToolbarProps {
@@ -21,17 +21,24 @@ interface BulkActionsToolbarProps {
  *   <BulkDeleteButton />
  * </BulkActionsToolbar>
  */
-export function BulkActionsToolbar({ children, label = "", className }: BulkActionsToolbarProps) {
+export function BulkActionsToolbar({ children, label, className }: BulkActionsToolbarProps) {
+  const translate = useTranslate();
   const { selectedIds } = useListContext();
 
   if (!selectedIds || selectedIds.length === 0) return null;
 
   const count = selectedIds.length;
+  const resolvedLabel =
+    label ??
+    translate("ra.action.bulk_actions", {
+      smart_count: count,
+      _: `${count} ${count === 1 ? "item" : "items"} selected`,
+    });
 
   return (
     <div
       role="toolbar"
-      aria-label={`${count} item${count !== 1 ? "s" : ""} selected`}
+      aria-label={resolvedLabel}
       className={cn(
         "flex items-center justify-between rounded-lg border border-primary-200 bg-primary-50 px-4 py-2 text-sm",
         "dark:border-primary-700 dark:bg-primary-900/30",
@@ -39,8 +46,7 @@ export function BulkActionsToolbar({ children, label = "", className }: BulkActi
       )}
     >
       <span className="font-medium text-primary-700 dark:text-primary-300">
-        {label}
-        {count} {count === 1 ? "item" : "items"} selected
+        {resolvedLabel}
       </span>
       <div className="flex items-center gap-2">{children}</div>
     </div>

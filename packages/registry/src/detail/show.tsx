@@ -1,5 +1,5 @@
 import React from "react";
-import { ShowBase, useShowContext } from "ra-core";
+import { ShowBase, useShowContext, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 import { Skeleton, SkeletonContainer } from "../skeleton/skeleton";
 
@@ -88,12 +88,13 @@ function ShowLayout({
   title,
   className,
 }: ShowLayoutProps) {
+  const translate = useTranslate();
   const { defaultTitle, error, isLoading } = useShowContext();
 
   if (error) {
     return (
       <div className="rounded-md bg-danger-50 dark:bg-danger-900/20 p-4 text-sm text-danger-700 dark:text-danger-400">
-        <strong>Error loading record:</strong>{" "}
+        <strong>{translate("ra.page.error", { _: "Error loading record:" })}</strong>{" "}
         {error instanceof Error ? error.message : String(error)}
       </div>
     );
@@ -105,7 +106,7 @@ function ShowLayout({
 
   if (isLoading) {
     return (
-      <SkeletonContainer label="Loading record…" className={cn("space-y-4", className)}>
+      <SkeletonContainer label={translate("ra.page.loading", { _: "Loading record\u2026" })} className={cn("space-y-4", className)}>
         <div className="flex items-center justify-between">
           <Skeleton className="h-8 w-48" />
           {actions && <Skeleton className="h-8 w-24" />}

@@ -191,6 +191,7 @@ function generateAppTsx(
     `import { Resource } from "ra-core";`,
     `import polyglotI18nProvider from "ra-i18n-polyglot";`,
     `import englishMessages from "ra-language-english";`,
+    `import { radishMessages } from "@radish-ui/core";`,
   ];
 
   if (dataProvider === "JSON Server") {
@@ -220,7 +221,7 @@ function generateAppTsx(
       ? `const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");`
       : `// TODO: Replace with your data provider\nconst dataProvider = undefined as never;`;
 
-  const i18nLine = `const i18nProvider = polyglotI18nProvider(() => englishMessages, "en");`;
+  const i18nLine = `const i18nProvider = polyglotI18nProvider(\n  () => ({ ...englishMessages, ...radishMessages }),\n  "en",\n);`;
 
   let postListBody: string;
   if (hasList && hasDatagrid && hasTextField) {

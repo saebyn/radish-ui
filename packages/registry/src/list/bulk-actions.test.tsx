@@ -7,6 +7,14 @@ import { BulkDeleteButton } from "./bulk-delete-button";
 
 const noop = () => Promise.resolve({ data: [] as never });
 
+// Minimal i18nProvider that resolves translation keys using the `_` fallback
+const testI18nProvider = {
+  translate: (key: string, options?: { _?: string; [k: string]: unknown }) =>
+    typeof options?._ === "string" ? options._ : key,
+  changeLocale: () => Promise.resolve(),
+  getLocale: () => "en",
+};
+
 function makeDataProvider(deleteManyImpl?: () => void) {
   return {
     getList: () => Promise.resolve({ data: [], total: 0 }),
@@ -61,7 +69,10 @@ function Wrapper({
 }) {
   return (
     <MemoryRouter>
-      <CoreAdminContext dataProvider={makeDataProvider(deleteManyImpl)}>
+      <CoreAdminContext
+        dataProvider={makeDataProvider(deleteManyImpl)}
+        i18nProvider={testI18nProvider}
+      >
         <ResourceContextProvider value="posts">
           <ListContextProvider value={baseListContext}>{children}</ListContextProvider>
         </ResourceContextProvider>

@@ -12,6 +12,9 @@ export { useFieldValue } from "./hooks";
 // Utilities
 export { cn } from "./utils/cn";
 
+// i18n
+export { radishMessages } from "./i18n";
+
 // Re-exports from ra-core for convenient single-package imports
 export {
   EditBase,

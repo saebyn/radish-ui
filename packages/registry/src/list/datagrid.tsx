@@ -1,5 +1,5 @@
 import React from "react";
-import { useListContext, RecordContextProvider } from "ra-core";
+import { useListContext, RecordContextProvider, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 import { Skeleton, SkeletonContainer } from "../skeleton/skeleton";
 
@@ -27,6 +27,7 @@ interface DatagridProps {
  * </Datagrid>
  */
 export function Datagrid({ children, rowActions, className }: DatagridProps) {
+  const translate = useTranslate();
   const { data, isLoading } = useListContext();
 
   const columns = React.Children.toArray(children) as React.ReactElement<{
@@ -37,7 +38,7 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
   if (isLoading) {
     return (
       <SkeletonContainer
-        label="Loading table data…"
+        label={translate("ra.page.loading", { _: "Loading table data\u2026" })}
         className={cn(
           "overflow-x-auto rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800",
           className,

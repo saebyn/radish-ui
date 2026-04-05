@@ -9,6 +9,14 @@ import { DeleteButton } from "./delete-button";
 // Minimal data provider required by CoreAdminContext
 const noop = () => Promise.resolve({ data: [] as never });
 
+// Minimal i18nProvider that resolves translation keys using the `_` fallback
+const testI18nProvider = {
+  translate: (key: string, options?: { _?: string; [k: string]: unknown }) =>
+    typeof options?._ === "string" ? options._ : key,
+  changeLocale: () => Promise.resolve(),
+  getLocale: () => "en",
+};
+
 function makeDataProvider(deleteImpl?: () => void) {
   return {
     getList: () => Promise.resolve({ data: [], total: 0 }),
@@ -37,7 +45,7 @@ function Wrapper({
 }) {
   return (
     <MemoryRouter>
-      <CoreAdminContext dataProvider={makeDataProvider(deleteImpl)}>
+      <CoreAdminContext dataProvider={makeDataProvider(deleteImpl)} i18nProvider={testI18nProvider}>
         <ResourceContextProvider value="posts">
           <RecordContextProvider value={record}>{children}</RecordContextProvider>
         </ResourceContextProvider>
@@ -50,7 +58,7 @@ describe("CreateButton", () => {
   it("renders with default label", () => {
     render(
       <MemoryRouter>
-        <CoreAdminContext dataProvider={makeDataProvider()}>
+        <CoreAdminContext dataProvider={makeDataProvider()} i18nProvider={testI18nProvider}>
           <ResourceContextProvider value="posts">
             <CreateButton />
           </ResourceContextProvider>
@@ -63,7 +71,7 @@ describe("CreateButton", () => {
   it("renders with a custom label", () => {
     render(
       <MemoryRouter>
-        <CoreAdminContext dataProvider={makeDataProvider()}>
+        <CoreAdminContext dataProvider={makeDataProvider()} i18nProvider={testI18nProvider}>
           <ResourceContextProvider value="posts">
             <CreateButton label="New Post" />
           </ResourceContextProvider>
@@ -76,7 +84,7 @@ describe("CreateButton", () => {
   it("renders an anchor link pointing to the create path", () => {
     render(
       <MemoryRouter>
-        <CoreAdminContext dataProvider={makeDataProvider()}>
+        <CoreAdminContext dataProvider={makeDataProvider()} i18nProvider={testI18nProvider}>
           <ResourceContextProvider value="posts">
             <CreateButton />
           </ResourceContextProvider>
@@ -110,7 +118,7 @@ describe("EditButton", () => {
     function NoRecordWrapper({ children }: { children: React.ReactNode }) {
       return (
         <MemoryRouter>
-          <CoreAdminContext dataProvider={makeDataProvider()}>
+          <CoreAdminContext dataProvider={makeDataProvider()} i18nProvider={testI18nProvider}>
             <ResourceContextProvider value="posts">{children}</ResourceContextProvider>
           </CoreAdminContext>
         </MemoryRouter>
@@ -156,7 +164,7 @@ describe("DeleteButton", () => {
     function NoRecordWrapper({ children }: { children: React.ReactNode }) {
       return (
         <MemoryRouter>
-          <CoreAdminContext dataProvider={makeDataProvider()}>
+          <CoreAdminContext dataProvider={makeDataProvider()} i18nProvider={testI18nProvider}>
             <ResourceContextProvider value="posts">{children}</ResourceContextProvider>
           </CoreAdminContext>
         </MemoryRouter>
