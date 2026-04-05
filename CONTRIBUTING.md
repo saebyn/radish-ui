@@ -245,10 +245,10 @@ to automatically open pull requests when dependencies have available updates.
 Dependabot is configured in [`.github/dependabot.yml`](.github/dependabot.yml).
 It monitors the following ecosystems on a **weekly** schedule:
 
-| Ecosystem       | Directories monitored                                                     |
-| --------------- | ------------------------------------------------------------------------- |
-| `npm` (pnpm)    | `/`, `/packages/cli`, `/packages/core`, `/packages/registry`, `/apps/demo`, `/apps/docs` |
-| `github-actions`| `/`                                                                       |
+| Ecosystem        | Directories monitored                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------- |
+| `npm` (pnpm)     | `/`, `/packages/cli`, `/packages/core`, `/packages/registry`, `/apps/demo`, `/apps/docs` |
+| `github-actions` | `/`                                                                                      |
 
 Updates within each directory are **grouped into a single PR** to reduce noise.
 
