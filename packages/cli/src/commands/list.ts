@@ -4,7 +4,6 @@ import { resolveConfig } from "../lib/config.js";
 
 export interface ListOptions {
   registry?: string;
-  target?: string;
   /** Override the working directory (used in tests; defaults to process.cwd()). */
   cwd?: string;
 }
@@ -13,7 +12,6 @@ export async function listCommand(options: ListOptions): Promise<void> {
   const cwd = options.cwd ?? process.cwd();
   const config = resolveConfig(cwd, {
     registry: options.registry,
-    outputDir: options.target,
   });
 
   const registry = await loadRegistryAsync(config.registry);
