@@ -34,14 +34,16 @@ export function DateField({
   const value = useFieldValue({ source });
 
   if (value == null || value === "") {
-    return <span className={cn("text-sm text-gray-400 dark:text-gray-500", className)}>—</span>;
+    return (
+      <span className={cn("text-sm text-neutral-400 dark:text-neutral-500", className)}>—</span>
+    );
   }
 
   const date = value instanceof Date ? value : new Date(value as string | number);
 
   if (isNaN(date.getTime())) {
     return (
-      <span className={cn("text-sm text-gray-700 dark:text-gray-300", className)}>
+      <span className={cn("text-sm text-neutral-700 dark:text-neutral-300", className)}>
         {String(value)}
       </span>
     );
@@ -59,7 +61,7 @@ export function DateField({
   return (
     <time
       dateTime={date.toISOString()}
-      className={cn("text-sm text-gray-700 dark:text-gray-300", className)}
+      className={cn("text-sm text-neutral-700 dark:text-neutral-300", className)}
     >
       {formatted}
     </time>

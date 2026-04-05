@@ -88,7 +88,7 @@ describe("ChipField", () => {
     const { container } = render(<ChipField source="status" color="green" />, {
       wrapper: withRecord({ id: 1, status: "ok" }),
     });
-    expect(container.querySelector(".bg-green-100")).toBeInTheDocument();
+    expect(container.querySelector(".bg-success-100")).toBeInTheDocument();
   });
 });
 

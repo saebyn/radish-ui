@@ -31,7 +31,9 @@ export function ArrayField({ source, children, className }: ArrayFieldProps) {
   const value = useFieldValue({ source });
 
   if (!Array.isArray(value) || value.length === 0) {
-    return <span className={cn("text-sm text-gray-400 dark:text-gray-500", className)}>—</span>;
+    return (
+      <span className={cn("text-sm text-neutral-400 dark:text-neutral-500", className)}>—</span>
+    );
   }
 
   return (

@@ -10,10 +10,10 @@ interface ChipFieldProps {
 }
 
 const colorMap: Record<ChipColor, string> = {
-  gray: "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200",
-  indigo: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300",
-  green: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
-  red: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
+  gray: "bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200",
+  indigo: "bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300",
+  green: "bg-success-100 text-success-700 dark:bg-success-900/40 dark:text-success-300",
+  red: "bg-danger-100 text-danger-700 dark:bg-danger-900/40 dark:text-danger-300",
   yellow: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300",
   blue: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
 };

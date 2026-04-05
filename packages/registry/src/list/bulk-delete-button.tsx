@@ -52,9 +52,9 @@ export function BulkDeleteButton({
         onClick={() => setOpen(true)}
         disabled={isPending}
         className={cn(
-          "inline-flex items-center rounded-md px-3 py-1.5 text-sm font-medium text-red-600",
-          "hover:bg-red-50 hover:text-red-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors",
-          "dark:text-red-400 dark:hover:bg-red-900/30 dark:hover:text-red-300",
+          "inline-flex items-center rounded-md px-3 py-1.5 text-sm font-medium text-danger-600",
+          "hover:bg-danger-50 hover:text-danger-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors",
+          "dark:text-danger-400 dark:hover:bg-danger-900/30 dark:hover:text-danger-300",
           className,
         )}
       >
