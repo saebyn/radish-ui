@@ -8,6 +8,8 @@ interface DatagridProps {
   children: React.ReactElement | React.ReactElement[];
   /** Optional action buttons rendered at the end of each row (e.g. <EditButton /><DeleteButton />) */
   rowActions?: React.ReactNode;
+  /** Accessible label for the table. Defaults to the resource's default title. */
+  label?: string;
   className?: string;
 }
 
@@ -26,9 +28,9 @@ interface DatagridProps {
  *   <TextField source="title" />
  * </Datagrid>
  */
-export function Datagrid({ children, rowActions, className }: DatagridProps) {
+export function Datagrid({ children, rowActions, label, className }: DatagridProps) {
   const translate = useTranslate();
-  const { data, isLoading } = useListContext();
+  const { data, isLoading, defaultTitle } = useListContext();
 
   const columns = React.Children.toArray(children) as React.ReactElement<{
     source?: string;
@@ -44,10 +46,7 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
           className,
         )}
       >
-        <table
-          aria-hidden="true"
-          className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700 text-sm"
-        >
+        <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700 text-sm">
           <thead className="bg-canvas-50 dark:bg-canvas-700">
             <tr>
               {columns.map((col, i) => {
@@ -110,7 +109,10 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
         className,
       )}
     >
-      <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700 text-sm">
+      <table
+        aria-label={label ?? defaultTitle ?? undefined}
+        className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700 text-sm"
+      >
         <thead className="bg-canvas-50 dark:bg-canvas-700">
           <tr>
             {columns.map((col, i) => {

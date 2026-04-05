@@ -37,21 +37,18 @@ export function ArrayField({ source, children, className }: ArrayFieldProps) {
   }
 
   return (
-    <div className={cn("flex flex-wrap gap-1", className)}>
+    <ul role="list" className={cn("flex flex-wrap gap-1 list-none p-0 m-0", className)}>
       {value.map((item, index) => {
         const record =
           item !== null && typeof item === "object"
             ? (item as Record<string, unknown>)
             : { id: index, value: item };
         return (
-          <RecordContextProvider
-            key={record.id !== undefined ? String(record.id) : index}
-            value={record}
-          >
-            {children}
-          </RecordContextProvider>
+          <li key={record.id !== undefined ? String(record.id) : index}>
+            <RecordContextProvider value={record}>{children}</RecordContextProvider>
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 }

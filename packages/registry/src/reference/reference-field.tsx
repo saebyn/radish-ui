@@ -55,6 +55,8 @@ export function ReferenceField({
   if (isLoading) {
     return (
       <span
+        role="status"
+        aria-label="Loading"
         className={cn("text-sm text-neutral-400 dark:text-neutral-500 animate-pulse", className)}
       >
         {loadingElement ?? "…"}
@@ -64,7 +66,7 @@ export function ReferenceField({
 
   if (error || !referenceRecord) {
     return (
-      <span className={cn("text-sm text-danger-500 dark:text-danger-400", className)}>
+      <span role="alert" className={cn("text-sm text-danger-500 dark:text-danger-400", className)}>
         {errorElement ?? "Error"}
       </span>
     );

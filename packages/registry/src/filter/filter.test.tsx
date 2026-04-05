@@ -147,6 +147,17 @@ describe("FilterForm", () => {
     expect(screen.getByRole("button", { name: /Clear filters/i })).toBeInTheDocument();
   });
 
+  it("form element has aria-label 'Filters'", () => {
+    const { container } = render(
+      <ListContextProvider value={{ ...baseListContext, displayedFilters: { __filterForm: true } }}>
+        <FilterForm>
+          <span>My Filter</span>
+        </FilterForm>
+      </ListContextProvider>,
+    );
+    expect(container.querySelector("form")).toHaveAttribute("aria-label", "Filters");
+  });
+
   it("calls setFilters with empty object when Clear filters is clicked", () => {
     const setFilters = vi.fn();
     render(

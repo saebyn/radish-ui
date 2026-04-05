@@ -141,16 +141,35 @@ describe("Datagrid", () => {
     expect(screen.getByText("Bob")).toBeInTheDocument();
   });
 
-  it("renders row actions via the rowActions prop", () => {
-    render(
+  it("table has aria-label from defaultTitle when no label prop is given", () => {
+    const { container } = render(
       <ListContextProvider
-        value={{ ...baseListContext, data: [{ id: 99, title: "T" }], total: 1, isLoading: false }}
+        value={{
+          ...baseListContext,
+          data: records,
+          total: records.length,
+          isLoading: false,
+          defaultTitle: "Posts",
+        }}
       >
-        <Datagrid rowActions={<span>action</span>}>
+        <Datagrid>
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
     );
-    expect(screen.getByText("action")).toBeInTheDocument();
+    expect(container.querySelector("table")).toHaveAttribute("aria-label", "Posts");
+  });
+
+  it("table has aria-label from the label prop when provided", () => {
+    const { container } = render(
+      <ListContextProvider
+        value={{ ...baseListContext, data: records, total: records.length, isLoading: false }}
+      >
+        <Datagrid label="My custom label">
+          <TextField source="title" label="Title" />
+        </Datagrid>
+      </ListContextProvider>,
+    );
+    expect(container.querySelector("table")).toHaveAttribute("aria-label", "My custom label");
   });
 });
