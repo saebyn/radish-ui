@@ -10,15 +10,12 @@ import colors from "tailwindcss/colors";
  *
  * Color scale tokens (expose the full 50–950 shade range):
  *   - `primary`  – brand / interactive color (default: indigo)
- *   - `neutral`  – backgrounds, borders, and muted text (default: gray)
+ *   - `neutral`  – borders, dividers, and muted text (default: gray)
  *   - `danger`   – destructive actions and error states (default: red)
  *   - `success`  – positive states and confirmations (default: green)
  *   - `info`     – informational states, e.g. info notifications (default: blue)
  *   - `warning`  – warning states, e.g. warning notifications (default: yellow)
- *
- * Surface tokens (single background values, used as `bg-canvas`, `bg-paper`):
- *   - `canvas`   – app / page background (default: neutral-100 / neutral-900 dark)
- *   - `paper`    – card, panel, dialog, and input surface (default: white / neutral-800 dark)
+ *   - `canvas`   – surface backgrounds: page, card, panel, input (default: gray)
  *
  * @example
  * // tailwind.config.ts
@@ -43,8 +40,12 @@ const preset = {
         success: colors.green,
         info: colors.blue,
         warning: colors.yellow,
-        canvas: colors.gray[100],
-        paper: colors.white,
+        canvas: {
+          ...colors.gray,
+          // Extend the gray scale with shade 0 = pure white,
+          // so bg-canvas-0 can be used for the lightest surface (cards, inputs).
+          0: colors.white,
+        },
       },
     },
   },

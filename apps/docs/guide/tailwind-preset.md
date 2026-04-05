@@ -43,16 +43,25 @@ freely.
 
 ## Design tokens
 
-| Token     | Default palette | Typical usage                             |
-| --------- | --------------- | ----------------------------------------- |
-| `primary` | `indigo`        | Brand colour, interactive elements, links |
-| `neutral` | `gray`          | Backgrounds, borders, muted text          |
-| `danger`  | `red`           | Destructive actions, error states         |
-| `success` | `green`         | Positive states, confirmations            |
+### Color scale tokens
 
-Each token exposes the full 11-shade scale (`50`–`950`) that Tailwind provides
+These tokens expose the full 11-shade scale (`50`–`950`) that Tailwind provides
 for built-in palette colors, so all variants such as `bg-primary-100`,
 `text-neutral-700`, or `border-danger-500` are available.
+
+| Token     | Default palette | Typical usage                                      |
+| --------- | --------------- | -------------------------------------------------- |
+| `primary` | `indigo`        | Brand colour, interactive elements, links          |
+| `neutral` | `gray`          | Borders, dividers, and muted text                  |
+| `danger`  | `red`           | Destructive actions, error states                  |
+| `success` | `green`         | Positive states, confirmations                     |
+| `info`    | `blue`          | Informational states, info notifications and chips |
+| `warning` | `yellow`        | Warning states, warning notifications and chips    |
+| `canvas`  | `gray`          | Surface backgrounds: page, card, panel, and inputs |
+
+The `canvas` scale also includes a `0` shade (`canvas-0`) mapped to pure white,
+so the lightest surface (cards, inputs in light mode) can be expressed within
+the same token family as darker surfaces (e.g. `dark:bg-canvas-800`).
 
 ## Overriding tokens
 

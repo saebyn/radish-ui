@@ -89,9 +89,9 @@ export function ReferenceInput({
         id={id}
         disabled={isLoading}
         className={cn(
-          "block w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm",
+          "block w-full rounded-md border border-neutral-300 bg-canvas-0 px-3 py-2 text-sm text-neutral-900 shadow-sm",
           "focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500",
-          "dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-100",
+          "dark:border-neutral-600 dark:bg-canvas-700 dark:text-neutral-100",
           "dark:focus:border-primary-400 dark:focus:ring-primary-400",
           "disabled:opacity-60 disabled:cursor-not-allowed",
           error &&

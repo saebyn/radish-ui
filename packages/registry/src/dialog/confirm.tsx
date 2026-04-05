@@ -106,8 +106,8 @@ export function Confirm({
       aria-labelledby={titleId}
       aria-describedby={content ? contentId : undefined}
       className={cn(
-        "rounded-xl border border-neutral-200 bg-white p-0 shadow-xl backdrop:bg-black/40",
-        "dark:border-neutral-700 dark:bg-neutral-800",
+        "rounded-xl border border-neutral-200 bg-canvas-0 p-0 shadow-xl backdrop:bg-black/40",
+        "dark:border-neutral-700 dark:bg-canvas-800",
         "open:flex open:flex-col",
         "w-full max-w-sm",
         className,
@@ -129,9 +129,9 @@ export function Confirm({
             type="button"
             onClick={onClose}
             className={cn(
-              "rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm",
-              "hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1",
-              "dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600",
+              "rounded-md border border-neutral-300 bg-canvas-0 px-4 py-2 text-sm font-medium text-neutral-700 shadow-sm",
+              "hover:bg-canvas-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1",
+              "dark:border-neutral-600 dark:bg-canvas-700 dark:text-neutral-200 dark:hover:bg-canvas-600",
             )}
           >
             {resolvedCancelLabel}

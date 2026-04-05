@@ -40,7 +40,7 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
       <SkeletonContainer
         label={translate("ra.page.loading", { _: "Loading table data…" })}
         className={cn(
-          "overflow-x-auto rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800",
+          "overflow-x-auto rounded-lg border border-neutral-200 bg-canvas-0 shadow-sm dark:border-neutral-700 dark:bg-canvas-800",
           className,
         )}
       >
@@ -48,7 +48,7 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
           aria-hidden="true"
           className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700 text-sm"
         >
-          <thead className="bg-neutral-50 dark:bg-neutral-700">
+          <thead className="bg-canvas-50 dark:bg-canvas-700">
             <tr>
               {columns.map((col, i) => {
                 const header =
@@ -106,12 +106,12 @@ export function Datagrid({ children, rowActions, className }: DatagridProps) {
   return (
     <div
       className={cn(
-        "overflow-x-auto rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800",
+        "overflow-x-auto rounded-lg border border-neutral-200 bg-canvas-0 shadow-sm dark:border-neutral-700 dark:bg-canvas-800",
         className,
       )}
     >
       <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700 text-sm">
-        <thead className="bg-neutral-50 dark:bg-neutral-700">
+        <thead className="bg-canvas-50 dark:bg-canvas-700">
           <tr>
             {columns.map((col, i) => {
               const header =

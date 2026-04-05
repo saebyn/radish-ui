@@ -71,7 +71,7 @@ export function Pagination({ siblingCount = 2, className }: PaginationProps) {
                   "rounded-md px-3 py-1.5 transition-colors",
                   p === page
                     ? "bg-primary-600 text-white font-semibold"
-                    : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700",
+                    : "text-neutral-700 dark:text-neutral-300 hover:bg-canvas-100 dark:hover:bg-canvas-700",
                 )}
               >
                 {p}

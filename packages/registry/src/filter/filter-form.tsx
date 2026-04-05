@@ -54,7 +54,7 @@ export function FilterForm({ children, alwaysOpen = false, className }: FilterFo
     <form
       onSubmit={(e) => e.preventDefault()}
       className={cn(
-        "flex flex-wrap items-end gap-3 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3 dark:border-neutral-700 dark:bg-neutral-800/50",
+        "flex flex-wrap items-end gap-3 rounded-lg border border-neutral-200 bg-canvas-50 px-4 py-3 dark:border-neutral-700 dark:bg-canvas-800/50",
         className,
       )}
     >
