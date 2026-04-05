@@ -108,14 +108,14 @@ function TabbedFormContent({
   return (
     <div
       className={cn(
-        "rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800",
+        "rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800",
         className,
       )}
     >
       {/* Tab bar */}
       <div
         role="tablist"
-        className="flex border-b border-gray-200 dark:border-gray-700"
+        className="flex border-b border-neutral-200 dark:border-neutral-700"
         onKeyDown={handleKeyDown}
       >
         {tabs.map((tab, i) => (
@@ -132,10 +132,10 @@ function TabbedFormContent({
             tabIndex={activeIndex === i ? 0 : -1}
             onClick={() => setActiveIndex(i)}
             className={cn(
-              "px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500",
+              "px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500",
               activeIndex === i
-                ? "border-b-2 border-indigo-600 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400"
-                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200",
+                ? "border-b-2 border-primary-600 text-primary-600 dark:border-primary-400 dark:text-primary-400"
+                : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200",
             )}
           >
             {tab.props.label}
@@ -157,11 +157,11 @@ function TabbedFormContent({
       ))}
 
       {/* Footer toolbar */}
-      <div className="flex items-center justify-end gap-3 border-t border-gray-100 dark:border-gray-700 px-6 py-4">
+      <div className="flex items-center justify-end gap-3 border-t border-neutral-100 dark:border-neutral-700 px-6 py-4">
         <button
           type="submit"
           disabled={saving}
-          className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {saving ? "Saving…" : submitLabel}
         </button>

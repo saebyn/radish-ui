@@ -33,12 +33,12 @@ export function BulkActionsToolbar({ children, label = "", className }: BulkActi
       role="toolbar"
       aria-label={`${count} item${count !== 1 ? "s" : ""} selected`}
       className={cn(
-        "flex items-center justify-between rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm",
-        "dark:border-indigo-700 dark:bg-indigo-900/30",
+        "flex items-center justify-between rounded-lg border border-primary-200 bg-primary-50 px-4 py-2 text-sm",
+        "dark:border-primary-700 dark:bg-primary-900/30",
         className,
       )}
     >
-      <span className="font-medium text-indigo-700 dark:text-indigo-300">
+      <span className="font-medium text-primary-700 dark:text-primary-300">
         {label}
         {count} {count === 1 ? "item" : "items"} selected
       </span>

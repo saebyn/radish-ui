@@ -30,7 +30,7 @@ export function CreateButton({ resource, label = "Create", className }: CreateBu
     <Link
       to={path}
       className={cn(
-        "inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition-colors",
+        "inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 transition-colors",
         className,
       )}
     >

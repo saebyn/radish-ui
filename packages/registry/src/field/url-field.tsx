@@ -23,7 +23,9 @@ export function UrlField({ source, maxLength, target = "_blank", className }: Ur
   const value = useFieldValue({ source });
 
   if (value === undefined || value === null) {
-    return <span className={cn("text-sm text-gray-400 dark:text-gray-500", className)}>—</span>;
+    return (
+      <span className={cn("text-sm text-neutral-400 dark:text-neutral-500", className)}>—</span>
+    );
   }
 
   const href = String(value);
@@ -35,8 +37,8 @@ export function UrlField({ source, maxLength, target = "_blank", className }: Ur
       target={target}
       rel={target === "_blank" ? "noopener noreferrer" : undefined}
       className={cn(
-        "text-sm text-indigo-600 underline hover:text-indigo-800",
-        "dark:text-indigo-400 dark:hover:text-indigo-300",
+        "text-sm text-primary-600 underline hover:text-primary-800",
+        "dark:text-primary-400 dark:hover:text-primary-300",
         className,
       )}
     >

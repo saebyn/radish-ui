@@ -47,12 +47,16 @@ export function ReferenceField({
   });
 
   if (id === undefined || id === null) {
-    return <span className={cn("text-sm text-gray-400 dark:text-gray-500", className)}>—</span>;
+    return (
+      <span className={cn("text-sm text-neutral-400 dark:text-neutral-500", className)}>—</span>
+    );
   }
 
   if (isLoading) {
     return (
-      <span className={cn("text-sm text-gray-400 dark:text-gray-500 animate-pulse", className)}>
+      <span
+        className={cn("text-sm text-neutral-400 dark:text-neutral-500 animate-pulse", className)}
+      >
         {loadingElement ?? "…"}
       </span>
     );
@@ -60,7 +64,7 @@ export function ReferenceField({
 
   if (error || !referenceRecord) {
     return (
-      <span className={cn("text-sm text-red-500 dark:text-red-400", className)}>
+      <span className={cn("text-sm text-danger-500 dark:text-danger-400", className)}>
         {errorElement ?? "Error"}
       </span>
     );

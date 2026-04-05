@@ -24,13 +24,15 @@ export function NumberField({ source, options, locales, className }: NumberField
   const value = useFieldValue({ source });
 
   if (value == null) {
-    return <span className={cn("text-sm text-gray-400 dark:text-gray-500", className)}>—</span>;
+    return (
+      <span className={cn("text-sm text-neutral-400 dark:text-neutral-500", className)}>—</span>
+    );
   }
 
   const num = Number(value);
   if (isNaN(num)) {
     return (
-      <span className={cn("text-sm text-gray-700 dark:text-gray-300", className)}>
+      <span className={cn("text-sm text-neutral-700 dark:text-neutral-300", className)}>
         {String(value)}
       </span>
     );
@@ -39,7 +41,7 @@ export function NumberField({ source, options, locales, className }: NumberField
   const formatted = new Intl.NumberFormat(locales, options).format(num);
 
   return (
-    <span className={cn("text-sm text-gray-700 dark:text-gray-300 tabular-nums", className)}>
+    <span className={cn("text-sm text-neutral-700 dark:text-neutral-300 tabular-nums", className)}>
       {formatted}
     </span>
   );

@@ -26,6 +26,7 @@ export default defineConfig({
           { text: "CLI Reference", link: "/guide/cli" },
           { text: "Available Components", link: "/guide/components" },
           { text: "Configuration", link: "/guide/configuration" },
+          { text: "Tailwind Preset", link: "/guide/tailwind-preset" },
         ],
       },
     ],
