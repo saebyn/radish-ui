@@ -17,6 +17,8 @@ interface SidebarProps {
 export function Sidebar({ open, onToggle, children }: SidebarProps) {
   return (
     <aside
+      aria-label="Sidebar navigation"
+      aria-expanded={open}
       className={cn(
         "flex flex-col bg-canvas-900 dark:bg-canvas-950 text-white transition-all duration-200",
         open ? "w-56" : "w-14",

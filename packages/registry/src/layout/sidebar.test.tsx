@@ -40,4 +40,32 @@ describe("Sidebar", () => {
     fireEvent.click(screen.getByLabelText("Collapse sidebar"));
     expect(toggled).toBe(true);
   });
+
+  it("aside has aria-label 'Sidebar navigation'", () => {
+    const { container } = render(
+      <Sidebar open={true} onToggle={() => {}}>
+        <div />
+      </Sidebar>,
+    );
+    const aside = container.querySelector("aside");
+    expect(aside).toHaveAttribute("aria-label", "Sidebar navigation");
+  });
+
+  it("aside has aria-expanded=true when open", () => {
+    const { container } = render(
+      <Sidebar open={true} onToggle={() => {}}>
+        <div />
+      </Sidebar>,
+    );
+    expect(container.querySelector("aside")).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("aside has aria-expanded=false when closed", () => {
+    const { container } = render(
+      <Sidebar open={false} onToggle={() => {}}>
+        <div />
+      </Sidebar>,
+    );
+    expect(container.querySelector("aside")).toHaveAttribute("aria-expanded", "false");
+  });
 });

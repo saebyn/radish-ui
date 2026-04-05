@@ -74,6 +74,19 @@ describe("ReferenceField", () => {
     // During the initial load, loading indicator is shown
     expect(screen.getByText("…")).toBeInTheDocument();
   });
+
+  it("loading state has role='status'", () => {
+    render(
+      <AdminWrapper>
+        <RecordContextProvider value={{ id: 1, authorId: 999 }}>
+          <ReferenceField source="authorId" reference="authors">
+            <TextField source="name" />
+          </ReferenceField>
+        </RecordContextProvider>
+      </AdminWrapper>,
+    );
+    expect(screen.getByRole("status")).toBeInTheDocument();
+  });
 });
 
 describe("ReferenceInput", () => {

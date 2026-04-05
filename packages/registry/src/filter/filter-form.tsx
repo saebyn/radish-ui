@@ -52,6 +52,7 @@ export function FilterForm({ children, alwaysOpen = false, className }: FilterFo
 
   return (
     <form
+      aria-label="Filters"
       onSubmit={(e) => e.preventDefault()}
       className={cn(
         "flex flex-wrap items-end gap-3 rounded-lg border border-neutral-200 bg-canvas-50 px-4 py-3 dark:border-neutral-700 dark:bg-canvas-800/50",

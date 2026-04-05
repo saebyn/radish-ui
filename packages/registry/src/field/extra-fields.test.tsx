@@ -137,4 +137,18 @@ describe("ArrayField", () => {
     );
     expect(screen.getByText("—")).toBeInTheDocument();
   });
+
+  it("renders items inside a semantic list element", () => {
+    const { container } = render(
+      <RecordContextProvider
+        value={{ id: 1, tags: [{ id: 1, name: "React" }, { id: 2, name: "TypeScript" }] }}
+      >
+        <ArrayField source="tags">
+          <ChipField source="name" />
+        </ArrayField>
+      </RecordContextProvider>,
+    );
+    expect(container.querySelector("ul")).toBeInTheDocument();
+    expect(container.querySelectorAll("li")).toHaveLength(2);
+  });
 });
