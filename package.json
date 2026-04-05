@@ -13,7 +13,8 @@
     "format": "oxfmt .",
     "format:check": "oxfmt --check .",
     "lint": "oxlint .",
-    "validate-registry": "node scripts/validate-registry.mjs"
+    "validate-registry": "node scripts/validate-registry.mjs",
+    "storybook": "pnpm --filter @radish-ui/registry storybook"
   },
   "devDependencies": {
     "oxfmt": "^0.43.0",
