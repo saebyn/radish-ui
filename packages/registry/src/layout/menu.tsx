@@ -27,7 +27,7 @@ export function Menu({ open = true, className }: MenuProps) {
             <li key={name}>
               <a
                 href={path}
-                className="flex items-center gap-3 rounded-md px-2 py-2 text-sm font-medium text-neutral-300 hover:bg-neutral-700 hover:text-white transition-colors"
+                className="flex items-center gap-3 rounded-md px-2 py-2 text-sm font-medium text-neutral-300 hover:bg-canvas-700 hover:text-white transition-colors"
               >
                 {/* Resource icon placeholder */}
                 <span className="inline-block h-4 w-4 rounded-sm bg-primary-500 shrink-0" />

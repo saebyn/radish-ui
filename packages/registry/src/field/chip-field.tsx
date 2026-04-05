@@ -1,6 +1,6 @@
 import { useFieldValue, cn } from "@radish-ui/core";
 
-type ChipColor = "gray" | "indigo" | "green" | "red" | "yellow" | "blue";
+type ChipColor = "gray" | "indigo" | "green" | "red" | "warning" | "info";
 
 interface ChipFieldProps {
   source: string;
@@ -14,8 +14,8 @@ const colorMap: Record<ChipColor, string> = {
   indigo: "bg-primary-100 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300",
   green: "bg-success-100 text-success-700 dark:bg-success-900/40 dark:text-success-300",
   red: "bg-danger-100 text-danger-700 dark:bg-danger-900/40 dark:text-danger-300",
-  yellow: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300",
-  blue: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
+  warning: "bg-warning-100 text-warning-700 dark:bg-warning-900/40 dark:text-warning-300",
+  info: "bg-info-100 text-info-700 dark:bg-info-900/40 dark:text-info-300",
 };
 
 /**

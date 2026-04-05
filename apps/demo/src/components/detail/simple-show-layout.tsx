@@ -30,7 +30,7 @@ export function SimpleShowLayout({ children, className }: SimpleShowLayoutProps)
   return (
     <div
       className={cn(
-        "rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800",
+        "rounded-lg border border-neutral-200 bg-canvas-0 shadow-sm dark:border-neutral-700 dark:bg-canvas-800",
         className,
       )}
     >

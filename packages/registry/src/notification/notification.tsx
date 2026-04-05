@@ -20,9 +20,9 @@ const typeStyles: Record<NotificationType, string> = {
     "bg-success-50 border-success-400 text-success-800 [&_[data-icon]]:text-success-500 dark:bg-success-900/30 dark:border-success-700 dark:text-success-300 dark:[&_[data-icon]]:text-success-400",
   error:
     "bg-danger-50 border-danger-400 text-danger-800 [&_[data-icon]]:text-danger-500 dark:bg-danger-900/30 dark:border-danger-700 dark:text-danger-300 dark:[&_[data-icon]]:text-danger-400",
-  info: "bg-blue-50 border-blue-400 text-blue-800 [&_[data-icon]]:text-blue-500 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-300 dark:[&_[data-icon]]:text-blue-400",
+  info: "bg-info-50 border-info-400 text-info-800 [&_[data-icon]]:text-info-500 dark:bg-info-900/30 dark:border-info-700 dark:text-info-300 dark:[&_[data-icon]]:text-info-400",
   warning:
-    "bg-yellow-50 border-yellow-400 text-yellow-800 [&_[data-icon]]:text-yellow-500 dark:bg-yellow-900/30 dark:border-yellow-700 dark:text-yellow-300 dark:[&_[data-icon]]:text-yellow-400",
+    "bg-warning-50 border-warning-400 text-warning-800 [&_[data-icon]]:text-warning-500 dark:bg-warning-900/30 dark:border-warning-700 dark:text-warning-300 dark:[&_[data-icon]]:text-warning-400",
 };
 
 function NotificationIcon({ type }: { type: NotificationType }) {
@@ -101,9 +101,9 @@ interface ToastProps {
 }
 
 function Toast({ notification, dismiss }: ToastProps) {
-  const translate = useTranslate();
   const type: NotificationType = (notification.type as NotificationType) ?? "info";
   const { autoHideDuration, key } = notification;
+  const translate = useTranslate();
 
   useEffect(() => {
     if (autoHideDuration === null) return;
@@ -122,7 +122,14 @@ function Toast({ notification, dismiss }: ToastProps) {
       )}
     >
       <NotificationIcon type={type} />
-      <p className="flex-1 text-sm font-medium leading-5">{String(notification.message)}</p>
+      <p className="flex-1 text-sm font-medium leading-5">
+        {typeof notification.message === "string"
+          ? translate(notification.message, {
+              _: notification.message,
+              ...notification.notificationOptions?.messageArgs,
+            })
+          : notification.message}
+      </p>
       <button
         type="button"
         aria-label={translate("radish.notification.dismiss", { _: "Dismiss notification" })}

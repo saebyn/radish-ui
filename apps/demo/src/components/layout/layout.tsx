@@ -43,7 +43,7 @@ export function Layout({ children, title }: LayoutProps) {
   }, [darkMode]);
 
   return (
-    <div className="flex h-screen flex-col bg-neutral-100 dark:bg-neutral-900">
+    <div className="flex h-screen flex-col bg-canvas-100 dark:bg-canvas-900">
       {/* Header */}
       <header className="flex h-12 shrink-0 items-center bg-primary-700 dark:bg-primary-900 px-4 shadow">
         <span className="text-lg font-semibold text-white">{title ?? "radish-ui"}</span>
