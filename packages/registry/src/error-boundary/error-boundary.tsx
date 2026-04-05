@@ -56,6 +56,12 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     return { error };
   }
 
+  /**
+   * Clears the caught error and re-mounts the children subtree.
+   * Note: this only works if the underlying cause of the error has been resolved
+   * (e.g. a prop or state change before calling reset). Otherwise the same
+   * error will be thrown again immediately after the subtree is re-mounted.
+   */
   reset() {
     this.setState({ error: null });
   }
@@ -96,7 +102,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               <p className="text-sm font-semibold text-red-800 dark:text-red-300">
                 Something went wrong
               </p>
-              <p className="mt-1 truncate text-sm text-red-700 dark:text-red-400">
+              <p className="mt-1 break-words text-sm text-red-700 dark:text-red-400">
                 {error.message}
               </p>
             </div>
