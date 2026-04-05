@@ -23,12 +23,7 @@ interface DeleteButtonProps {
  *   <DeleteButton />
  * </Datagrid>
  */
-export function DeleteButton({
-  resource,
-  label,
-  confirmTitle,
-  className,
-}: DeleteButtonProps) {
+export function DeleteButton({ resource, label, confirmTitle, className }: DeleteButtonProps) {
   const translate = useTranslate();
   const record = useRecordContext();
   const resourceContext = useResourceContext();

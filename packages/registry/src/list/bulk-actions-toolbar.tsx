@@ -45,9 +45,7 @@ export function BulkActionsToolbar({ children, label, className }: BulkActionsTo
         className,
       )}
     >
-      <span className="font-medium text-primary-700 dark:text-primary-300">
-        {resolvedLabel}
-      </span>
+      <span className="font-medium text-primary-700 dark:text-primary-300">{resolvedLabel}</span>
       <div className="flex items-center gap-2">{children}</div>
     </div>
   );
