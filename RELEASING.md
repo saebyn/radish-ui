@@ -5,7 +5,7 @@ This document explains how to cut a new release for `@radish-ui/core` and `@radi
 ## Overview
 
 Both packages are published to npm under the `@radish-ui` scope. Publishing
-happens automatically via GitHub Actions when a GitHub Release is created
+happens automatically via GitHub Actions when a GitHub Release is published
 (recommended), or can be performed manually by a maintainer.
 
 ## Automated Publishing (CI — recommended)
