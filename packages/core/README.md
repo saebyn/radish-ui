@@ -1,7 +1,7 @@
 # @radish-ui/core
 
 [![npm](https://img.shields.io/npm/v/%40radish-ui%2Fcore?label=%40radish-ui%2Fcore)](https://www.npmjs.com/package/@radish-ui/core)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/saebyn/radish-ui/blob/main/LICENSE)
 
 Headless [react-admin](https://marmelab.com/react-admin/) wrappers and Tailwind CSS utilities for [radish-ui](https://github.com/saebyn/radish-ui).
 
