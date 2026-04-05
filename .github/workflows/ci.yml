@@ -9,13 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
         with:
           run_install: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
           cache: pnpm
@@ -39,7 +39,7 @@ jobs:
         run: pnpm test
 
       - name: Cache Storybook build cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: packages/registry/node_modules/.cache/storybook
           key: storybook-cache-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'packages/registry/.storybook/**', 'packages/registry/src/**') }}
