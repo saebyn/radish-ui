@@ -1,4 +1,4 @@
-import { useCreatePath, useResourceContext } from "ra-core";
+import { useCreatePath, useResourceContext, useTranslate } from "ra-core";
 import { Link } from "react-router-dom";
 import { cn } from "@radish-ui/core";
 
@@ -20,9 +20,11 @@ interface CreateButtonProps {
  *   <Datagrid>...</Datagrid>
  * </List>
  */
-export function CreateButton({ resource, label = "Create", className }: CreateButtonProps) {
+export function CreateButton({ resource, label, className }: CreateButtonProps) {
+  const translate = useTranslate();
   const resourceContext = useResourceContext();
   const createPath = useCreatePath();
+  const resolvedLabel = label ?? translate("ra.action.create", { _: "Create" });
 
   const path = createPath({ resource: resource ?? resourceContext ?? "", type: "create" });
 
@@ -34,7 +36,7 @@ export function CreateButton({ resource, label = "Create", className }: CreateBu
         className,
       )}
     >
-      {label}
+      {resolvedLabel}
     </Link>
   );
 }

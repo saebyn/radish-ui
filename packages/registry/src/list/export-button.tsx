@@ -1,4 +1,4 @@
-import { useListContext, defaultExporter, useDataProvider } from "ra-core";
+import { useListContext, defaultExporter, useDataProvider, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 interface ExportButtonProps {
@@ -24,13 +24,15 @@ interface ExportButtonProps {
  * <List actions={<ExportButton />}>…</List>
  */
 export function ExportButton({
-  label = "Export",
+  label,
   exporter = defaultExporter,
   resource,
   className,
 }: ExportButtonProps) {
+  const translate = useTranslate();
   const { data, resource: contextResource, isLoading } = useListContext();
   const dataProvider = useDataProvider();
+  const resolvedLabel = label ?? translate("ra.action.export", { _: "Export" });
 
   const resourceName = resource ?? contextResource;
 
@@ -78,7 +80,7 @@ export function ExportButton({
           clipRule="evenodd"
         />
       </svg>
-      {label}
+      {resolvedLabel}
     </button>
   );
 }

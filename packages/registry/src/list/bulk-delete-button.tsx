@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useResourceContext, useBulkDeleteController } from "ra-core";
+import { useResourceContext, useBulkDeleteController, useListContext, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 import { Confirm } from "../dialog/confirm";
 
@@ -27,18 +27,38 @@ interface BulkDeleteButtonProps {
  */
 export function BulkDeleteButton({
   resource,
-  label = "Delete",
-  confirmTitle = "Delete selected items?",
-  confirmContent = "This action cannot be undone.",
+  label,
+  confirmTitle,
+  confirmContent,
   className,
 }: BulkDeleteButtonProps) {
+  const translate = useTranslate();
   const resourceContext = useResourceContext();
+  const { selectedIds } = useListContext();
   const [open, setOpen] = useState(false);
 
   const { handleDelete, isPending } = useBulkDeleteController({
     resource: resource ?? resourceContext,
     mutationMode: "pessimistic",
   });
+
+  const count = selectedIds?.length ?? 0;
+  const resourceName = resource ?? resourceContext ?? "items";
+  const resolvedLabel = label ?? translate("ra.action.delete", { _: "Delete" });
+  const resolvedConfirmTitle =
+    confirmTitle ??
+    translate("ra.message.bulk_delete_title", {
+      smart_count: count,
+      name: resourceName,
+      _: "Delete selected items?",
+    });
+  const resolvedConfirmContent =
+    confirmContent ??
+    translate("ra.message.bulk_delete_content", {
+      smart_count: count,
+      name: resourceName,
+      _: "This action cannot be undone.",
+    });
 
   const handleConfirm = () => {
     handleDelete();
@@ -58,13 +78,13 @@ export function BulkDeleteButton({
           className,
         )}
       >
-        {isPending ? "Deleting…" : label}
+        {isPending ? translate("radish.action.deleting", { _: "Deleting…" }) : resolvedLabel}
       </button>
       <Confirm
         isOpen={open}
-        title={confirmTitle}
-        content={confirmContent}
-        confirmLabel="Delete"
+        title={resolvedConfirmTitle}
+        content={resolvedConfirmContent}
+        confirmLabel={translate("ra.action.delete", { _: "Delete" })}
         onConfirm={handleConfirm}
         onClose={() => setOpen(false)}
       />

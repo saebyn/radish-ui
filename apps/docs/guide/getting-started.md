@@ -91,3 +91,4 @@ npx @radish-ui/cli diff datagrid
 - Browse [Available Components](/guide/components) to see what's in the registry
 - Read the [CLI Reference](/guide/cli) for all available commands and options
 - Set up a [Configuration file](/guide/configuration) to avoid repeating flags
+- Customize display strings or add a new language with the [Localization guide](/guide/localization)

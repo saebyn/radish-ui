@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useListContext } from "ra-core";
+import { useListContext, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 interface SearchInputProps {
@@ -25,10 +25,12 @@ interface SearchInputProps {
  */
 export function SearchInput({
   source = "q",
-  placeholder = "Search…",
+  placeholder,
   debounce = 300,
   className,
 }: SearchInputProps) {
+  const translate = useTranslate();
+  const resolvedPlaceholder = placeholder ?? translate("ra.action.search", { _: "Search…" });
   const { filterValues, setFilters, displayedFilters } = useListContext();
   const [value, setValue] = useState<string>((filterValues[source] as string) ?? "");
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -65,8 +67,8 @@ export function SearchInput({
       type="search"
       value={value}
       onChange={handleChange}
-      placeholder={placeholder}
-      aria-label={placeholder}
+      placeholder={resolvedPlaceholder}
+      aria-label={resolvedPlaceholder}
       className={cn(
         "block rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm",
         "placeholder:text-neutral-400",

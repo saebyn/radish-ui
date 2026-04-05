@@ -1,5 +1,5 @@
 import React from "react";
-import { EditBase, useEditContext } from "ra-core";
+import { EditBase, useEditContext, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 import { Skeleton, SkeletonContainer } from "../skeleton/skeleton";
 
@@ -120,12 +120,13 @@ function EditLayout({
   title,
   className,
 }: EditLayoutProps) {
+  const translate = useTranslate();
   const { defaultTitle, error, isLoading } = useEditContext();
 
   if (error) {
     return (
       <div className="rounded-md bg-danger-50 dark:bg-danger-900/20 p-4 text-sm text-danger-700 dark:text-danger-400">
-        <strong>Error loading record:</strong>{" "}
+        <strong>{translate("ra.page.error", { _: "Error loading record:" })}</strong>{" "}
         {error instanceof Error ? error.message : String(error)}
       </div>
     );

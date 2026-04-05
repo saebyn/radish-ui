@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useRef } from "react";
+import { useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 interface ConfirmProps {
@@ -43,12 +44,15 @@ export function Confirm({
   isOpen,
   title,
   content,
-  confirmLabel = "Confirm",
-  cancelLabel = "Cancel",
+  confirmLabel,
+  cancelLabel,
   onConfirm,
   onClose,
   className,
 }: ConfirmProps) {
+  const translate = useTranslate();
+  const resolvedConfirmLabel = confirmLabel ?? translate("ra.action.confirm", { _: "Confirm" });
+  const resolvedCancelLabel = cancelLabel ?? translate("ra.action.cancel", { _: "Cancel" });
   const dialogRef = useRef<HTMLDialogElement>(null);
   const uid = useId();
   const titleId = `${uid}-title`;
@@ -130,7 +134,7 @@ export function Confirm({
               "dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-200 dark:hover:bg-neutral-600",
             )}
           >
-            {cancelLabel}
+            {resolvedCancelLabel}
           </button>
           <button
             type="button"
@@ -141,7 +145,7 @@ export function Confirm({
               "dark:bg-danger-700 dark:hover:bg-danger-600",
             )}
           >
-            {confirmLabel}
+            {resolvedConfirmLabel}
           </button>
         </div>
       </div>

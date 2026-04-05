@@ -23,10 +23,20 @@ const dataProvider = {
   deleteMany: noop,
 };
 
+// Minimal i18nProvider that resolves translation keys using the `_` fallback
+const testI18nProvider = {
+  translate: (key: string, options?: { _?: string; [k: string]: unknown }) =>
+    typeof options?._ === "string" ? options._ : key,
+  changeLocale: () => Promise.resolve(),
+  getLocale: () => "en",
+};
+
 function Wrapper({ children }: { children: ReactNode }) {
   return (
     <MemoryRouter>
-      <CoreAdminContext dataProvider={dataProvider}>{children}</CoreAdminContext>
+      <CoreAdminContext dataProvider={dataProvider} i18nProvider={testI18nProvider}>
+        {children}
+      </CoreAdminContext>
     </MemoryRouter>
   );
 }
