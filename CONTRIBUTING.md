@@ -15,6 +15,7 @@ the project locally, run the development tools, and submit changes.
 
 - [Pull Request Guidelines](#pull-request-guidelines)
 - [Review Process](#review-process)
+- [Automated Dependency Updates (Dependabot)](#automated-dependency-updates-dependabot)
 
 ## Prerequisites
 
@@ -233,3 +234,29 @@ BREAKING CHANGE: The --output flag has been renamed to --target.
   using squash-merge to keep the commit history linear.
 - Minor or trivial fixes (typos, docs) may be merged by any maintainer without
   a second review.
+
+## Automated Dependency Updates (Dependabot)
+
+This repository uses [GitHub Dependabot](https://docs.github.com/en/code-security/dependabot)
+to automatically open pull requests when dependencies have available updates.
+
+### Configuration
+
+Dependabot is configured in [`.github/dependabot.yml`](.github/dependabot.yml).
+It monitors the following ecosystems on a **weekly** schedule:
+
+| Ecosystem       | Directories monitored                                                     |
+| --------------- | ------------------------------------------------------------------------- |
+| `npm` (pnpm)    | `/`, `/packages/cli`, `/packages/core`, `/packages/registry`, `/apps/demo`, `/apps/docs` |
+| `github-actions`| `/`                                                                       |
+
+Updates within each directory are **grouped into a single PR** to reduce noise.
+
+### Reviewing Dependabot PRs
+
+1. Check that the CI pipeline passes (formatting, lint, build, tests, Storybook).
+2. Review the changelog or release notes linked in the PR description.
+3. For major version bumps, check for breaking changes and update consuming code
+   as needed before merging.
+4. Merge using **squash-merge** to keep the history linear, consistent with the
+   rest of the project's merge strategy.
