@@ -4,17 +4,49 @@ This document explains how to cut a new release for `@radish-ui/core` and `@radi
 
 ## Overview
 
-Both packages are published to npm under the `@radish-ui` scope. Releases are
-performed manually by a maintainer following the steps below.
+Both packages are published to npm under the `@radish-ui` scope. Publishing
+happens automatically via GitHub Actions when a GitHub Release is created
+(recommended), or can be performed manually by a maintainer.
 
-## Prerequisites
+## Automated Publishing (CI — recommended)
+
+Publishing is handled by the `.github/workflows/publish.yml` workflow, which
+triggers automatically whenever a GitHub Release is **published**. It builds
+both packages and publishes them to npm using
+[npm provenance attestations](https://docs.npmjs.com/generating-provenance-statements)
+via GitHub's OIDC token — no long-lived `NPM_TOKEN` secret is required.
+
+### One-time setup: configure npm Trusted Publisher
+
+Before the first automated publish, register the repository as a **Trusted
+Publisher** on npmjs.com so that GitHub Actions can publish without a stored
+token:
+
+1. Log in to [npmjs.com](https://www.npmjs.com) and open the settings page for
+   each package (`@radish-ui/core` and `@radish-ui/cli`).
+2. Navigate to **Publishing access → Trusted publishers → Add a publisher**.
+3. Fill in the fields:
+   - **Repository owner**: `saebyn`
+   - **Repository name**: `radish-ui`
+   - **Workflow filename**: `publish.yml`
+   - **Environment** (optional): leave blank
+4. Save. Repeat for the other package.
+
+Once this is set up, the publish workflow runs automatically on every GitHub
+Release and uses the GitHub OIDC token instead of a stored secret.
+
+## Manual Publishing (fallback)
+
+If you need to publish outside of the automated workflow, follow these steps.
+
+### Prerequisites
 
 - You must be logged in to npm with an account that has publish access to the
   `@radish-ui` scope (`npm login`).
 - All CI checks on `main` must be passing.
 - You must have `pnpm` installed.
 
-## Steps
+## Steps (manual release)
 
 ### 1. Update the changelog
 
@@ -69,9 +101,15 @@ git push origin vx.y.z
 
 On GitHub, go to **Releases → Draft a new release**, select the tag you just
 pushed, set the title to `vx.y.z`, and paste the corresponding changelog section
-as the release notes.
+as the release notes. Click **Publish release**.
 
-### 6. Publish to npm
+Publishing the release triggers the `.github/workflows/publish.yml` CI workflow,
+which builds and publishes both packages to npm automatically. Wait for the
+workflow to complete before verifying the packages on npmjs.com.
+
+### 6. Publish to npm (manual fallback only)
+
+If the automated workflow did not run or failed, publish manually:
 
 ```bash
 pnpm --filter @radish-ui/core publish --access public

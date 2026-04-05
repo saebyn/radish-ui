@@ -1,0 +1,43 @@
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    name: Publish packages to npm
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages
+        run: pnpm build
+
+      # Authentication uses GitHub's OIDC token via npm Trusted Publishers
+      # (https://docs.npmjs.com/trusted-publishers). No NPM_TOKEN secret is
+      # needed. The id-token: write permission above enables the OIDC flow.
+      # @radish-ui/cli does not depend on @radish-ui/core at runtime, so the
+      # two publishes are independent and order does not matter.
+      - name: Publish @radish-ui/core
+        run: pnpm --filter @radish-ui/core publish --provenance --access public --no-git-checks
+
+      - name: Publish @radish-ui/cli
+        run: pnpm --filter @radish-ui/cli publish --provenance --access public --no-git-checks
