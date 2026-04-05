@@ -165,10 +165,9 @@ npx @radish-ui/cli list [options]
 
 **Options:**
 
-| Option              | Description                                         |
-| ------------------- | --------------------------------------------------- |
-| `--registry <path>` | Path or URL to the registry                         |
-| `--target <path>`   | Output directory (default: `src/components/radish`) |
+| Option              | Description                 |
+| ------------------- | --------------------------- |
+| `--registry <path>` | Path or URL to the registry |
 
 **Example output:**
 
