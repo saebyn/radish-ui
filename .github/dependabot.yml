@@ -11,82 +11,114 @@ updates:
         patterns:
           - "*"
 
-  # Root workspace
+  # Root workspace + pnpm catalog
+  # Catalog-managed deps (react, react-dom, typescript, vite, etc.) are defined
+  # in pnpm-workspace.yaml and updated here in one PR rather than per-package.
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
     groups:
-      dev-dependencies:
-        dependency-type: development
+      catalog:
         patterns:
           - "*"
 
-  # packages/cli
+  # packages/cli — only non-catalog deps (@clack/prompts, chalk, commander,
+  # diff, zod, @types/node) need tracking here.
   - package-ecosystem: npm
     directory: /packages/cli
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "tsup"
+      - dependency-name: "typescript"
+      - dependency-name: "vitest"
     groups:
       dependencies:
         patterns:
           - "*"
 
-  # packages/core
+  # packages/core — only non-catalog deps (clsx, tailwind-merge) need
+  # tracking here.
   - package-ecosystem: npm
     directory: /packages/core
     schedule:
       interval: weekly
     ignore:
-      - dependency-name: "react"
-      - dependency-name: "react-dom"
       - dependency-name: "@types/react"
       - dependency-name: "@types/react-dom"
+      - dependency-name: "@vitejs/plugin-react"
+      - dependency-name: "ra-core"
+      - dependency-name: "react"
+      - dependency-name: "react-dom"
+      - dependency-name: "tailwindcss"
+      - dependency-name: "tsup"
+      - dependency-name: "typescript"
     groups:
       dependencies:
         patterns:
           - "*"
 
-  # packages/registry
+  # packages/registry — only non-catalog deps (@storybook/*, @testing-library/*,
+  # jsdom) need tracking here.
   - package-ecosystem: npm
     directory: /packages/registry
     schedule:
       interval: weekly
     ignore:
-      - dependency-name: "react"
-      - dependency-name: "react-dom"
+      - dependency-name: "@tailwindcss/postcss"
       - dependency-name: "@types/react"
       - dependency-name: "@types/react-dom"
+      - dependency-name: "@vitejs/plugin-react"
+      - dependency-name: "autoprefixer"
+      - dependency-name: "postcss"
+      - dependency-name: "ra-core"
+      - dependency-name: "react"
+      - dependency-name: "react-dom"
+      - dependency-name: "react-icons"
+      - dependency-name: "react-router-dom"
+      - dependency-name: "tailwindcss"
+      - dependency-name: "typescript"
+      - dependency-name: "vite"
+      - dependency-name: "vitest"
     groups:
       dependencies:
         patterns:
           - "*"
 
-  # apps/demo
+  # apps/demo — only non-catalog deps (@playwright/test) need tracking here.
   - package-ecosystem: npm
     directory: /apps/demo
     schedule:
       interval: weekly
     ignore:
-      - dependency-name: "react"
-      - dependency-name: "react-dom"
+      - dependency-name: "@tailwindcss/postcss"
       - dependency-name: "@types/react"
       - dependency-name: "@types/react-dom"
+      - dependency-name: "@vitejs/plugin-react"
+      - dependency-name: "autoprefixer"
+      - dependency-name: "postcss"
+      - dependency-name: "ra-core"
+      - dependency-name: "ra-data-json-server"
+      - dependency-name: "ra-i18n-polyglot"
+      - dependency-name: "ra-language-english"
+      - dependency-name: "react"
+      - dependency-name: "react-dom"
+      - dependency-name: "react-icons"
+      - dependency-name: "react-router-dom"
+      - dependency-name: "tailwindcss"
+      - dependency-name: "typescript"
+      - dependency-name: "vite"
     groups:
       dependencies:
         patterns:
           - "*"
 
-  # apps/docs
+  # apps/docs — only vitepress, not in catalog.
   - package-ecosystem: npm
     directory: /apps/docs
     schedule:
       interval: weekly
-    ignore:
-      - dependency-name: "react"
-      - dependency-name: "react-dom"
-      - dependency-name: "@types/react"
-      - dependency-name: "@types/react-dom"
     groups:
       dependencies:
         patterns:
