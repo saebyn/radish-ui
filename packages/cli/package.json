@@ -1,6 +1,6 @@
 {
   "name": "@radish-ui/cli",
-  "version": "0.1.0-prerelease",
+  "version": "0.1.0",
   "description": "CLI for copying radish-ui registry components into your project",
   "keywords": [
     "cli",
