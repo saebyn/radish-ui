@@ -4,6 +4,66 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@tailwindcss/postcss':
+      specifier: 4.2.2
+      version: 4.2.2
+    '@types/react':
+      specifier: 18.3.28
+      version: 18.3.28
+    '@types/react-dom':
+      specifier: 18.3.7
+      version: 18.3.7
+    '@vitejs/plugin-react':
+      specifier: 6.0.1
+      version: 6.0.1
+    autoprefixer:
+      specifier: 10.4.27
+      version: 10.4.27
+    postcss:
+      specifier: 8.5.8
+      version: 8.5.8
+    ra-core:
+      specifier: 5.14.5
+      version: 5.14.5
+    ra-data-json-server:
+      specifier: 5.14.5
+      version: 5.14.5
+    ra-i18n-polyglot:
+      specifier: 5.14.5
+      version: 5.14.5
+    ra-language-english:
+      specifier: 5.14.5
+      version: 5.14.5
+    react:
+      specifier: 18.3.1
+      version: 18.3.1
+    react-dom:
+      specifier: 18.3.1
+      version: 18.3.1
+    react-icons:
+      specifier: 5.6.0
+      version: 5.6.0
+    react-router-dom:
+      specifier: 7.14.0
+      version: 7.14.0
+    tailwindcss:
+      specifier: 4.2.2
+      version: 4.2.2
+    tsup:
+      specifier: 8.5.1
+      version: 8.5.1
+    typescript:
+      specifier: 6.0.2
+      version: 6.0.2
+    vite:
+      specifier: 8.0.3
+      version: 8.0.3
+    vitest:
+      specifier: 4.1.2
+      version: 4.1.2
+
 importers:
 
   .:
@@ -24,28 +84,28 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core
       ra-core:
-        specifier: ^5.3.3
+        specifier: 'catalog:'
         version: 5.14.5(@tanstack/react-query@5.96.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.72.0(react@18.3.1))(react-router-dom@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       ra-data-json-server:
-        specifier: ^5.3.3
+        specifier: 'catalog:'
         version: 5.14.5(@tanstack/react-query@5.96.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.72.0(react@18.3.1))(react-router-dom@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       ra-i18n-polyglot:
-        specifier: ^5.3.3
+        specifier: 'catalog:'
         version: 5.14.5(@tanstack/react-query@5.96.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.72.0(react@18.3.1))(react-router-dom@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       ra-language-english:
-        specifier: ^5.3.3
+        specifier: 'catalog:'
         version: 5.14.5(@tanstack/react-query@5.96.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.72.0(react@18.3.1))(react-router-dom@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
-        specifier: ^18.3.1
+        specifier: 'catalog:'
         version: 18.3.1
       react-dom:
-        specifier: ^18.3.1
+        specifier: 'catalog:'
         version: 18.3.1(react@18.3.1)
       react-icons:
-        specifier: ^5.2.1
+        specifier: 'catalog:'
         version: 5.6.0(react@18.3.1)
       react-router-dom:
-        specifier: ^7.14.0
+        specifier: 'catalog:'
         version: 7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
       '@playwright/test':
@@ -55,31 +115,31 @@ importers:
         specifier: workspace:*
         version: link:../../packages/cli
       '@tailwindcss/postcss':
-        specifier: ^4.2.2
+        specifier: 'catalog:'
         version: 4.2.2
       '@types/react':
-        specifier: ^18.3.3
+        specifier: 'catalog:'
         version: 18.3.28
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: 'catalog:'
         version: 18.3.7(@types/react@18.3.28)
       '@vitejs/plugin-react':
-        specifier: ^6.0.1
+        specifier: 'catalog:'
         version: 6.0.1(vite@8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.5)(jiti@2.6.1))
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: 'catalog:'
         version: 10.4.27(postcss@8.5.8)
       postcss:
-        specifier: ^8.4.38
+        specifier: 'catalog:'
         version: 8.5.8
       tailwindcss:
-        specifier: ^4.2.2
+        specifier: 'catalog:'
         version: 4.2.2
       typescript:
-        specifier: 6.0.2
+        specifier: 'catalog:'
         version: 6.0.2
       vite:
-        specifier: ^8.0.3
+        specifier: 'catalog:'
         version: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.5)(jiti@2.6.1)
 
   apps/docs:
@@ -110,13 +170,13 @@ importers:
         specifier: ^25.5.2
         version: 25.5.2
       tsup:
-        specifier: ^8.5.1
+        specifier: 'catalog:'
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(typescript@6.0.2)
       typescript:
-        specifier: 6.0.2
+        specifier: 'catalog:'
         version: 6.0.2
       vitest:
-        specifier: ^4.1.2
+        specifier: 'catalog:'
         version: 4.1.2(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.5)(jiti@2.6.1))
 
   packages/core:
@@ -129,28 +189,28 @@ importers:
         version: 3.5.0
     devDependencies:
       '@types/react':
-        specifier: ^18.3.28
+        specifier: 'catalog:'
         version: 18.3.28
       '@types/react-dom':
-        specifier: ^18.3.7
+        specifier: 'catalog:'
         version: 18.3.7(@types/react@18.3.28)
       ra-core:
-        specifier: ^5.3.3
+        specifier: 'catalog:'
         version: 5.14.5(@tanstack/react-query@5.96.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.72.0(react@18.3.1))(react-router-dom@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
-        specifier: ^18.3.1
+        specifier: 'catalog:'
         version: 18.3.1
       react-dom:
-        specifier: ^18.3.1
+        specifier: 'catalog:'
         version: 18.3.1(react@18.3.1)
       tailwindcss:
-        specifier: ^4.2.2
+        specifier: 'catalog:'
         version: 4.2.2
       tsup:
-        specifier: ^8.5.1
+        specifier: 'catalog:'
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(typescript@6.0.2)
       typescript:
-        specifier: ^6.0.2
+        specifier: 'catalog:'
         version: 6.0.2
 
   packages/registry:
@@ -159,13 +219,13 @@ importers:
         specifier: workspace:*
         version: link:../core
       ra-core:
-        specifier: ^5.3.3
+        specifier: 'catalog:'
         version: 5.14.5(@tanstack/react-query@5.96.1(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.72.0(react@18.3.1))(react-router-dom@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-router@7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
-        specifier: ^18.3.1
+        specifier: 'catalog:'
         version: 18.3.1
       react-icons:
-        specifier: ^5.2.1
+        specifier: 'catalog:'
         version: 5.6.0(react@18.3.1)
     devDependencies:
       '@storybook/react':
@@ -175,7 +235,7 @@ importers:
         specifier: ^10.3.4
         version: 10.3.4(esbuild@0.27.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(rollup@4.60.1)(storybook@10.3.4(@testing-library/dom@10.4.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(typescript@6.0.2)(vite@8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.5)(jiti@2.6.1))
       '@tailwindcss/postcss':
-        specifier: ^4.2.2
+        specifier: 'catalog:'
         version: 4.2.2
       '@testing-library/jest-dom':
         specifier: ^6.9.1
@@ -184,43 +244,43 @@ importers:
         specifier: ^16.3.2
         version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@18.3.7(@types/react@18.3.28))(@types/react@18.3.28)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/react':
-        specifier: ^18.3.3
+        specifier: 'catalog:'
         version: 18.3.28
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: 'catalog:'
         version: 18.3.7(@types/react@18.3.28)
       '@vitejs/plugin-react':
-        specifier: ^6.0.1
+        specifier: 'catalog:'
         version: 6.0.1(vite@8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.5)(jiti@2.6.1))
       autoprefixer:
-        specifier: ^10.4.19
+        specifier: 'catalog:'
         version: 10.4.27(postcss@8.5.8)
       jsdom:
         specifier: ^29.0.1
         version: 29.0.1
       postcss:
-        specifier: ^8.4.38
+        specifier: 'catalog:'
         version: 8.5.8
       react-dom:
-        specifier: ^18.3.1
+        specifier: 'catalog:'
         version: 18.3.1(react@18.3.1)
       react-router-dom:
-        specifier: ^7.14.0
+        specifier: 'catalog:'
         version: 7.14.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       storybook:
         specifier: ^10.3.4
         version: 10.3.4(@testing-library/dom@10.4.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwindcss:
-        specifier: ^4.2.2
+        specifier: 'catalog:'
         version: 4.2.2
       typescript:
-        specifier: 6.0.2
+        specifier: 'catalog:'
         version: 6.0.2
       vite:
-        specifier: ^8.0.3
+        specifier: 'catalog:'
         version: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.5)(jiti@2.6.1)
       vitest:
-        specifier: ^4.1.2
+        specifier: 'catalog:'
         version: 4.1.2(@types/node@25.5.2)(jsdom@29.0.1)(vite@8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.5)(jiti@2.6.1))
 
 packages:
