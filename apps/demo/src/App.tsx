@@ -26,9 +26,11 @@ import { StreamsEdit } from "./components/streams/StreamsEdit";
 import { ProjectsList } from "./components/projects/ProjectsList";
 import { ProjectsCreate } from "./components/projects/ProjectsCreate";
 import { ProjectsEdit } from "./components/projects/ProjectsEdit";
+import { ProjectsShow } from "./components/projects/ProjectsShow";
 import { EpisodesList } from "./components/episodes/EpisodesList";
 import { EpisodesCreate } from "./components/episodes/EpisodesCreate";
 import { EpisodesEdit } from "./components/episodes/EpisodesEdit";
+import { EpisodesShow } from "./components/episodes/EpisodesShow";
 import { UsersList } from "./components/users/UsersList";
 import { UsersCreate } from "./components/users/UsersCreate";
 import { UsersEdit } from "./components/users/UsersEdit";
@@ -120,8 +122,20 @@ export default function App() {
         create={SeriesCreate}
       />
       <Resource name="streams" list={StreamsList} edit={StreamsEdit} create={StreamsCreate} />
-      <Resource name="projects" list={ProjectsList} edit={ProjectsEdit} create={ProjectsCreate} />
-      <Resource name="episodes" list={EpisodesList} edit={EpisodesEdit} create={EpisodesCreate} />
+      <Resource
+        name="projects"
+        list={ProjectsList}
+        show={ProjectsShow}
+        edit={ProjectsEdit}
+        create={ProjectsCreate}
+      />
+      <Resource
+        name="episodes"
+        list={EpisodesList}
+        show={EpisodesShow}
+        edit={EpisodesEdit}
+        create={EpisodesCreate}
+      />
       <Resource name="users" list={UsersList} edit={UsersEdit} create={UsersCreate} />
       <Resource name="activityLog" list={ActivityLogList} />
     </Admin>

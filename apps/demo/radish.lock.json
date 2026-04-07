@@ -171,6 +171,14 @@
           "localHash": "sha256-30418b1cbfa0beb4a0af986597032d250253d087cc584f44dd9f756b3fd21887"
         }
       }
+    },
+    "show-button": {
+      "files": {
+        "button/show-button.tsx": {
+          "registryHash": "sha256-7f9b782278e2e5a06ae524dc05f1f92013a5dcac69933c3d6bbc9f759fdc7af7",
+          "localHash": "sha256-7f9b782278e2e5a06ae524dc05f1f92013a5dcac69933c3d6bbc9f759fdc7af7"
+        }
+      }
     }
   }
 }

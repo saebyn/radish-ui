@@ -56,6 +56,11 @@
       "dependencies": ["@radish-ui/core"]
     },
     {
+      "name": "show-button",
+      "files": ["src/button/show-button.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
       "name": "delete-button",
       "files": ["src/button/delete-button.tsx"],
       "dependencies": ["@radish-ui/core"]
