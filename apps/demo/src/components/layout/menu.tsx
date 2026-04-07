@@ -1,4 +1,5 @@
 import { useResourceDefinitions, useCreatePath } from "ra-core";
+import { Link } from "react-router-dom";
 import { cn } from "@radish-ui/core";
 
 interface MenuProps {
@@ -23,10 +24,11 @@ export function Menu({ open = true, className }: MenuProps) {
         {Object.keys(resources).map((name) => {
           const resource = resources[name];
           const path = createPath({ resource: name, type: "list" });
+          const to = path.startsWith("#") ? path.slice(1) : path;
           return (
             <li key={name}>
-              <a
-                href={path}
+              <Link
+                to={to}
                 className="flex items-center gap-3 rounded-md px-2 py-2 text-sm font-medium text-neutral-300 hover:bg-canvas-700 hover:text-white transition-colors"
               >
                 {/* Resource icon placeholder */}
@@ -34,7 +36,7 @@ export function Menu({ open = true, className }: MenuProps) {
                 {open && (
                   <span className="truncate capitalize">{resource.options?.label ?? name}</span>
                 )}
-              </a>
+              </Link>
             </li>
           );
         })}
