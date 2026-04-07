@@ -28,10 +28,18 @@ const ACTION_COLORS: Record<string, string> = {
 
 function formatTimestamp(ts: string) {
   try {
-    return new Intl.DateTimeFormat(undefined, {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(new Date(ts));
+    const diffMs = Date.now() - new Date(ts).getTime();
+    const diffSec = Math.floor(diffMs / 1000);
+    if (diffSec < 60) return "just now";
+    const diffMin = Math.floor(diffSec / 60);
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffHr = Math.floor(diffMin / 60);
+    if (diffHr < 24) return `${diffHr}h ago`;
+    const diffDay = Math.floor(diffHr / 24);
+    if (diffDay < 30) return `${diffDay}d ago`;
+    const diffMo = Math.floor(diffDay / 30);
+    if (diffMo < 12) return `${diffMo}mo ago`;
+    return `${Math.floor(diffMo / 12)}y ago`;
   } catch {
     return ts;
   }
@@ -129,7 +137,7 @@ export function ActivityFeed({ filter, perPage = 50 }: ActivityFeedProps) {
               <p className="text-sm text-neutral-900 dark:text-neutral-100">
                 <span className="font-medium">{actorName}</span> <span>{actionLabel}</span>
                 {detail && (
-                  <span className="ml-1 rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
+                  <span className="ml-1 inline-block whitespace-nowrap rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
                     {detail}
                   </span>
                 )}
