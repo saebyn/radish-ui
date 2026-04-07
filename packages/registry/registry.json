@@ -96,6 +96,11 @@
       "dependencies": ["@radish-ui/core"]
     },
     {
+      "name": "select-array-input",
+      "files": ["src/form/select-array-input.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
       "name": "notification",
       "files": ["src/notification/notification.tsx"],
       "dependencies": ["@radish-ui/core"]

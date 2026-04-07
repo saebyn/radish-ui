@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useGetList } from "ra-core";
 import { Edit } from "../detail/edit";
-import { MultiSelectInput } from "../form/multi-select-input";
+import { SelectArrayInput } from "../form/select-array-input";
 import { NumberInput } from "../form/number-input";
 import { SelectInput } from "../form/select-input";
 import { SimpleForm } from "../form/simple-form";
@@ -42,8 +42,8 @@ export function ProjectsEdit() {
             { id: "published", name: "Published" },
           ]}
         />
-        <MultiSelectInput source="streams" label="Source Streams" choices={streamChoices} />
-        <MultiSelectInput source="reviewer_ids" label="Reviewers" choices={reviewerChoices} />
+        <SelectArrayInput source="streams" label="Source Streams" choices={streamChoices} />
+        <SelectArrayInput source="reviewer_ids" label="Reviewers" choices={reviewerChoices} />
         <TextInput source="created_at" label="Created At" />
       </SimpleForm>
     </Edit>

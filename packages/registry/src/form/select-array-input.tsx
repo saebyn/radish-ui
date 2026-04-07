@@ -1,19 +1,40 @@
 import { useInput } from "ra-core";
 import { cn } from "@radish-ui/core";
 
-export interface MultiSelectChoice {
+export interface SelectArrayChoice {
   id: string | number;
   name: string;
 }
 
-interface MultiSelectInputProps {
+interface SelectArrayInputProps {
+  /** The field name in the record — should hold an array of ids */
   source: string;
-  choices: MultiSelectChoice[];
+  /** The list of options to display */
+  choices: SelectArrayChoice[];
+  /** Human-readable label; defaults to a capitalised version of source */
   label?: string;
   className?: string;
 }
 
-export function MultiSelectInput({ source, choices, label, className }: MultiSelectInputProps) {
+/**
+ * Multi-select input for array-valued fields.
+ * Equivalent to react-admin's <SelectArrayInput>.
+ *
+ * Stores an array of numbers (or strings if the id cannot be coerced to a
+ * finite number) in the form state. Renders a native <select multiple>.
+ *
+ * Copy this file into your project and customise freely.
+ *
+ * @example
+ * <SelectArrayInput
+ *   source="tag_ids"
+ *   choices={[
+ *     { id: 1, name: 'Sports' },
+ *     { id: 2, name: 'Tech' },
+ *   ]}
+ * />
+ */
+export function SelectArrayInput({ source, choices, label, className }: SelectArrayInputProps) {
   const {
     id,
     field,
@@ -21,14 +42,16 @@ export function MultiSelectInput({ source, choices, label, className }: MultiSel
     isRequired,
   } = useInput({
     source,
+    // Convert stored values (numbers or strings) → strings for the <select>
     format: (value: unknown) => {
       if (!Array.isArray(value)) return [];
       return value.map((item) => String(item));
     },
+    // Convert selected strings back to numbers where possible
     parse: (value: string[]) =>
       value.map((item) => {
-        const numberValue = Number(item);
-        return Number.isNaN(numberValue) ? item : numberValue;
+        const n = Number(item);
+        return Number.isFinite(n) ? n : item;
       }),
   });
 
@@ -78,7 +101,7 @@ export function MultiSelectInput({ source, choices, label, className }: MultiSel
         ))}
       </select>
       <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-        Hold Ctrl (or Cmd on macOS) to select multiple streams.
+        Hold Ctrl (or Cmd on macOS) to select multiple items.
       </p>
       {error && (
         <p className="mt-1 text-xs text-danger-600 dark:text-danger-400" role="alert">

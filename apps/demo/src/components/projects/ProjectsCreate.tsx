@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useGetList } from "ra-core";
 import { Create } from "../detail/create";
-import { MultiSelectInput } from "../form/multi-select-input";
+import { SelectArrayInput } from "../form/select-array-input";
 import { NumberInput } from "../form/number-input";
 import { SelectInput } from "../form/select-input";
 import { SimpleForm } from "../form/simple-form";
@@ -34,7 +34,7 @@ export function ProjectsCreate() {
             { id: "published", name: "Published" },
           ]}
         />
-        <MultiSelectInput source="streams" label="Source Streams" choices={streamChoices} />
+        <SelectArrayInput source="streams" label="Source Streams" choices={streamChoices} />
         <TextInput source="created_at" label="Created At" />
       </SimpleForm>
     </Create>
