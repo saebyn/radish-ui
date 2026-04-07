@@ -147,9 +147,8 @@ describe("newCommand", () => {
     await newCommand("css-app", { yes: true, cwd: tmpDir });
 
     const css = readFileSync(join(tmpDir, "css-app", "src", "index.css"), "utf-8");
-    expect(css).toContain("@tailwind base");
-    expect(css).toContain("@tailwind components");
-    expect(css).toContain("@tailwind utilities");
+    expect(css).toContain('@import "tailwindcss";');
+    expect(css).toContain('@config "../tailwind.config.ts";');
   });
 
   it("creates radish.json with remote registry URL when no --registry given", async () => {
