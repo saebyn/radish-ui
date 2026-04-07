@@ -5,7 +5,7 @@ import { TextInput } from "../form/text-input";
 
 export function UsersEdit() {
   return (
-    <Edit resource="users">
+    <Edit resource="users" mutationMode="pessimistic">
       <SimpleForm>
         <TextInput source="name" label="Name" />
         <TextInput source="email" label="Email" />

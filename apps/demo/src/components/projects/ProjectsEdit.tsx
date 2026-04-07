@@ -12,14 +12,22 @@ export function ProjectsEdit() {
     pagination: { page: 1, perPage: 100 },
     sort: { field: "id", order: "ASC" },
   });
+  const { data: users = [] } = useGetList("users", {
+    pagination: { page: 1, perPage: 100 },
+    sort: { field: "id", order: "ASC" },
+  });
 
   const streamChoices = useMemo(
     () => streams.map((stream) => ({ id: stream.id, name: String(stream.title ?? stream.id) })),
     [streams],
   );
+  const reviewerChoices = useMemo(
+    () => users.map((user) => ({ id: user.id, name: String(user.name ?? user.id) })),
+    [users],
+  );
 
   return (
-    <Edit resource="projects">
+    <Edit resource="projects" mutationMode="pessimistic">
       <SimpleForm>
         <TextInput source="title" label="Title" />
         <TextInput source="description" label="Description" multiline rows={4} />
@@ -35,6 +43,7 @@ export function ProjectsEdit() {
           ]}
         />
         <MultiSelectInput source="streams" label="Source Streams" choices={streamChoices} />
+        <MultiSelectInput source="reviewer_ids" label="Reviewers" choices={reviewerChoices} />
         <TextInput source="created_at" label="Created At" />
       </SimpleForm>
     </Edit>

@@ -32,6 +32,7 @@ import { EpisodesEdit } from "./components/episodes/EpisodesEdit";
 import { UsersList } from "./components/users/UsersList";
 import { UsersCreate } from "./components/users/UsersCreate";
 import { UsersEdit } from "./components/users/UsersEdit";
+import { ActivityLogList } from "./components/activityLog/ActivityLogList";
 
 const dataProvider = fakeDataProvider(demoData);
 
@@ -75,7 +76,7 @@ function SeriesShow() {
 
 function SeriesEdit() {
   return (
-    <Edit resource="series">
+    <Edit resource="series" mutationMode="pessimistic">
       <SimpleForm>
         <TextInput source="title" label="Title" />
         <TextInput source="cadence" label="Cadence" />
@@ -120,6 +121,7 @@ export default function App() {
       <Resource name="projects" list={ProjectsList} edit={ProjectsEdit} create={ProjectsCreate} />
       <Resource name="episodes" list={EpisodesList} edit={EpisodesEdit} create={EpisodesCreate} />
       <Resource name="users" list={UsersList} edit={UsersEdit} create={UsersCreate} />
+      <Resource name="activityLog" list={ActivityLogList} />
     </Admin>
   );
 }

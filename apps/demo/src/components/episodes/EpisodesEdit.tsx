@@ -6,7 +6,7 @@ import { TextInput } from "../form/text-input";
 
 export function EpisodesEdit() {
   return (
-    <Edit resource="episodes">
+    <Edit resource="episodes" mutationMode="pessimistic">
       <SimpleForm>
         <NumberInput source="project_id" label="Project ID" min={1} />
         <NumberInput source="series_id" label="Series ID" min={1} />
