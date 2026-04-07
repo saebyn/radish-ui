@@ -33,6 +33,7 @@ import { UsersList } from "./components/users/UsersList";
 import { UsersCreate } from "./components/users/UsersCreate";
 import { UsersEdit } from "./components/users/UsersEdit";
 import { ActivityLogList } from "./components/activityLog/ActivityLogList";
+import { DashboardPage } from "./components/custom/DashboardPage";
 
 const dataProvider = fakeDataProvider(demoData);
 
@@ -108,6 +109,7 @@ export default function App() {
       dataProvider={dataProvider}
       i18nProvider={i18nProvider}
       layout={Layout}
+      dashboard={DashboardPage}
       title="radish-ui demo"
     >
       <Resource

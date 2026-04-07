@@ -34,12 +34,7 @@ interface SelectArrayInputProps {
  *   ]}
  * />
  */
-export function SelectArrayInput({
-  source,
-  choices,
-  label,
-  className,
-}: SelectArrayInputProps) {
+export function SelectArrayInput({ source, choices, label, className }: SelectArrayInputProps) {
   const {
     id,
     field,
@@ -86,9 +81,7 @@ export function SelectArrayInput({
         onBlur={field.onBlur}
         value={selectedValues}
         onChange={(event) => {
-          const values = Array.from(event.target.selectedOptions).map(
-            (option) => option.value,
-          );
+          const values = Array.from(event.target.selectedOptions).map((option) => option.value);
           field.onChange(values);
         }}
         className={cn(
@@ -111,10 +104,7 @@ export function SelectArrayInput({
         Hold Ctrl (or Cmd on macOS) to select multiple items.
       </p>
       {error && (
-        <p
-          className="mt-1 text-xs text-danger-600 dark:text-danger-400"
-          role="alert"
-        >
+        <p className="mt-1 text-xs text-danger-600 dark:text-danger-400" role="alert">
           {error.message}
         </p>
       )}

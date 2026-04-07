@@ -1,20 +1,12 @@
-import { NumberField } from "../field/number-field";
-import { TextField } from "../field/text-field";
-import { Datagrid } from "../list/datagrid";
-import { List } from "../list/list";
-import { Pagination } from "../list/pagination";
+import { ActivityFeed } from "../custom/ActivityFeed";
 
 export function ActivityLogList() {
   return (
-    <List resource="activityLog" pagination={<Pagination />}>
-      <Datagrid>
-        <NumberField source="id" label="ID" />
-        <NumberField source="actor_id" label="Actor ID" />
-        <TextField source="action" label="Action" />
-        <TextField source="resource_type" label="Resource" />
-        <NumberField source="resource_id" label="Resource ID" />
-        <TextField source="timestamp" label="Timestamp" />
-      </Datagrid>
-    </List>
+    <div className="mx-auto max-w-2xl px-4 py-8">
+      <h1 className="mb-6 text-xl font-semibold text-neutral-900 dark:text-neutral-100">
+        Activity Log
+      </h1>
+      <ActivityFeed />
+    </div>
   );
 }
