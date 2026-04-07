@@ -170,9 +170,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 }
 
 function generateIndexCss(): string {
-  return `@tailwind base;
-@tailwind components;
-@tailwind utilities;
+  return `@import "tailwindcss";
+@config "../tailwind.config.ts";
+@source "./**/*.{ts,tsx}";
+@source "../index.html";
 `;
 }
 
