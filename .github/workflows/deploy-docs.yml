@@ -42,10 +42,21 @@ jobs:
       - name: Build demo
         run: pnpm --filter @radish-ui/demo build
 
+      - name: Build storybook
+        run: pnpm --filter @radish-ui/registry storybook:build
+
       - name: Copy demo into docs output
         run: |
           mkdir -p apps/docs/.vitepress/dist/demo
           cp -r apps/demo/dist/. apps/docs/.vitepress/dist/demo/
+
+      - name: Copy storybook into docs output
+        run: |
+          mkdir -p apps/docs/.vitepress/dist/storybook
+          cp -r packages/registry/storybook-static/. apps/docs/.vitepress/dist/storybook/
+
+      - name: Create 404 page
+        run: |
           cat > apps/docs/.vitepress/dist/404.html <<'EOF'
           <!doctype html>
           <html lang="en">
@@ -79,6 +90,7 @@ jobs:
             </body>
           </html>
           EOF
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
