@@ -18,15 +18,17 @@ function Introduction() {
           >
             react-admin
           </a>
-          . Like shadcn/ui, but for react-admin — use <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">ra-core</code> for
-          headless state management and own your UI components.
+          . Like shadcn/ui, but for react-admin — use{" "}
+          <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">
+            ra-core
+          </code>{" "}
+          for headless state management and own your UI components.
         </p>
       </div>
 
       <div className="mb-10 p-4 border border-warning-300 bg-warning-50 dark:border-warning-700 dark:bg-warning-950 rounded-lg text-warning-800 dark:text-warning-200 text-sm leading-relaxed">
-        ⚠️ <strong>Early development — not production-ready.</strong> Many
-        components are missing or incomplete, and the API may change rapidly.
-        Use at your own risk.
+        ⚠️ <strong>Early development — not production-ready.</strong> Many components are missing or
+        incomplete, and the API may change rapidly. Use at your own risk.
       </div>
 
       <section className="mb-10">
@@ -43,29 +45,39 @@ function Introduction() {
           >
             shadcn/ui
           </a>
-          : instead of installing a component library and fighting its styles,
-          you copy the components directly into your project and make them your
-          own. The difference from plain react-admin:{" "}
-          <strong>zero Material UI</strong>. All styling is Tailwind CSS.
+          : instead of installing a component library and fighting its styles, you copy the
+          components directly into your project and make them your own. The difference from plain
+          react-admin: <strong>zero Material UI</strong>. All styling is Tailwind CSS.
         </p>
         <ul className="list-disc list-inside space-y-2 text-neutral-700 dark:text-neutral-300">
           <li>
             <strong>
-              <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">@radish-ui/core</code>
+              <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">
+                @radish-ui/core
+              </code>
             </strong>{" "}
-            — Wraps <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">ra-core</code> primitives and provides a{" "}
-            <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">cn()</code> utility for Tailwind class merging.
+            — Wraps{" "}
+            <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">
+              ra-core
+            </code>{" "}
+            primitives and provides a{" "}
+            <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">
+              cn()
+            </code>{" "}
+            utility for Tailwind class merging.
           </li>
           <li>
             <strong>
-              <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">@radish-ui/cli</code>
+              <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">
+                @radish-ui/cli
+              </code>
             </strong>{" "}
-            — Copies registry components into your project and keeps them in
-            sync with upstream changes.
+            — Copies registry components into your project and keeps them in sync with upstream
+            changes.
           </li>
           <li>
-            <strong>Registry components</strong> — Tailwind-styled components
-            you own and can customize freely.
+            <strong>Registry components</strong> — Tailwind-styled components you own and can
+            customize freely.
           </li>
         </ul>
       </section>
@@ -76,17 +88,18 @@ function Introduction() {
         </h2>
         <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed mb-6">
           Each story demonstrates a component in isolation using mock{" "}
-          <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">ra-core</code> providers — no real data source required.
-          Use the toolbar above to toggle <strong>dark mode</strong> and explore
-          how components adapt.
+          <code className="text-sm bg-neutral-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded font-mono">
+            ra-core
+          </code>{" "}
+          providers — no real data source required. Use the toolbar above to toggle{" "}
+          <strong>dark mode</strong> and explore how components adapt.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
             {
               category: "Layout",
-              description:
-                "App shell, sidebar, and menu — the outer frame of your admin.",
+              description: "App shell, sidebar, and menu — the outer frame of your admin.",
             },
             {
               category: "List",
@@ -95,13 +108,11 @@ function Introduction() {
             },
             {
               category: "Detail",
-              description:
-                "Show, Edit, Create views with simple and tabbed layouts.",
+              description: "Show, Edit, Create views with simple and tabbed layouts.",
             },
             {
               category: "Form",
-              description:
-                "SimpleForm with text, number, select, and boolean inputs.",
+              description: "SimpleForm with text, number, select, and boolean inputs.",
             },
             {
               category: "Field",
@@ -115,8 +126,7 @@ function Introduction() {
             },
             {
               category: "Filter",
-              description:
-                "SearchInput, FilterButton, and FilterForm for list filtering.",
+              description: "SearchInput, FilterButton, and FilterForm for list filtering.",
             },
             {
               category: "Dialog",
@@ -129,8 +139,7 @@ function Introduction() {
             },
             {
               category: "Skeleton",
-              description:
-                "Loading skeleton placeholders with accessible live-region support.",
+              description: "Loading skeleton placeholders with accessible live-region support.",
             },
             {
               category: "Notification",
@@ -138,8 +147,7 @@ function Introduction() {
             },
             {
               category: "Error Boundary",
-              description:
-                "Graceful error UI for unexpected rendering failures.",
+              description: "Graceful error UI for unexpected rendering failures.",
             },
           ].map(({ category, description }) => (
             <div
@@ -149,9 +157,7 @@ function Introduction() {
               <h3 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-1">
                 {category}
               </h3>
-              <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                {description}
-              </p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">{description}</p>
             </div>
           ))}
         </div>
