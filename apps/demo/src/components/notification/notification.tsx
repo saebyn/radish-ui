@@ -132,7 +132,7 @@ function Toast({ notification, dismiss }: ToastProps) {
       </p>
       <button
         type="button"
-        aria-label="Dismiss notification"
+        aria-label={translate("radish.notification.dismiss", { _: "Dismiss notification" })}
         onClick={() => dismiss(key)}
         className="shrink-0 rounded p-0.5 opacity-60 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-current"
       >
@@ -165,6 +165,7 @@ function Toast({ notification, dismiss }: ToastProps) {
  * }
  */
 export function Notification({ className }: { className?: string }) {
+  const translate = useTranslate();
   const { notifications, takeNotification } = useNotificationContext();
   const [active, setActive] = useState<ActiveNotification[]>([]);
   const keyRef = useRef(0);
@@ -201,7 +202,7 @@ export function Notification({ className }: { className?: string }) {
 
   return (
     <div
-      aria-label="Notifications"
+      aria-label={translate("radish.notification.label", { _: "Notifications" })}
       className={cn("fixed right-4 top-4 z-50 flex flex-col gap-2", className)}
     >
       {active.map((n) => (

@@ -1,4 +1,4 @@
-import { useListContext } from "ra-core";
+import { useListContext, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 interface PaginationProps {
@@ -19,6 +19,7 @@ interface PaginationProps {
  * </List>
  */
 export function Pagination({ siblingCount = 2, className }: PaginationProps) {
+  const translate = useTranslate();
   const { page, perPage, total, setPage } = useListContext();
 
   if (total === undefined || total === null) return null;
@@ -34,7 +35,10 @@ export function Pagination({ siblingCount = 2, className }: PaginationProps) {
       className={cn("flex items-center justify-between px-1 py-3 text-sm", className)}
     >
       <p className="text-neutral-500 dark:text-neutral-400">
-        {total} result{total !== 1 ? "s" : ""}
+        {translate("ra.navigation.result", {
+          smart_count: total,
+          _: `${total} result${total !== 1 ? "s" : ""}`,
+        })}
       </p>
 
       <ul className="flex items-center gap-1">
@@ -44,7 +48,7 @@ export function Pagination({ siblingCount = 2, className }: PaginationProps) {
             onClick={() => setPage(page - 1)}
             disabled={page <= 1}
             className="rounded-md px-3 py-1.5 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            aria-label="Previous page"
+            aria-label={translate("ra.navigation.previous", { _: "Previous page" })}
           >
             ‹
           </button>
@@ -82,7 +86,7 @@ export function Pagination({ siblingCount = 2, className }: PaginationProps) {
             onClick={() => setPage(page + 1)}
             disabled={page >= pageCount}
             className="rounded-md px-3 py-1.5 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            aria-label="Next page"
+            aria-label={translate("ra.navigation.next", { _: "Next page" })}
           >
             ›
           </button>

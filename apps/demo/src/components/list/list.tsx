@@ -1,5 +1,5 @@
 import React from "react";
-import { ListBase, useListContext } from "ra-core";
+import { ListBase, useListContext, useTranslate } from "ra-core";
 import { cn } from "@radish-ui/core";
 
 interface SortPayload {
@@ -134,12 +134,13 @@ export function ListLayout({
   title,
   className,
 }: ListLayoutProps) {
+  const translate = useTranslate();
   const { defaultTitle, error, isLoading, total } = useListContext();
 
   if (error) {
     return (
       <div className="rounded-md bg-danger-50 dark:bg-danger-900/20 p-4 text-sm text-danger-700 dark:text-danger-400">
-        <strong>Error loading data:</strong>{" "}
+        <strong>{translate("ra.page.error", { _: "Error loading data:" })}</strong>{" "}
         {error instanceof Error ? error.message : String(error)}
       </div>
     );
