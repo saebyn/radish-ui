@@ -2,7 +2,8 @@ import { Admin } from "@radish-ui/core";
 import { Resource } from "ra-core";
 import polyglotI18nProvider from "ra-i18n-polyglot";
 import englishMessages from "ra-language-english";
-import jsonServerProvider from "ra-data-json-server";
+import fakeDataProvider from "ra-data-fakerest";
+import { demoData } from "./data";
 import { Layout } from "./components/layout/layout";
 import { List } from "./components/list/list";
 import { Datagrid } from "./components/list/datagrid";
@@ -20,13 +21,13 @@ import { SimpleForm } from "./components/form/simple-form";
 import { TextInput } from "./components/form/text-input";
 import { NumberInput } from "./components/form/number-input";
 
-const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");
+const dataProvider = fakeDataProvider(demoData);
 
 const i18nProvider = polyglotI18nProvider(() => englishMessages, "en");
 
-function PostList() {
+function SeriesList() {
   return (
-    <List resource="posts" actions={<CreateButton />} pagination={<Pagination />}>
+    <List resource="series" actions={<CreateButton />} pagination={<Pagination />}>
       <Datagrid
         rowActions={
           <>
@@ -37,44 +38,52 @@ function PostList() {
       >
         <TextField source="id" label="ID" />
         <TextField source="title" label="Title" />
-        <NumberField source="userId" label="User ID" />
+        <TextField source="cadence" label="Cadence" />
+        <TextField source="status" label="Status" />
+        <NumberField source="owner_id" label="Owner ID" />
       </Datagrid>
     </List>
   );
 }
 
-function PostShow() {
+function SeriesShow() {
   return (
-    <Show resource="posts" actions={<EditButton />}>
+    <Show resource="series" actions={<EditButton />}>
       <SimpleShowLayout>
         <TextField source="id" label="ID" />
         <TextField source="title" label="Title" />
-        <TextField source="body" label="Body" />
-        <NumberField source="userId" label="User ID" />
+        <TextField source="cadence" label="Cadence" />
+        <TextField source="status" label="Status" />
+        <NumberField source="owner_id" label="Owner ID" />
+        <TextField source="created_at" label="Created At" />
       </SimpleShowLayout>
     </Show>
   );
 }
 
-function PostEdit() {
+function SeriesEdit() {
   return (
-    <Edit resource="posts">
+    <Edit resource="series">
       <SimpleForm>
         <TextInput source="title" label="Title" />
-        <TextInput source="body" label="Body" multiline rows={5} />
-        <NumberInput source="userId" label="User ID" min={1} />
+        <TextInput source="cadence" label="Cadence" />
+        <TextInput source="status" label="Status" />
+        <NumberInput source="owner_id" label="Owner ID" min={1} />
+        <TextInput source="created_at" label="Created At" />
       </SimpleForm>
     </Edit>
   );
 }
 
-function PostCreate() {
+function SeriesCreate() {
   return (
-    <Create resource="posts">
-      <SimpleForm submitLabel="Create Post">
+    <Create resource="series">
+      <SimpleForm submitLabel="Create Series">
         <TextInput source="title" label="Title" />
-        <TextInput source="body" label="Body" multiline rows={5} />
-        <NumberInput source="userId" label="User ID" min={1} />
+        <TextInput source="cadence" label="Cadence" />
+        <TextInput source="status" label="Status" />
+        <NumberInput source="owner_id" label="Owner ID" min={1} />
+        <TextInput source="created_at" label="Created At" />
       </SimpleForm>
     </Create>
   );
@@ -88,7 +97,13 @@ export default function App() {
       layout={Layout}
       title="radish-ui demo"
     >
-      <Resource name="posts" list={PostList} show={PostShow} edit={PostEdit} create={PostCreate} />
+      <Resource
+        name="series"
+        list={SeriesList}
+        show={SeriesShow}
+        edit={SeriesEdit}
+        create={SeriesCreate}
+      />
     </Admin>
   );
 }

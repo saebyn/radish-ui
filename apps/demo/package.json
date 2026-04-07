@@ -14,7 +14,7 @@
   "dependencies": {
     "@radish-ui/core": "workspace:*",
     "ra-core": "catalog:",
-    "ra-data-json-server": "catalog:",
+    "ra-data-fakerest": "catalog:",
     "ra-i18n-polyglot": "catalog:",
     "ra-language-english": "catalog:",
     "react": "catalog:",
