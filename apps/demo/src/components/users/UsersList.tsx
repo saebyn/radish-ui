@@ -1,11 +1,11 @@
 import { CreateButton } from "../button/create-button";
 import { DeleteButton } from "../button/delete-button";
 import { EditButton } from "../button/edit-button";
-import { NumberField } from "../field/number-field";
 import { TextField } from "../field/text-field";
 import { Datagrid } from "../list/datagrid";
 import { List } from "../list/list";
 import { Pagination } from "../list/pagination";
+import { UserBadge } from "../custom/UserBadge";
 
 export function UsersList() {
   return (
@@ -18,10 +18,8 @@ export function UsersList() {
           </>
         }
       >
-        <NumberField source="id" label="ID" />
-        <TextField source="name" label="Name" />
+        <UserBadge source="name" roleSource="role" label="User" />
         <TextField source="email" label="Email" />
-        <TextField source="role" label="Role" />
       </Datagrid>
     </List>
   );
