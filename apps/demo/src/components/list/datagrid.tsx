@@ -244,8 +244,13 @@ export function Datagrid({ children, rowActions, rowClick, label, className }: D
                         navigate(destination);
                       }
                     }}
+                    role={isClickable ? "button" : undefined}
                     tabIndex={isClickable ? 0 : undefined}
-                    aria-label={isClickable ? "Open record" : undefined}
+                    aria-label={
+                      isClickable
+                        ? translate("ra.action.open_record", { _: "Open record" })
+                        : undefined
+                    }
                   >
                     {columns.map((col, i) => (
                       <td

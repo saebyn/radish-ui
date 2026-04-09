@@ -28,13 +28,15 @@ export function ShowButton({ resource, label, className }: ShowButtonProps) {
   const createPath = useCreatePath();
   const resolvedLabel = label ?? translate("ra.action.show", { _: "Show" });
 
-  if (!record) return null;
+  const resolvedResource = resource ?? resourceContext;
+  if (!record || !resolvedResource) return null;
 
-  const path = createPath({
-    resource: resource ?? resourceContext ?? "",
+  const rawPath = createPath({
+    resource: resolvedResource,
     type: "show",
     id: record.id,
   });
+  const path = rawPath.startsWith("#") ? rawPath.slice(1) : rawPath;
 
   return (
     <Link

@@ -276,8 +276,16 @@ function ProjectShowContent() {
                   return (
                     <tr
                       key={ep.id}
+                      role="button"
+                      tabIndex={0}
                       className="cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
                       onClick={() => redirect("show", "episodes", ep.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          redirect("show", "episodes", ep.id);
+                        }
+                      }}
                     >
                       <td className="px-5 py-2.5 font-medium text-neutral-900 dark:text-neutral-100">
                         {ep.title}
