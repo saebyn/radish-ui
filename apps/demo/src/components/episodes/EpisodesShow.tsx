@@ -84,12 +84,16 @@ function EpisodeShowContent() {
   const record = useRecordContext<EpisodeRecord>();
   const redirect = useRedirect();
 
-  const { data: project } = useGetOne<ProjectRecord>("projects", {
-    id: record?.project_id ?? 0,
-  });
-  const { data: series } = useGetOne<SeriesRecord>("series", {
-    id: record?.series_id ?? 0,
-  });
+  const { data: project } = useGetOne<ProjectRecord>(
+    "projects",
+    { id: record?.project_id ?? 0 },
+    { enabled: !!record },
+  );
+  const { data: series } = useGetOne<SeriesRecord>(
+    "series",
+    { id: record?.series_id ?? 0 },
+    { enabled: !!record },
+  );
   const { data: users = [] } = useGetList<UserRecord>("users", {
     pagination: { page: 1, perPage: 100 },
     sort: { field: "id", order: "ASC" },

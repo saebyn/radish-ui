@@ -98,11 +98,10 @@ export function Datagrid({ children, rowActions, rowClick, label, className }: D
       if (!destination) return;
 
       const target = event.target as HTMLElement;
-      if (
-        target.closest(
-          "a,button,input,select,textarea,label,[role='button'],[data-no-row-click='true']",
-        )
-      ) {
+      const matched = target.closest(
+        "a,button,input,select,textarea,label,[role='button'],[data-no-row-click='true']",
+      );
+      if (matched && matched !== event.currentTarget) {
         return;
       }
 
