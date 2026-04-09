@@ -103,7 +103,7 @@
     {
       "name": "wizard-form",
       "files": ["src/form/wizard-form.tsx"],
-      "dependencies": ["@radish-ui/core"]
+      "dependencies": ["@radish-ui/core", "react-hook-form"]
     },
     {
       "name": "select-array-input",

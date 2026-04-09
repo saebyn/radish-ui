@@ -80,37 +80,77 @@ const COLUMNS: KanbanColumnDef[] = [
 interface ProjectCardProps {
   project: Project;
   owner?: User;
-  /** When true, renders as a static ghost clone inside DragOverlay */
-  overlay?: boolean;
 }
 
-function ProjectCard({ project, owner, overlay = false }: ProjectCardProps) {
+function ProjectCard({ project, owner }: ProjectCardProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: project.id,
   });
   const createPath = useCreatePath();
   const showPath = createPath({ resource: "projects", type: "show", id: project.id });
 
-  const style = overlay
-    ? {}
-    : {
-        transform: CSS.Translate.toString(transform),
-        opacity: isDragging ? 0.35 : undefined,
-      };
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    opacity: isDragging ? 0.35 : undefined,
+  };
 
   return (
     <div
-      ref={overlay ? undefined : setNodeRef}
+      ref={setNodeRef}
       style={style}
-      {...(overlay ? {} : { ...listeners, ...attributes })}
-      data-testid={overlay ? undefined : `kanban-card-${project.id}`}
+      {...listeners}
+      {...attributes}
+      data-testid={`kanban-card-${project.id}`}
       className={cn(
         "bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-3",
         "hover:shadow-md hover:border-primary-300 dark:hover:border-primary-600 transition-all",
-        overlay ? "shadow-xl rotate-1 cursor-grabbing" : "cursor-grab active:cursor-grabbing",
+        "cursor-grab active:cursor-grabbing",
       )}
     >
       {/* Title — stops pointer-down from reaching the drag listeners */}
+      <Link
+        to={showPath}
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+        className="block font-semibold text-sm text-primary-700 dark:text-primary-400 hover:underline line-clamp-2 leading-snug mb-2"
+      >
+        {project.title}
+      </Link>
+
+      {project.description && (
+        <p className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2 mb-2">
+          {project.description}
+        </p>
+      )}
+
+      <div className="flex items-center justify-between gap-2 text-xs">
+        {owner && <UserBadge name={owner.name} email={owner.email} role={owner.role} />}
+        {project.streams && project.streams.length > 0 && (
+          <span className="shrink-0 text-neutral-500 dark:text-neutral-400">
+            {project.streams.length} stream
+            {project.streams.length !== 1 ? "s" : ""}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Non-draggable clone rendered inside DragOverlay.
+ * Kept separate to avoid registering a duplicate useDraggable ID for the same project.
+ */
+function ProjectCardOverlay({ project, owner }: ProjectCardProps) {
+  const createPath = useCreatePath();
+  const showPath = createPath({ resource: "projects", type: "show", id: project.id });
+
+  return (
+    <div
+      className={cn(
+        "bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-3",
+        "shadow-xl rotate-1 cursor-grabbing",
+      )}
+    >
       <Link
         to={showPath}
         onPointerDown={(e) => e.stopPropagation()}
@@ -262,7 +302,7 @@ export function ProjectKanban() {
 
         <DragOverlay dropAnimation={{ duration: 150, easing: "ease" }}>
           {activeProject ? (
-            <ProjectCard project={activeProject} owner={userMap[activeProject.owner_id]} overlay />
+            <ProjectCardOverlay project={activeProject} owner={userMap[activeProject.owner_id]} />
           ) : null}
         </DragOverlay>
       </DndContext>

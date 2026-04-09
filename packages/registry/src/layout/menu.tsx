@@ -7,7 +7,7 @@ function humanize(str: string): string {
   return str
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/_/g, " ")
-    .replace(/^./, (c) => c.toUpperCase());
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 interface MenuProps {

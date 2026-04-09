@@ -17,12 +17,14 @@ import { useGetList } from "ra-core";
 const ACTION_LABELS: Record<string, string> = {
   project_created: "created project",
   project_status_changed: "changed project status",
+  status_transition: "changed status",
   episode_published: "published episode",
 };
 
 const ACTION_COLORS: Record<string, string> = {
   project_created: "bg-success-500 dark:bg-success-400",
   project_status_changed: "bg-primary-500 dark:bg-primary-400",
+  status_transition: "bg-primary-500 dark:bg-primary-400",
   episode_published: "bg-warning-500 dark:bg-warning-400",
 };
 

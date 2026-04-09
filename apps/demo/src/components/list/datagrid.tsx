@@ -231,11 +231,21 @@ export function Datagrid({ children, rowActions, rowClick, label, className }: D
                     onKeyDown={(event) => {
                       if (!destination) return;
                       if (event.key === "Enter" || event.key === " ") {
+                        const target = event.target as HTMLElement;
+                        if (
+                          target !== event.currentTarget &&
+                          target.closest(
+                            "a,button,input,select,textarea,label,[role='button'],[data-no-row-click='true']",
+                          )
+                        ) {
+                          return;
+                        }
                         event.preventDefault();
                         navigate(destination);
                       }
                     }}
                     tabIndex={isClickable ? 0 : undefined}
+                    role={isClickable ? "link" : undefined}
                     aria-label={isClickable ? "Open record" : undefined}
                   >
                     {columns.map((col, i) => (
