@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ListContextProvider } from "ra-core";
+import { MemoryRouter } from "react-router-dom";
 import { Datagrid } from "./datagrid";
 import { TextField } from "../field/text-field";
 
@@ -35,6 +36,10 @@ const baseListContext = {
   hasPreviousPage: false,
 };
 
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <MemoryRouter>{children}</MemoryRouter>
+);
+
 describe("Datagrid", () => {
   it("renders column headers derived from child label props", () => {
     render(
@@ -46,6 +51,7 @@ describe("Datagrid", () => {
           <TextField source="author" label="Author" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText("Title")).toBeInTheDocument();
     expect(screen.getByText("Author")).toBeInTheDocument();
@@ -60,6 +66,7 @@ describe("Datagrid", () => {
           <TextField source="title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText("Title")).toBeInTheDocument();
   });
@@ -73,6 +80,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText("First Post")).toBeInTheDocument();
     expect(screen.getByText("Second Post")).toBeInTheDocument();
@@ -85,6 +93,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText(/Loading/)).toBeInTheDocument();
   });
@@ -96,6 +105,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText(/No records found/)).toBeInTheDocument();
   });
@@ -109,6 +119,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText("Actions")).toBeInTheDocument();
   });
@@ -122,6 +133,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     // One action button per row
     expect(screen.getAllByText("Edit")).toHaveLength(records.length);
@@ -136,6 +148,7 @@ describe("Datagrid", () => {
           <TextField source="author" label="Author" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText("Alice")).toBeInTheDocument();
     expect(screen.getByText("Bob")).toBeInTheDocument();
@@ -156,6 +169,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(container.querySelector("table")).toHaveAttribute("aria-label", "Posts");
   });
@@ -169,6 +183,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(container.querySelector("table")).toHaveAttribute("aria-label", "My custom label");
   });
