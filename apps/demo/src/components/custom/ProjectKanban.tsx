@@ -21,7 +21,8 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { useGetList, useUpdate } from "ra-core";
+import { useGetList, useUpdate, useCreatePath } from "ra-core";
+import { Link } from "react-router-dom";
 import { UserBadge } from "./UserBadge";
 import { cn } from "@radish-ui/core";
 
@@ -87,6 +88,8 @@ function ProjectCard({ project, owner, overlay = false }: ProjectCardProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: project.id,
   });
+  const createPath = useCreatePath();
+  const showPath = createPath({ resource: "projects", type: "show", id: project.id });
 
   const style = overlay
     ? {}
@@ -101,14 +104,20 @@ function ProjectCard({ project, owner, overlay = false }: ProjectCardProps) {
       style={style}
       {...(overlay ? {} : { ...listeners, ...attributes })}
       className={cn(
-        "select-none bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-3",
+        "bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-3",
         "hover:shadow-md hover:border-primary-300 dark:hover:border-primary-600 transition-all",
         overlay ? "shadow-xl rotate-1 cursor-grabbing" : "cursor-grab active:cursor-grabbing",
       )}
     >
-      <h4 className="font-semibold text-sm text-neutral-900 dark:text-white line-clamp-2 mb-2">
+      {/* Title — stops pointer-down from reaching the drag listeners */}
+      <Link
+        to={showPath}
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+        className="block font-semibold text-sm text-primary-700 dark:text-primary-400 hover:underline line-clamp-2 leading-snug mb-2"
+      >
         {project.title}
-      </h4>
+      </Link>
 
       {project.description && (
         <p className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2 mb-2">
