@@ -187,6 +187,14 @@
           "localHash": "sha256-ba08c2e37b7e334168208f8f063374018cbba662d742fb18bc0ea2ec367530ee"
         }
       }
+    },
+    "reference-input": {
+      "files": {
+        "reference/reference-input.tsx": {
+          "registryHash": "sha256-09f6c02ef246e01b0d4bfdefa5f94126b6c86baba9040d7c54c94bb08ddd2fa6",
+          "localHash": "sha256-09f6c02ef246e01b0d4bfdefa5f94126b6c86baba9040d7c54c94bb08ddd2fa6"
+        }
+      }
     }
   }
 }

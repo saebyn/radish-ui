@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import { useGetList } from "ra-core";
 import { Create } from "../detail/create";
 import { SelectArrayInput } from "../form/select-array-input";
-import { NumberInput } from "../form/number-input";
 import { SelectInput } from "../form/select-input";
 import { TextInput } from "../form/text-input";
 import { WizardForm } from "../form/wizard-form";
+import { ReferenceInput } from "../reference/reference-input";
 
 export function ProjectsCreate() {
   const { data: streams = [] } = useGetList("streams", {
@@ -30,8 +30,18 @@ export function ProjectsCreate() {
         </WizardForm.Step>
 
         <WizardForm.Step label="Ownership" description="Set series, owner, and workflow status.">
-          <NumberInput source="series_id" label="Series ID" min={1} />
-          <NumberInput source="owner_id" label="Owner ID" min={1} />
+          <ReferenceInput
+            source="series_id"
+            reference="series"
+            optionText="title"
+            parse={(v) => (v === "" ? null : Number(v))}
+          />
+          <ReferenceInput
+            source="owner_id"
+            reference="users"
+            optionText="name"
+            parse={(v) => (v === "" ? null : Number(v))}
+          />
           <SelectInput
             source="status"
             label="Status"

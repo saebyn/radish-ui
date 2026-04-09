@@ -2,10 +2,10 @@ import { useMemo } from "react";
 import { useGetList } from "ra-core";
 import { Edit } from "../detail/edit";
 import { SelectArrayInput } from "../form/select-array-input";
-import { NumberInput } from "../form/number-input";
 import { SelectInput } from "../form/select-input";
 import { SimpleForm } from "../form/simple-form";
 import { TextInput } from "../form/text-input";
+import { ReferenceInput } from "../reference/reference-input";
 
 export function ProjectsEdit() {
   const { data: streams = [] } = useGetList("streams", {
@@ -31,8 +31,18 @@ export function ProjectsEdit() {
       <SimpleForm>
         <TextInput source="title" label="Title" />
         <TextInput source="description" label="Description" multiline rows={4} />
-        <NumberInput source="series_id" label="Series ID" min={1} />
-        <NumberInput source="owner_id" label="Owner ID" min={1} />
+        <ReferenceInput
+          source="series_id"
+          reference="series"
+          optionText="title"
+          parse={(v) => (v === "" ? null : Number(v))}
+        />
+        <ReferenceInput
+          source="owner_id"
+          reference="users"
+          optionText="name"
+          parse={(v) => (v === "" ? null : Number(v))}
+        />
         <SelectInput
           source="status"
           label="Status"
