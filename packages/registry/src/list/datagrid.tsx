@@ -74,16 +74,15 @@ export function Datagrid({ children, rowActions, rowClick, label, className }: D
 
   const resolveRowDestination = React.useCallback(
     (record: RaRecord): string | null => {
-      if (!resource || record?.id == null) return null;
-
       const action =
         typeof rowClick === "function"
-          ? rowClick(record.id, resource, record)
+          ? rowClick(record.id, resource ?? "", record)
           : (rowClick ?? defaultRowClick);
 
       if (!action) return null;
 
       if (action === "show" || action === "edit") {
+        if (!resource || record?.id == null) return null;
         const path = createPath({ resource, type: action, id: record.id });
         return normalizePath(path);
       }
