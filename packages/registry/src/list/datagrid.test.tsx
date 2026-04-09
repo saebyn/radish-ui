@@ -1,13 +1,18 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { ListContextProvider, ResourceContextProvider, ResourceDefinitionContextProvider } from "ra-core";
+import {
+  ListContextProvider,
+  ResourceContextProvider,
+  ResourceDefinitionContextProvider,
+} from "ra-core";
 import { MemoryRouter } from "react-router-dom";
+import type * as ReactRouterDom from "react-router-dom";
 import { Datagrid } from "./datagrid";
 import { TextField } from "../field/text-field";
 
 const mockNavigate = vi.fn();
 vi.mock("react-router-dom", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("react-router-dom")>();
+  const actual = await importOriginal<typeof ReactRouterDom>();
   return { ...actual, useNavigate: () => mockNavigate };
 });
 
@@ -200,7 +205,15 @@ describe("Datagrid rowClick", () => {
     const { container } = render(
       <MemoryRouter>
         <ResourceDefinitionContextProvider
-          definitions={{ posts: { name: "posts", hasList: true, hasShow: true, hasEdit: false, hasCreate: false } }}
+          definitions={{
+            posts: {
+              name: "posts",
+              hasList: true,
+              hasShow: true,
+              hasEdit: false,
+              hasCreate: false,
+            },
+          }}
         >
           <ResourceContextProvider value="posts">
             <ListContextProvider
@@ -226,7 +239,15 @@ describe("Datagrid rowClick", () => {
     const { container } = render(
       <MemoryRouter>
         <ResourceDefinitionContextProvider
-          definitions={{ posts: { name: "posts", hasList: true, hasShow: false, hasEdit: true, hasCreate: false } }}
+          definitions={{
+            posts: {
+              name: "posts",
+              hasList: true,
+              hasShow: false,
+              hasEdit: true,
+              hasCreate: false,
+            },
+          }}
         >
           <ResourceContextProvider value="posts">
             <ListContextProvider
@@ -252,7 +273,15 @@ describe("Datagrid rowClick", () => {
     const { container } = render(
       <MemoryRouter>
         <ResourceDefinitionContextProvider
-          definitions={{ posts: { name: "posts", hasList: true, hasShow: false, hasEdit: false, hasCreate: false } }}
+          definitions={{
+            posts: {
+              name: "posts",
+              hasList: true,
+              hasShow: false,
+              hasEdit: false,
+              hasCreate: false,
+            },
+          }}
         >
           <ResourceContextProvider value="posts">
             <ListContextProvider
