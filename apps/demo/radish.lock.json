@@ -179,6 +179,14 @@
           "localHash": "sha256-7f9b782278e2e5a06ae524dc05f1f92013a5dcac69933c3d6bbc9f759fdc7af7"
         }
       }
+    },
+    "wizard-form": {
+      "files": {
+        "form/wizard-form.tsx": {
+          "registryHash": "sha256-ba08c2e37b7e334168208f8f063374018cbba662d742fb18bc0ea2ec367530ee",
+          "localHash": "sha256-ba08c2e37b7e334168208f8f063374018cbba662d742fb18bc0ea2ec367530ee"
+        }
+      }
     }
   }
 }
