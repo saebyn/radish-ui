@@ -15,6 +15,39 @@ import { EditButton } from "../button/edit-button";
 import { DeleteButton } from "../button/delete-button";
 import { UserBadge } from "../custom/UserBadge";
 import { ActivityFeed } from "../custom/ActivityFeed";
+import { ApprovalWorkflow, type TransitionMap } from "../custom/ApprovalWorkflow";
+
+// ─── Project status workflow ──────────────────────────────────────────────────
+
+const PROJECT_STATUS_TRANSITIONS: TransitionMap = {
+  draft: [
+    {
+      to: "in_review",
+      label: "Submit for Review",
+      confirmLabel: "Submit",
+      prompt: "This will move the project to In Review and notify reviewers.",
+      variant: "primary",
+    },
+  ],
+  in_review: [
+    {
+      to: "published",
+      label: "Approve & Publish",
+      confirmLabel: "Approve",
+      prompt:
+        "This will mark the project as Published. This action should only be taken once all episodes are ready.",
+      variant: "success",
+    },
+    {
+      to: "draft",
+      label: "Reject",
+      confirmLabel: "Reject",
+      prompt:
+        "This will send the project back to Draft. Add a note to explain what needs to change.",
+      variant: "danger",
+    },
+  ],
+};
 
 // ─── Status badge ────────────────────────────────────────────────────────────
 
@@ -311,6 +344,7 @@ export function ProjectsShow() {
       resource="projects"
       actions={
         <div className="flex items-center gap-2">
+          <ApprovalWorkflow resource="projects" transitions={PROJECT_STATUS_TRANSITIONS} />
           <EditButton />
           <DeleteButton />
         </div>

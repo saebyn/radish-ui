@@ -49,8 +49,8 @@ describe("lockfile read/write", () => {
 });
 
 describe("shouldUpdate", () => {
-  const HASH_A = "sha256-" + "a".repeat(64);
-  const HASH_B = "sha256-" + "b".repeat(64);
+  const HASH_A = `sha256-${"a".repeat(64)}`;
+  const HASH_B = `sha256-${"b".repeat(64)}`;
 
   it("force=true always returns update=true", () => {
     const result = shouldUpdate(HASH_B, HASH_A, HASH_B, HASH_A, true);

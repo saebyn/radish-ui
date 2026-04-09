@@ -27,8 +27,9 @@ function NavigationSpy({ onNavigate }: { onNavigate: (path: string) => void }) {
  * Builds a minimal ra-core data provider where `delete` is replaced by a spy.
  * All other methods resolve immediately so the context boots without errors.
  */
+const noop = () => Promise.resolve({ data: [] as never });
+
 function makeMockDataProvider(onDelete: (resource: string, params: { id: unknown }) => void) {
-  const noop = () => Promise.resolve({ data: [] as never });
   return {
     getList: () => Promise.resolve({ data: [], total: 0 }),
     getOne: () => Promise.resolve({ data: { id: 1 } as never }),
