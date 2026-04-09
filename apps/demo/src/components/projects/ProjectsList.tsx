@@ -9,8 +9,9 @@ import { Datagrid } from "../list/datagrid";
 import { List } from "../list/list";
 import { Pagination } from "../list/pagination";
 import { ProjectKanban } from "../custom/ProjectKanban";
+import { ProjectTimeline } from "../custom/ProjectTimeline";
 
-type ViewMode = "list" | "board";
+type ViewMode = "list" | "board" | "timeline";
 
 function ViewToggle({ view, onChange }: { view: ViewMode; onChange: (v: ViewMode) => void }) {
   return (
@@ -35,6 +36,16 @@ function ViewToggle({ view, onChange }: { view: ViewMode; onChange: (v: ViewMode
       >
         Board
       </button>
+      <button
+        onClick={() => onChange("timeline")}
+        className={`px-3 py-1.5 transition-colors ${
+          view === "timeline"
+            ? "bg-primary-600 text-white"
+            : "bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700"
+        }`}
+      >
+        Timeline
+      </button>
     </div>
   );
 }
@@ -51,6 +62,10 @@ export function ProjectsList() {
       {view === "board" ? (
         <div className="px-4 pb-4">
           <ProjectKanban />
+        </div>
+      ) : view === "timeline" ? (
+        <div className="px-4 pb-4">
+          <ProjectTimeline />
         </div>
       ) : (
         <List resource="projects" actions={<CreateButton />} pagination={<Pagination />}>
