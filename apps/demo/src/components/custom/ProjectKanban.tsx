@@ -103,6 +103,7 @@ function ProjectCard({ project, owner, overlay = false }: ProjectCardProps) {
       ref={overlay ? undefined : setNodeRef}
       style={style}
       {...(overlay ? {} : { ...listeners, ...attributes })}
+      data-testid={overlay ? undefined : `kanban-card-${project.id}`}
       className={cn(
         "bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-3",
         "hover:shadow-md hover:border-primary-300 dark:hover:border-primary-600 transition-all",
@@ -151,7 +152,10 @@ function KanbanColumn({ column, projects, users }: KanbanColumnProps) {
   const columnProjects = projects.filter((p) => p.status === column.status);
 
   return (
-    <div className="flex flex-col flex-1 min-w-56 gap-0">
+    <div
+      className="flex flex-col flex-1 min-w-56 gap-0"
+      data-testid={`kanban-column-${column.status}`}
+    >
       {/* Column header */}
       <div
         className={cn(

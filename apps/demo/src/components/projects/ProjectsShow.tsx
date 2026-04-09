@@ -62,6 +62,8 @@ function StatusBadge({ status }: { status: string }) {
   const label = status.replace(/_/g, " ");
   return (
     <span
+      data-testid="project-status-badge"
+      data-status={status}
       className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${cls}`}
     >
       {label}

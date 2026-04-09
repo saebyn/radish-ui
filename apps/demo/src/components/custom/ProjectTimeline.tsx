@@ -124,6 +124,7 @@ export function ProjectTimeline() {
               key={value}
               type="button"
               onClick={() => setStatusFilter(value)}
+              data-testid={`timeline-filter-${value}`}
               className={cn(
                 "rounded-full px-3 py-1 text-xs font-medium capitalize transition-colors",
                 statusFilter === value
@@ -141,6 +142,7 @@ export function ProjectTimeline() {
           <button
             type="button"
             onClick={() => setSort((current) => (current === "newest" ? "oldest" : "newest"))}
+            data-testid="timeline-sort-toggle"
             className="rounded-md border border-neutral-200 bg-canvas-0 px-2.5 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-canvas-800 dark:text-neutral-200 dark:hover:bg-canvas-700"
           >
             {sort === "newest" ? "Newest first" : "Oldest first"}
@@ -181,6 +183,7 @@ export function ProjectTimeline() {
                   return (
                     <article
                       key={project.id}
+                      data-testid={`timeline-item-${project.id}`}
                       className="relative ml-2 rounded-lg border border-neutral-200 bg-canvas-0 p-4 pl-8 shadow-sm dark:border-neutral-700 dark:bg-canvas-800"
                     >
                       <span
@@ -195,6 +198,7 @@ export function ProjectTimeline() {
                         <div className="min-w-0 space-y-1">
                           <Link
                             to={to}
+                            data-testid={`timeline-link-${project.id}`}
                             className="block truncate text-sm font-semibold text-primary-700 hover:underline dark:text-primary-400"
                           >
                             {project.title}
