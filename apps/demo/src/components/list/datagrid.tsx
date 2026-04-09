@@ -245,7 +245,6 @@ export function Datagrid({ children, rowActions, rowClick, label, className }: D
                       }
                     }}
                     tabIndex={isClickable ? 0 : undefined}
-                    role={isClickable ? "link" : undefined}
                     aria-label={isClickable ? "Open record" : undefined}
                   >
                     {columns.map((col, i) => (
