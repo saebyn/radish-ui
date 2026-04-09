@@ -141,7 +141,9 @@ function TransitionModal({
         "rounded-xl border border-neutral-200 bg-canvas-0 p-0 shadow-xl",
         "backdrop:bg-black/40",
         "dark:border-neutral-700 dark:bg-canvas-800",
-        "open:flex open:flex-col w-full max-w-md",
+        "w-full max-w-md max-h-[calc(100vh-2rem)] overflow-auto",
+        "open:flex open:flex-col",
+        "open:fixed open:inset-0 open:m-auto",
       )}
     >
       <div className="flex flex-col gap-4 p-6">
