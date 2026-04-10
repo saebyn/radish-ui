@@ -15,7 +15,7 @@ test.describe("Projects list", () => {
       page.getByRole("cell", { name: "Creator Spotlight - Spring Cut", exact: true }),
     ).toBeVisible();
 
-    const firstDataRow = page.getByRole("row").nth(1);
+    const firstDataRow = page.getByRole("button", { name: /open record/i }).first();
     await expect(firstDataRow.getByRole("link", { name: /show/i })).toBeVisible();
     await expect(firstDataRow.getByRole("link", { name: /edit/i })).toBeVisible();
     await expect(firstDataRow.getByRole("button", { name: /delete/i })).toBeVisible();
