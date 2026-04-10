@@ -1,4 +1,4 @@
-import { useRecordContext, useCreatePath, useResourceContext } from "ra-core";
+import { useRecordContext, useCreatePath, useResourceContext, useTranslate } from "ra-core";
 import { Link } from "react-router-dom";
 import { cn } from "@radish-ui/core";
 
@@ -21,18 +21,22 @@ interface EditButtonProps {
  *   <EditButton />
  * </Datagrid>
  */
-export function EditButton({ resource, label = "Edit", className }: EditButtonProps) {
+export function EditButton({ resource, label, className }: EditButtonProps) {
+  const translate = useTranslate();
   const record = useRecordContext();
   const resourceContext = useResourceContext();
   const createPath = useCreatePath();
+  const resolvedLabel = label ?? translate("ra.action.edit", { _: "Edit" });
 
-  if (!record) return null;
+  const resolvedResource = resource ?? resourceContext;
+  if (!record || !resolvedResource) return null;
 
-  const path = createPath({
-    resource: resource ?? resourceContext ?? "",
+  const rawPath = createPath({
+    resource: resolvedResource,
     type: "edit",
     id: record.id,
   });
+  const path = rawPath.startsWith("#") ? rawPath.slice(1) : rawPath;
 
   return (
     <Link
@@ -43,7 +47,7 @@ export function EditButton({ resource, label = "Edit", className }: EditButtonPr
         className,
       )}
     >
-      {label}
+      {resolvedLabel}
     </Link>
   );
 }

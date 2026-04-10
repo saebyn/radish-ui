@@ -1,13 +1,36 @@
 import React from "react";
-import { useListContext, RecordContextProvider, useTranslate } from "ra-core";
+import {
+  useListContext,
+  RecordContextProvider,
+  useTranslate,
+  useCreatePath,
+  useResourceContext,
+  useResourceDefinitions,
+  type Identifier,
+  type RaRecord,
+} from "ra-core";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@radish-ui/core";
 import { Skeleton, SkeletonContainer } from "../skeleton/skeleton";
+
+type RowClickHandler = (
+  id: Identifier,
+  resource: string,
+  record: RaRecord,
+) => "edit" | "show" | false | string;
+
+type RowClickValue = "edit" | "show" | false | string | RowClickHandler;
 
 interface DatagridProps {
   /** Field components (e.g. <TextField source="title" />) */
   children: React.ReactElement | React.ReactElement[];
   /** Optional action buttons rendered at the end of each row (e.g. <EditButton /><DeleteButton />) */
   rowActions?: React.ReactNode;
+  /**
+   * Action to trigger when the user clicks a row.
+   * Defaults to: "show" if available for the resource, else "edit" if available, else not clickable.
+   */
+  rowClick?: RowClickValue;
   /** Accessible label for the table. Defaults to the resource's default title. */
   label?: string;
   className?: string;
@@ -28,14 +51,63 @@ interface DatagridProps {
  *   <TextField source="title" />
  * </Datagrid>
  */
-export function Datagrid({ children, rowActions, label, className }: DatagridProps) {
+export function Datagrid({ children, rowActions, rowClick, label, className }: DatagridProps) {
   const translate = useTranslate();
   const { data, isLoading, defaultTitle } = useListContext();
+  const resource = useResourceContext();
+  const resourceDefinitions = useResourceDefinitions();
+  const createPath = useCreatePath();
+  const navigate = useNavigate();
 
   const columns = React.Children.toArray(children) as React.ReactElement<{
     source?: string;
     label?: string;
   }>[];
+
+  const defaultRowClick = React.useMemo<"show" | "edit" | false>(() => {
+    if (!resource) return false;
+    const definition = resourceDefinitions[resource];
+    if (definition?.hasShow) return "show";
+    if (definition?.hasEdit) return "edit";
+    return false;
+  }, [resource, resourceDefinitions]);
+
+  const resolveRowDestination = React.useCallback(
+    (record: RaRecord): string | null => {
+      const action =
+        typeof rowClick === "function"
+          ? rowClick(record.id, resource ?? "", record)
+          : (rowClick ?? defaultRowClick);
+
+      if (!action) return null;
+
+      if (action === "show" || action === "edit") {
+        if (!resource || record?.id == null) return null;
+        const path = createPath({ resource, type: action, id: record.id });
+        return normalizePath(path);
+      }
+
+      return normalizePath(action);
+    },
+    [createPath, defaultRowClick, resource, rowClick],
+  );
+
+  const handleRowClick = React.useCallback(
+    (event: React.MouseEvent<HTMLTableRowElement>, destination: string | null) => {
+      if (!destination) return;
+
+      const target = event.target as HTMLElement;
+      const matched = target.closest(
+        "a,button,input,select,textarea,label,[role='button'],[data-no-row-click='true']",
+      );
+      if (matched && matched !== event.currentTarget) {
+        return;
+      }
+
+      navigate(destination);
+    },
+    [navigate],
+  );
 
   if (isLoading) {
     return (
@@ -142,21 +214,58 @@ export function Datagrid({ children, rowActions, label, className }: DatagridPro
         <tbody className="divide-y divide-neutral-100 dark:divide-neutral-700">
           {data.map((record) => (
             <RecordContextProvider key={record.id} value={record}>
-              <tr className="hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors">
-                {columns.map((col, i) => (
-                  <td
-                    key={col.props.source ?? i}
-                    className="px-4 py-3 text-neutral-700 dark:text-neutral-300"
+              {(() => {
+                const destination = resolveRowDestination(record);
+                const isClickable = destination != null;
+
+                return (
+                  <tr
+                    className={cn(
+                      "transition-colors",
+                      "hover:bg-primary-50 dark:hover:bg-primary-900/30",
+                      isClickable && "cursor-pointer",
+                    )}
+                    onClick={(event) => handleRowClick(event, destination)}
+                    onKeyDown={(event) => {
+                      if (!destination) return;
+                      if (event.key === "Enter" || event.key === " ") {
+                        const target = event.target as HTMLElement;
+                        if (
+                          target !== event.currentTarget &&
+                          target.closest(
+                            "a,button,input,select,textarea,label,[role='button'],[data-no-row-click='true']",
+                          )
+                        ) {
+                          return;
+                        }
+                        event.preventDefault();
+                        navigate(destination);
+                      }
+                    }}
+                    role={isClickable ? "button" : undefined}
+                    tabIndex={isClickable ? 0 : undefined}
+                    aria-label={
+                      isClickable
+                        ? translate("ra.action.open_record", { _: "Open record" })
+                        : undefined
+                    }
                   >
-                    {col}
-                  </td>
-                ))}
-                {rowActions && (
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-2">{rowActions}</div>
-                  </td>
-                )}
-              </tr>
+                    {columns.map((col, i) => (
+                      <td
+                        key={col.props.source ?? i}
+                        className="px-4 py-3 text-neutral-700 dark:text-neutral-300"
+                      >
+                        {col}
+                      </td>
+                    ))}
+                    {rowActions && (
+                      <td className="px-4 py-3 text-right">
+                        <div className="flex items-center justify-end gap-2">{rowActions}</div>
+                      </td>
+                    )}
+                  </tr>
+                );
+              })()}
             </RecordContextProvider>
           ))}
         </tbody>
@@ -167,4 +276,8 @@ export function Datagrid({ children, rowActions, label, className }: DatagridPro
 
 function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function normalizePath(path: string) {
+  return path.startsWith("#") ? path.slice(1) : path;
 }

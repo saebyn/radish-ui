@@ -56,6 +56,11 @@
       "dependencies": ["@radish-ui/core"]
     },
     {
+      "name": "show-button",
+      "files": ["src/button/show-button.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
       "name": "delete-button",
       "files": ["src/button/delete-button.tsx"],
       "dependencies": ["@radish-ui/core"]
@@ -93,6 +98,16 @@
         "src/form/select-input.tsx",
         "src/form/boolean-input.tsx"
       ],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "wizard-form",
+      "files": ["src/form/wizard-form.tsx"],
+      "dependencies": ["@radish-ui/core", "react-hook-form"]
+    },
+    {
+      "name": "select-array-input",
+      "files": ["src/form/select-array-input.tsx"],
       "dependencies": ["@radish-ui/core"]
     },
     {

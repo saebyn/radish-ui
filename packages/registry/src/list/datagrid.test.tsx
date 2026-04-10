@@ -1,8 +1,20 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { ListContextProvider } from "ra-core";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import {
+  ListContextProvider,
+  ResourceContextProvider,
+  ResourceDefinitionContextProvider,
+} from "ra-core";
+import { MemoryRouter } from "react-router-dom";
+import type * as ReactRouterDom from "react-router-dom";
 import { Datagrid } from "./datagrid";
 import { TextField } from "../field/text-field";
+
+const mockNavigate = vi.fn();
+vi.mock("react-router-dom", async (importOriginal) => {
+  const actual = await importOriginal<typeof ReactRouterDom>();
+  return { ...actual, useNavigate: () => mockNavigate };
+});
 
 const records = [
   { id: 1, title: "First Post", author: "Alice" },
@@ -35,6 +47,10 @@ const baseListContext = {
   hasPreviousPage: false,
 };
 
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <MemoryRouter>{children}</MemoryRouter>
+);
+
 describe("Datagrid", () => {
   it("renders column headers derived from child label props", () => {
     render(
@@ -46,6 +62,7 @@ describe("Datagrid", () => {
           <TextField source="author" label="Author" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText("Title")).toBeInTheDocument();
     expect(screen.getByText("Author")).toBeInTheDocument();
@@ -60,6 +77,7 @@ describe("Datagrid", () => {
           <TextField source="title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText("Title")).toBeInTheDocument();
   });
@@ -73,6 +91,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText("First Post")).toBeInTheDocument();
     expect(screen.getByText("Second Post")).toBeInTheDocument();
@@ -85,6 +104,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText(/Loading/)).toBeInTheDocument();
   });
@@ -96,6 +116,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText(/No records found/)).toBeInTheDocument();
   });
@@ -109,6 +130,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText("Actions")).toBeInTheDocument();
   });
@@ -122,6 +144,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     // One action button per row
     expect(screen.getAllByText("Edit")).toHaveLength(records.length);
@@ -136,6 +159,7 @@ describe("Datagrid", () => {
           <TextField source="author" label="Author" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(screen.getByText("Alice")).toBeInTheDocument();
     expect(screen.getByText("Bob")).toBeInTheDocument();
@@ -156,6 +180,7 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(container.querySelector("table")).toHaveAttribute("aria-label", "Posts");
   });
@@ -169,7 +194,150 @@ describe("Datagrid", () => {
           <TextField source="title" label="Title" />
         </Datagrid>
       </ListContextProvider>,
+      { wrapper },
     );
     expect(container.querySelector("table")).toHaveAttribute("aria-label", "My custom label");
+  });
+});
+
+describe("Datagrid rowClick", () => {
+  it("rows have role='button' and tabIndex=0 when resource has hasShow", () => {
+    const { container } = render(
+      <MemoryRouter>
+        <ResourceDefinitionContextProvider
+          definitions={{
+            posts: {
+              name: "posts",
+              hasList: true,
+              hasShow: true,
+              hasEdit: false,
+              hasCreate: false,
+            },
+          }}
+        >
+          <ResourceContextProvider value="posts">
+            <ListContextProvider
+              value={{ ...baseListContext, data: records, total: records.length, isLoading: false }}
+            >
+              <Datagrid>
+                <TextField source="title" label="Title" />
+              </Datagrid>
+            </ListContextProvider>
+          </ResourceContextProvider>
+        </ResourceDefinitionContextProvider>
+      </MemoryRouter>,
+    );
+    const rows = container.querySelectorAll("tbody tr");
+    expect(rows.length).toBeGreaterThan(0);
+    rows.forEach((row) => {
+      expect(row).toHaveAttribute("role", "button");
+      expect(row).toHaveAttribute("tabindex", "0");
+    });
+  });
+
+  it("rows have role='button' and tabIndex=0 when resource has hasEdit but not hasShow", () => {
+    const { container } = render(
+      <MemoryRouter>
+        <ResourceDefinitionContextProvider
+          definitions={{
+            posts: {
+              name: "posts",
+              hasList: true,
+              hasShow: false,
+              hasEdit: true,
+              hasCreate: false,
+            },
+          }}
+        >
+          <ResourceContextProvider value="posts">
+            <ListContextProvider
+              value={{ ...baseListContext, data: records, total: records.length, isLoading: false }}
+            >
+              <Datagrid>
+                <TextField source="title" label="Title" />
+              </Datagrid>
+            </ListContextProvider>
+          </ResourceContextProvider>
+        </ResourceDefinitionContextProvider>
+      </MemoryRouter>,
+    );
+    const rows = container.querySelectorAll("tbody tr");
+    expect(rows.length).toBeGreaterThan(0);
+    rows.forEach((row) => {
+      expect(row).toHaveAttribute("role", "button");
+      expect(row).toHaveAttribute("tabindex", "0");
+    });
+  });
+
+  it("rows have no role or tabIndex when resource has neither hasShow nor hasEdit", () => {
+    const { container } = render(
+      <MemoryRouter>
+        <ResourceDefinitionContextProvider
+          definitions={{
+            posts: {
+              name: "posts",
+              hasList: true,
+              hasShow: false,
+              hasEdit: false,
+              hasCreate: false,
+            },
+          }}
+        >
+          <ResourceContextProvider value="posts">
+            <ListContextProvider
+              value={{ ...baseListContext, data: records, total: records.length, isLoading: false }}
+            >
+              <Datagrid>
+                <TextField source="title" label="Title" />
+              </Datagrid>
+            </ListContextProvider>
+          </ResourceContextProvider>
+        </ResourceDefinitionContextProvider>
+      </MemoryRouter>,
+    );
+    const rows = container.querySelectorAll("tbody tr");
+    expect(rows.length).toBeGreaterThan(0);
+    rows.forEach((row) => {
+      expect(row).not.toHaveAttribute("role", "button");
+      expect(row).not.toHaveAttribute("tabindex");
+    });
+  });
+
+  it("navigates to a custom path when rowClick returns a string", () => {
+    mockNavigate.mockClear();
+    render(
+      <MemoryRouter>
+        <ListContextProvider
+          value={{ ...baseListContext, data: [records[0]], total: 1, isLoading: false }}
+        >
+          <Datagrid rowClick={() => "/custom/path"}>
+            <TextField source="title" label="Title" />
+          </Datagrid>
+        </ListContextProvider>
+      </MemoryRouter>,
+    );
+    const row = screen.getByText("First Post").closest("tr")!;
+    fireEvent.click(row);
+    expect(mockNavigate).toHaveBeenCalledWith("/custom/path");
+  });
+
+  it("does not navigate when clicking an interactive child element inside the row", () => {
+    mockNavigate.mockClear();
+    render(
+      <MemoryRouter>
+        <ListContextProvider
+          value={{ ...baseListContext, data: [records[0]], total: 1, isLoading: false }}
+        >
+          <Datagrid
+            rowClick={() => "/some/path"}
+            rowActions={<button type="button">Action</button>}
+          >
+            <TextField source="title" label="Title" />
+          </Datagrid>
+        </ListContextProvider>
+      </MemoryRouter>,
+    );
+    fireEvent.click(screen.getByText("Action"));
+    expect(mockNavigate).not.toHaveBeenCalled();
   });
 });
