@@ -1,7 +1,6 @@
 <template>
   <div
     v-if="isNext"
-    class="next-banner"
     style="
       background-color: #fbbf24;
       color: #1c1917;
@@ -21,11 +20,10 @@
 <script setup lang="ts">
 declare const __IS_NEXT__: boolean;
 const isNext = __IS_NEXT__;
-const layoutTopHeight = isNext ? '36px' : '0px';
 </script>
 
 <style>
 :root {
-  --vp-layout-top-height: v-bind(layoutTopHeight);
+  --vp-layout-top-height: 36px;
 }
 </style>
