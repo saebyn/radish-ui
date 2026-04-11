@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi, afterAll } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -56,6 +56,7 @@ describe("diffCommand (single component)", () => {
 
   afterEach(() => {
     rmSync(tmpDir, { recursive: true, force: true });
+    vi.restoreAllMocks();
   });
 
   it("reports no upstream changes when file is in sync", async () => {
@@ -82,7 +83,6 @@ describe("diffCommand (single component)", () => {
 
     await diffCommand("skeleton", { registry: registryDir, target: "components", cwd: projectDir });
 
-    vi.restoreAllMocks();
     expect(logs.some((l) => l.includes("no upstream changes"))).toBe(true);
   });
 
@@ -139,10 +139,6 @@ describe("diffCommand (project-wide, no component arg)", () => {
   afterEach(() => {
     process.exitCode = originalExitCode;
     rmSync(tmpDir, { recursive: true, force: true });
-    vi.restoreAllMocks();
-  });
-
-  afterAll(() => {
     vi.restoreAllMocks();
   });
 

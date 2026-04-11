@@ -125,7 +125,11 @@ async function getComponentStatus(
   for (const [relPath, fileLock] of Object.entries(componentLock.files)) {
     try {
       validateRelativePath(relPath);
-    } catch {
+    } catch (err) {
+      console.warn(
+        `⚠ Skipping unsafe path in lockfile: ${relPath} — ${err instanceof Error ? err.message : String(err)}`,
+      );
+      hasUpstreamChange = true;
       continue;
     }
 
@@ -156,19 +160,24 @@ async function getComponentStatus(
       try {
         const buf = await fetchRegistryFile(config.registry, registryFilePath);
         registryContent = buf.toString("utf-8");
-      } catch {
-        // If we can't fetch, skip upstream check for this file
+      } catch (err) {
+        console.warn(
+          `⚠ Could not fetch registry file for ${relPath}: ${err instanceof Error ? err.message : String(err)}`,
+        );
+        hasUpstreamChange = true;
         continue;
       }
     } else {
       const registryPath = resolve(config.registry, registryFilePath);
       if (!existsSync(registryPath)) {
+        hasUpstreamChange = true;
         continue;
       }
       try {
         assertWithinDir(config.registry, registryPath);
         registryContent = readFileSync(registryPath, "utf-8");
       } catch {
+        hasUpstreamChange = true;
         continue;
       }
     }
@@ -202,6 +211,7 @@ async function diffAllComponents(options: DiffOptions, cwd: string): Promise<voi
   }
 
   const registry = await loadRegistryAsync(config.registry);
+  const registryComponentNames = new Set(registry.components.map((c) => c.name));
 
   let upToDateCount = 0;
   let driftCount = 0;
@@ -218,7 +228,7 @@ async function diffAllComponents(options: DiffOptions, cwd: string): Promise<voi
       continue;
     }
 
-    if (!registry.components.some((c) => c.name === componentName)) {
+    if (!registryComponentNames.has(componentName)) {
       status = "untracked/unknown";
       console.log(`  ? ${componentName}: ${status}`);
       driftCount++;
