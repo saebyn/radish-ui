@@ -28,15 +28,13 @@ export function EditButton({ resource, label, className }: EditButtonProps) {
   const createPath = useCreatePath();
   const resolvedLabel = label ?? translate("ra.action.edit", { _: "Edit" });
 
-  const resolvedResource = resource ?? resourceContext;
-  if (!record || !resolvedResource) return null;
+  if (!record) return null;
 
-  const rawPath = createPath({
-    resource: resolvedResource,
+  const path = createPath({
+    resource: resource ?? resourceContext ?? "",
     type: "edit",
     id: record.id,
   });
-  const path = rawPath.startsWith("#") ? rawPath.slice(1) : rawPath;
 
   return (
     <Link
