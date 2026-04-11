@@ -307,13 +307,15 @@ describe("Datagrid rowClick", () => {
     mockNavigate.mockClear();
     render(
       <MemoryRouter>
-        <ListContextProvider
-          value={{ ...baseListContext, data: [records[0]], total: 1, isLoading: false }}
-        >
-          <Datagrid rowClick={() => "/custom/path"}>
-            <TextField source="title" label="Title" />
-          </Datagrid>
-        </ListContextProvider>
+        <ResourceContextProvider value="posts">
+          <ListContextProvider
+            value={{ ...baseListContext, data: [records[0]], total: 1, isLoading: false }}
+          >
+            <Datagrid rowClick={() => "/custom/path"}>
+              <TextField source="title" label="Title" />
+            </Datagrid>
+          </ListContextProvider>
+        </ResourceContextProvider>
       </MemoryRouter>,
     );
     const row = screen.getByText("First Post").closest("tr")!;
@@ -325,16 +327,18 @@ describe("Datagrid rowClick", () => {
     mockNavigate.mockClear();
     render(
       <MemoryRouter>
-        <ListContextProvider
-          value={{ ...baseListContext, data: [records[0]], total: 1, isLoading: false }}
-        >
-          <Datagrid
-            rowClick={() => "/some/path"}
-            rowActions={<button type="button">Action</button>}
+        <ResourceContextProvider value="posts">
+          <ListContextProvider
+            value={{ ...baseListContext, data: [records[0]], total: 1, isLoading: false }}
           >
-            <TextField source="title" label="Title" />
-          </Datagrid>
-        </ListContextProvider>
+            <Datagrid
+              rowClick={() => "/some/path"}
+              rowActions={<button type="button">Action</button>}
+            >
+              <TextField source="title" label="Title" />
+            </Datagrid>
+          </ListContextProvider>
+        </ResourceContextProvider>
       </MemoryRouter>,
     );
     fireEvent.click(screen.getByText("Action"));

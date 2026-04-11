@@ -27,8 +27,8 @@
     "datagrid": {
       "files": {
         "list/datagrid.tsx": {
-          "registryHash": "sha256-d9d0322b89c3cbb4960c5507a62790d67c7eaec64f607155aaad8eb9ba45d542",
-          "localHash": "sha256-d9d0322b89c3cbb4960c5507a62790d67c7eaec64f607155aaad8eb9ba45d542"
+          "registryHash": "sha256-ffe5608876efdd6afb9d388980182eb8c21035b6fd79c46be43751cecdd6f8f2",
+          "localHash": "sha256-ffe5608876efdd6afb9d388980182eb8c21035b6fd79c46be43751cecdd6f8f2"
         },
         "skeleton/skeleton.tsx": {
           "registryHash": "sha256-e6500bc5048f7adf331e45aaf4096ed85426c93b3933e204207fe1d029182f20",
@@ -47,8 +47,8 @@
     "edit-button": {
       "files": {
         "button/edit-button.tsx": {
-          "registryHash": "sha256-61f8c426526fed515cf04cf10b4d800bf31880d0dfcd95f97691098a6727824e",
-          "localHash": "sha256-61f8c426526fed515cf04cf10b4d800bf31880d0dfcd95f97691098a6727824e"
+          "registryHash": "sha256-1e713db0741ad45b6563298c982257e5f8f6ba779508769c744a408c0abcf0b0",
+          "localHash": "sha256-1e713db0741ad45b6563298c982257e5f8f6ba779508769c744a408c0abcf0b0"
         }
       }
     },
