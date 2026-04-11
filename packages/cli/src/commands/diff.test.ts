@@ -304,9 +304,9 @@ describe("diffCommand (project-wide, no component arg)", () => {
 
     await diffCommand(undefined, { registry: registryDir, target: "components", cwd: projectDir });
 
-    expect(
-      logs.some((l) => l.includes("unknown-widget") && l.includes("untracked/unknown")),
-    ).toBe(true);
+    expect(logs.some((l) => l.includes("unknown-widget") && l.includes("untracked/unknown"))).toBe(
+      true,
+    );
     expect(logs.some((l) => l.includes("1 with drift"))).toBe(true);
     expect(process.exitCode).toBe(1);
   });
@@ -353,9 +353,9 @@ describe("diffCommand (project-wide, no component arg)", () => {
 
     expect(logs.some((l) => l.includes("skeleton") && l.includes("up-to-date"))).toBe(true);
     expect(logs.some((l) => l.includes("datagrid") && l.includes("upstream changes"))).toBe(true);
-    expect(
-      logs.some((l) => l.includes("Scanned 2 components") && l.includes("1 up-to-date")),
-    ).toBe(true);
+    expect(logs.some((l) => l.includes("Scanned 2 components") && l.includes("1 up-to-date"))).toBe(
+      true,
+    );
     expect(process.exitCode).toBe(1);
   });
 
