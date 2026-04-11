@@ -178,8 +178,19 @@ async function getComponentStatus(
       }
       try {
         assertWithinDir(config.registry, registryPath);
+      } catch (err) {
+        console.warn(
+          `⚠ Skipping unsafe registry path: ${registryPath} — ${err instanceof Error ? err.message : String(err)}`,
+        );
+        hasInvalidEntry = true;
+        continue;
+      }
+      try {
         registryContent = readFileSync(registryPath, "utf-8");
-      } catch {
+      } catch (err) {
+        console.warn(
+          `⚠ Could not read registry file: ${registryPath} — ${err instanceof Error ? err.message : String(err)}`,
+        );
         hasUpstreamChange = true;
         continue;
       }
