@@ -203,7 +203,7 @@ describe("UserMenu – with auth provider", () => {
     await waitFor(() => screen.getByLabelText("User menu for Jane Smith"));
     fireEvent.click(screen.getByLabelText("User menu for Jane Smith"));
     fireEvent.click(screen.getByRole("menuitem", { name: /logout/i }));
-    expect(authProvider.logout).toHaveBeenCalled();
+    await waitFor(() => expect(authProvider.logout).toHaveBeenCalled());
   });
 
   it("closes the menu when logout is clicked", async () => {
