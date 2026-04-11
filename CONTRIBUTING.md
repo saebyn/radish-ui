@@ -241,11 +241,11 @@ BREAKING CHANGE: The --output flag has been renamed to --target.
 The docs site (VitePress), the demo app, and Storybook are hosted on
 [Cloudflare Pages](https://pages.cloudflare.com/) at two environments:
 
-| Environment      | URL                           | Trigger                  |
-| ---------------- | ----------------------------- | ------------------------ |
-| **Production**   | `radish-ui.saebyn.dev`        | GitHub Release published |
-| **Canary (next)**| `next.radish-ui.saebyn.dev`   | Push to `main`           |
-| **Preview**      | Cloudflare-generated URL      | `workflow_dispatch`      |
+| Environment       | URL                         | Trigger                  |
+| ----------------- | --------------------------- | ------------------------ |
+| **Production**    | `radish-ui.saebyn.dev`      | GitHub Release published |
+| **Canary (next)** | `next.radish-ui.saebyn.dev` | Push to `main`           |
+| **Preview**       | Cloudflare-generated URL    | `workflow_dispatch`      |
 
 The canary deployment shows a yellow banner at the top of every page to make it
 clear that visitors are reading unreleased documentation.
@@ -268,10 +268,10 @@ The `.github/workflows/deploy-docs.yml` workflow handles all three environments:
 Configure these secrets in **Settings → Secrets and variables → Actions** of
 the repository:
 
-| Secret name              | Description                                              |
-| ------------------------ | -------------------------------------------------------- |
-| `CLOUDFLARE_API_TOKEN`   | API token with *Cloudflare Pages: Edit* permission       |
-| `CLOUDFLARE_ACCOUNT_ID`  | Your Cloudflare account ID (visible in the dashboard URL)|
+| Secret name             | Description                                               |
+| ----------------------- | --------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | API token with _Cloudflare Pages: Edit_ permission        |
+| `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID (visible in the dashboard URL) |
 
 ### Cloudflare Pages project setup (one-time)
 

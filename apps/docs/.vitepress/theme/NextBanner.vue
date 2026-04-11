@@ -9,8 +9,7 @@
       font-size: 14px;
     "
   >
-    ⚠️ You are viewing the <strong>canary (next)</strong> docs. For the stable
-    release, visit
+    ⚠️ You are viewing the <strong>canary (next)</strong> docs. For the stable release, visit
     <a href="https://radish-ui.saebyn.dev" style="color: #1c1917">radish-ui.saebyn.dev</a>.
   </div>
 </template>
