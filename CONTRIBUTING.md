@@ -297,7 +297,7 @@ pnpm --filter @radish-ui/docs preview
 
 ## Automated Dependency Updates (Dependabot)
 
-This repository uses [GitHub Dependabot](https://docs.github.com/en/code-security/dependabot)
+This repository uses [GitHub Dependabot](https://docs.github.com/en/code-security/dependabot) to automatically open pull requests for dependency updates.
 
 ### Configuration
 
