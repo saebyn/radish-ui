@@ -172,6 +172,7 @@ async function getComponentStatus(
     } else {
       const registryPath = resolve(config.registry, registryFilePath);
       if (!existsSync(registryPath)) {
+        console.warn(`⚠ Registry file not found: ${registryPath}`);
         hasUpstreamChange = true;
         continue;
       }
