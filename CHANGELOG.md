@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-04-11
+
+### Added
+
+- Registry components: `show-button`, `wizard-form`, `select-array-input`, `dashboard-menu-item`.
+- Storybook introduction page and Storybook hosted on the static docs site.
+
+### Changed
+
+- `radish diff` now runs project-wide (across all installed components) when no component argument is provided.
+- Improved CLI help text to clarify the optional `component` argument on `radish diff`.
+- Tailwind CSS entrypoints updated from directives to `@import "tailwindcss"` syntax (Tailwind v4 style).
+
+### Fixed
+
+- Datagrid `rowClick` now accepts a string or function value without requiring a `resource` prop.
+- CI workflow permissions hardened; third-party GitHub Actions pinned to immutable commit SHAs.
+
 ## [0.1.0] - 2026-04-05
 
 ### Added
@@ -47,5 +65,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Path traversal guard: output directory is validated to ensure it cannot escape the project root.
 
-[Unreleased]: https://github.com/saebyn/radish-ui/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/saebyn/radish-ui/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/saebyn/radish-ui/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/saebyn/radish-ui/releases/tag/v0.1.0
