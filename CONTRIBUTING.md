@@ -12,6 +12,7 @@ the project locally, run the development tools, and submit changes.
 - [Code Style](#code-style)
 - [Package Dependency Boundaries](#package-dependency-boundaries)
 - [Commit Message Format](#commit-message-format)
+- [Deployment](#deployment)
 
 - [Pull Request Guidelines](#pull-request-guidelines)
 - [Review Process](#review-process)
@@ -235,10 +236,68 @@ BREAKING CHANGE: The --output flag has been renamed to --target.
 - Minor or trivial fixes (typos, docs) may be merged by any maintainer without
   a second review.
 
+## Deployment
+
+The docs site (VitePress), the demo app, and Storybook are hosted on
+[Cloudflare Pages](https://pages.cloudflare.com/) at two environments:
+
+| Environment      | URL                           | Trigger                  |
+| ---------------- | ----------------------------- | ------------------------ |
+| **Production**   | `radish-ui.saebyn.dev`        | GitHub Release published |
+| **Canary (next)**| `next.radish-ui.saebyn.dev`   | Push to `main`           |
+| **Preview**      | Cloudflare-generated URL      | `workflow_dispatch`      |
+
+The canary deployment shows a yellow banner at the top of every page to make it
+clear that visitors are reading unreleased documentation.
+
+### How it works
+
+The `.github/workflows/deploy-docs.yml` workflow handles all three environments:
+
+- **`release: published`** — builds with no banner and deploys to the
+  `production` Cloudflare Pages branch, which is aliased to
+  `radish-ui.saebyn.dev`.
+- **`push: main`** — builds with `VITE_DOCS_ENV=next` (which enables the
+  canary banner) and deploys to the `main` Cloudflare Pages branch, aliased to
+  `next.radish-ui.saebyn.dev`.
+- **`workflow_dispatch`** — also builds and deploys to the `main` branch,
+  useful for triggering an out-of-band preview.
+
+### Required GitHub Actions secrets
+
+Configure these secrets in **Settings → Secrets and variables → Actions** of
+the repository:
+
+| Secret name              | Description                                              |
+| ------------------------ | -------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`   | API token with *Cloudflare Pages: Edit* permission       |
+| `CLOUDFLARE_ACCOUNT_ID`  | Your Cloudflare account ID (visible in the dashboard URL)|
+
+### Cloudflare Pages project setup (one-time)
+
+1. Create a Cloudflare Pages project named **`radish-ui-docs`** (Direct Upload
+   mode — no Git integration needed, since deploys are driven by GitHub
+   Actions).
+2. In the project settings, set the **production branch** to `production`.
+3. Add the following custom domain aliases:
+   - `radish-ui.saebyn.dev` → `production` branch
+   - `next.radish-ui.saebyn.dev` → `main` branch preview alias
+4. Configure the DNS records in Cloudflare DNS for both custom domains.
+
+### Local docs preview
+
+```bash
+pnpm --filter @radish-ui/docs dev       # VitePress dev server
+pnpm --filter @radish-ui/demo dev       # Demo app dev server
+
+# Build and preview the full site locally (mirrors CI output)
+pnpm --filter @radish-ui/docs build
+pnpm --filter @radish-ui/docs preview
+```
+
 ## Automated Dependency Updates (Dependabot)
 
 This repository uses [GitHub Dependabot](https://docs.github.com/en/code-security/dependabot)
-to automatically open pull requests when dependencies have available updates.
 
 ### Configuration
 
