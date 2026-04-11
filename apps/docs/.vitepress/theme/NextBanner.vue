@@ -21,3 +21,9 @@
 declare const __IS_NEXT__: boolean;
 const isNext = __IS_NEXT__;
 </script>
+
+<style>
+:root {
+  --vp-layout-top-height: 36px;
+}
+</style>
