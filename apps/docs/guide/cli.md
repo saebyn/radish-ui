@@ -129,9 +129,9 @@ radish diff [component] [options]
 
 **Arguments:**
 
-| Argument    | Description                                         |
-| ----------- | --------------------------------------------------- |
-| `component` | Name of the component to diff. If omitted, prints drift status for each component in `radish.lock.json` without outputting a patch. |
+| Argument    | Description                                                                      |
+| ----------- | -------------------------------------------------------------------------------- |
+| `component` | Component to diff. If omitted, prints a drift status summary for each component. |
 
 **Options:**
 
