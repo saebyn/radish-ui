@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  deployments: write
   contents: read
 
 # Allow only one concurrent deployment per environment
