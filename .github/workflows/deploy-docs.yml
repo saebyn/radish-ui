@@ -1,22 +1,23 @@
-name: Deploy Docs to GitHub Pages
+name: Deploy Docs to Cloudflare Pages
 
 on:
   push:
     branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# Allow only one concurrent deployment
+# Allow only one concurrent deployment per environment
 concurrency:
-  group: pages
+  group: deploy-docs-${{ github.event_name == 'release' && 'production' || 'next' }}
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build documentation site
+  build-and-deploy:
+    name: Build and deploy documentation site
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -33,11 +34,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      # Resolve the target Cloudflare Pages branch:
+      # - release:published → "production" (maps to radish-ui.saebyn.dev)
+      # - push:main / workflow_dispatch → "main" (maps to next.radish-ui.saebyn.dev)
+      - name: Resolve deploy target
+        id: target
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "branch=production" >> "$GITHUB_OUTPUT"
+            echo "docs_env=production" >> "$GITHUB_OUTPUT"
+          else
+            echo "branch=main" >> "$GITHUB_OUTPUT"
+            echo "docs_env=next" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build docs
         run: pnpm --filter @radish-ui/docs build
+        env:
+          VITE_DOCS_ENV: ${{ steps.target.outputs.docs_env }}
 
       - name: Build demo
         run: pnpm --filter @radish-ui/demo build
@@ -71,11 +85,9 @@ jobs:
                   var demoIndex = path.indexOf(demoMarker);
 
                   if (demoIndex !== -1) {
-                    var siteBase = path.slice(0, demoIndex);
-                    var demoBase = siteBase + demoMarker;
                     var demoPath = path.slice(demoIndex + demoMarker.length - 1);
                     var redirectUrl =
-                      demoBase +
+                      demoMarker +
                       '?redirect=' +
                       encodeURIComponent(demoPath + window.location.search + window.location.hash);
 
@@ -91,19 +103,14 @@ jobs:
           </html>
           EOF
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@392c3b4d8602f9f26e2ac06cf0b5c35f2ad49dc3 # v3.14.1
         with:
-          path: apps/docs/.vitepress/dist
-
-  deploy:
-    name: Deploy to GitHub Pages
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: >-
+            pages deploy apps/docs/.vitepress/dist
+            --project-name=radish-ui-docs
+            --branch=${{ steps.target.outputs.branch }}
+            --commit-dirty=true

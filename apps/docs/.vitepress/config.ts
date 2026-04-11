@@ -1,9 +1,11 @@
 import { defineConfig } from "vitepress";
 
+const isNext = process.env.VITE_DOCS_ENV === "next";
+
 export default defineConfig({
   title: "radish-ui",
   description: "Tailwind CSS components for react-admin",
-  base: "/radish-ui/",
+  base: "/",
   themeConfig: {
     nav: [
       { text: "Guide", link: "/guide/getting-started" },
@@ -37,6 +39,11 @@ export default defineConfig({
     },
     search: {
       provider: "local",
+    },
+  },
+  vite: {
+    define: {
+      __IS_NEXT__: JSON.stringify(isNext),
     },
   },
 });
