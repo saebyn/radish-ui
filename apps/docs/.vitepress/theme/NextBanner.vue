@@ -10,9 +10,7 @@
     "
   >
     ⚠️ You are viewing the in-development documentation (from the
-    <a
-      href="https://github.com/saebyn/radish-ui/tree/main"
-      style="color: #1c1917"
+    <a href="https://github.com/saebyn/radish-ui/tree/main" style="color: #1c1917"
       ><code>main</code> branch</a
     >). For the stable release, visit
     <a href="https://radish-ui.saebyn.dev" style="color: #1c1917">radish-ui.saebyn.dev</a>.
