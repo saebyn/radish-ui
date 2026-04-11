@@ -245,7 +245,6 @@ The docs site (VitePress), the demo app, and Storybook are hosted on
 | ----------------- | --------------------------- | ------------------------ |
 | **Production**    | `radish-ui.saebyn.dev`      | GitHub Release published |
 | **Canary (next)** | `next.radish-ui.saebyn.dev` | Push to `main`           |
-| **Preview**       | Cloudflare-generated URL    | `workflow_dispatch`      |
 
 The canary deployment shows a yellow banner at the top of every page to make it
 clear that visitors are reading unreleased documentation.
