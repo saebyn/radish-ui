@@ -125,14 +125,14 @@ Show a diff between a component in your project and the current registry
 version.
 
 ```
-radish diff <component> [options]
+radish diff [component] [options]
 ```
 
 **Arguments:**
 
-| Argument    | Description                      |
-| ----------- | -------------------------------- |
-| `component` | Name of the component to compare |
+| Argument    | Description                                         |
+| ----------- | --------------------------------------------------- |
+| `component` | Name of the component to compare, or all if omitted |
 
 **Options:**
 
@@ -146,6 +146,11 @@ radish diff <component> [options]
 ```bash
 # Show diff for the datagrid component
 npx @radish-ui/cli diff datagrid
+```
+
+```bash
+# Show diff for all components in use
+npx @radish-ui/cli diff
 ```
 
 ---
