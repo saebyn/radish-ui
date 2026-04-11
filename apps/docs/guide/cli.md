@@ -121,18 +121,17 @@ npx @radish-ui/cli sync --force
 
 ### `radish diff`
 
-Show a diff between a component in your project and the current registry
-version.
+Show a diff between a component in your project and the current registry version, or check drift status for all components listed in `radish.lock.json`.
 
 ```
-radish diff <component> [options]
+radish diff [component] [options]
 ```
 
 **Arguments:**
 
-| Argument    | Description                      |
-| ----------- | -------------------------------- |
-| `component` | Name of the component to compare |
+| Argument    | Description                                                                      |
+| ----------- | -------------------------------------------------------------------------------- |
+| `component` | Component to diff. If omitted, prints a drift status summary for each component. |
 
 **Options:**
 
@@ -146,6 +145,11 @@ radish diff <component> [options]
 ```bash
 # Show diff for the datagrid component
 npx @radish-ui/cli diff datagrid
+```
+
+```bash
+# Show drift status for all components in radish.lock.json
+npx @radish-ui/cli diff
 ```
 
 ---
