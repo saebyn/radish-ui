@@ -11,6 +11,7 @@
         "src/layout/layout.tsx",
         "src/layout/sidebar.tsx",
         "src/layout/menu.tsx",
+        "src/layout/dashboard-menu-item.tsx",
         "src/notification/notification.tsx"
       ],
       "dependencies": ["@radish-ui/core", "react-icons"]
@@ -193,6 +194,11 @@
     {
       "name": "error-boundary",
       "files": ["src/error-boundary/error-boundary.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "dashboard-menu-item",
+      "files": ["src/layout/dashboard-menu-item.tsx"],
       "dependencies": ["@radish-ui/core"]
     }
   ]
