@@ -358,4 +358,90 @@ describe("diffCommand (project-wide, no component arg)", () => {
     ).toBe(true);
     expect(process.exitCode).toBe(1);
   });
+
+  it("reports untracked/unknown when lockfile contains an unsafe path entry", async () => {
+    const hash = hashContent(SKELETON_CONTENT);
+    mkdirSync(join(projectDir, "components", "skeleton"), { recursive: true });
+    writeFileSync(join(projectDir, "components", "skeleton", "skeleton.tsx"), SKELETON_CONTENT);
+    writeFileSync(
+      join(projectDir, "radish.lock.json"),
+      makeLockfile({
+        components: {
+          skeleton: {
+            files: {
+              // unsafe path with traversal
+              "../../etc/passwd": { registryHash: hash, localHash: hash },
+            },
+          },
+        },
+      }),
+    );
+
+    const logs: string[] = [];
+    const warns: string[] = [];
+    vi.spyOn(console, "log").mockImplementation((...args) => {
+      logs.push(args.join(" "));
+    });
+    vi.spyOn(console, "warn").mockImplementation((...args) => {
+      warns.push(args.join(" "));
+    });
+
+    await diffCommand(undefined, { registry: registryDir, target: "components", cwd: projectDir });
+
+    expect(logs.some((l) => l.includes("skeleton") && l.includes("untracked/unknown"))).toBe(true);
+    expect(warns.some((w) => w.includes("unsafe path"))).toBe(true);
+    expect(process.exitCode).toBe(1);
+  });
+
+  it("reports upstream changes and sets exit code 1 when registry adds a new file (manifest drift)", async () => {
+    const hash = hashContent(SKELETON_CONTENT);
+    mkdirSync(join(projectDir, "components", "skeleton"), { recursive: true });
+    writeFileSync(join(projectDir, "components", "skeleton", "skeleton.tsx"), SKELETON_CONTENT);
+
+    // Lockfile only knows about the original file, but registry now declares two files
+    writeFileSync(
+      join(projectDir, "radish.lock.json"),
+      makeLockfile({
+        components: {
+          skeleton: {
+            files: {
+              "skeleton/skeleton.tsx": { registryHash: hash, localHash: hash },
+              // NOTE: registry now also declares "skeleton/utils.tsx" which is absent here
+            },
+          },
+        },
+      }),
+    );
+
+    // Add a second file to the registry component manifest
+    writeFileSync(
+      join(registryDir, "registry.json"),
+      JSON.stringify({
+        components: [
+          {
+            name: "skeleton",
+            files: ["src/skeleton/skeleton.tsx", "src/skeleton/utils.tsx"],
+            dependencies: ["@radish-ui/core"],
+          },
+          {
+            name: "datagrid",
+            files: ["src/list/datagrid.tsx"],
+            dependencies: ["@radish-ui/core"],
+          },
+        ],
+      }),
+    );
+    writeFileSync(join(registryDir, "src", "skeleton", "utils.tsx"), `export function utils() {}`);
+
+    const logs: string[] = [];
+    vi.spyOn(console, "log").mockImplementation((...args) => {
+      logs.push(args.join(" "));
+    });
+
+    await diffCommand(undefined, { registry: registryDir, target: "components", cwd: projectDir });
+
+    expect(logs.some((l) => l.includes("skeleton") && l.includes("upstream changes"))).toBe(true);
+    expect(logs.some((l) => l.includes("1 with drift"))).toBe(true);
+    expect(process.exitCode).toBe(1);
+  });
 });

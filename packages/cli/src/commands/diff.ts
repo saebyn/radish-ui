@@ -8,6 +8,7 @@ import {
   fetchRegistryFile,
   validateRelativePath,
   relativeToRegistryFile,
+  registryFileToRelative,
   validateComponentName,
 } from "../lib/registry.js";
 import { loadLockfile, type ComponentLock } from "../lib/lockfile.js";
@@ -121,6 +122,7 @@ async function getComponentStatus(
   let hasMissing = false;
   let hasLocalMod = false;
   let hasUpstreamChange = false;
+  let hasInvalidEntry = false;
 
   for (const [relPath, fileLock] of Object.entries(componentLock.files)) {
     try {
@@ -129,7 +131,7 @@ async function getComponentStatus(
       console.warn(
         `⚠ Skipping unsafe path in lockfile: ${relPath} — ${err instanceof Error ? err.message : String(err)}`,
       );
-      hasUpstreamChange = true;
+      hasInvalidEntry = true;
       continue;
     }
 
@@ -193,6 +195,7 @@ async function getComponentStatus(
   if (hasMissing) return "missing";
   if (hasLocalMod) return "modified locally";
   if (hasUpstreamChange) return "upstream changes";
+  if (hasInvalidEntry) return "untracked/unknown";
   return "up-to-date";
 }
 
@@ -211,7 +214,7 @@ async function diffAllComponents(options: DiffOptions, cwd: string): Promise<voi
   }
 
   const registry = await loadRegistryAsync(config.registry);
-  const registryComponentNames = new Set(registry.components.map((c) => c.name));
+  const registryComponentMap = new Map(registry.components.map((c) => [c.name, c]));
 
   let upToDateCount = 0;
   let driftCount = 0;
@@ -228,7 +231,7 @@ async function diffAllComponents(options: DiffOptions, cwd: string): Promise<voi
       continue;
     }
 
-    if (!registryComponentNames.has(componentName)) {
+    if (!registryComponentMap.has(componentName)) {
       status = "untracked/unknown";
       console.log(`  ? ${componentName}: ${status}`);
       driftCount++;
@@ -236,7 +239,45 @@ async function diffAllComponents(options: DiffOptions, cwd: string): Promise<voi
     }
 
     const componentLock = lockfile.components[componentName];
-    status = await getComponentStatus(componentLock, config, cwd);
+    const lockedFiles = Object.keys(componentLock.files);
+
+    // Check for unsafe lockfile entries before any other analysis.
+    let hasUnsafeLockEntry = false;
+    for (const f of lockedFiles) {
+      try {
+        validateRelativePath(f);
+      } catch (err) {
+        console.warn(
+          `⚠ Skipping unsafe path in lockfile for ${componentName}: ${f} — ${err instanceof Error ? err.message : String(err)}`,
+        );
+        hasUnsafeLockEntry = true;
+      }
+    }
+
+    if (hasUnsafeLockEntry) {
+      status = "untracked/unknown";
+    } else {
+      // Check manifest drift: compare registry-declared files vs locked files.
+      const registryComponent = registryComponentMap.get(componentName)!;
+      const registryRelFiles = registryComponent.files.flatMap((f) => {
+        try {
+          return [registryFileToRelative(f)];
+        } catch {
+          return [];
+        }
+      });
+      const registryFileSet = new Set(registryRelFiles);
+      const lockedFileSet = new Set(lockedFiles);
+      const hasManifestDrift =
+        registryRelFiles.some((f) => !lockedFileSet.has(f)) ||
+        lockedFiles.some((f) => !registryFileSet.has(f));
+
+      if (hasManifestDrift) {
+        status = "upstream changes";
+      } else {
+        status = await getComponentStatus(componentLock, config, cwd);
+      }
+    }
 
     const statusSymbols: Record<ComponentStatus, string> = {
       "up-to-date": "✓",
