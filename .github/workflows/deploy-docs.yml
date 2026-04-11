@@ -35,17 +35,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Resolve the target Cloudflare Pages branch:
-      # - release:published → "production" (maps to radish-ui.saebyn.dev)
-      # - push:main / workflow_dispatch → "main" (maps to next.radish-ui.saebyn.dev)
+      # Resolve the target Cloudflare Pages project:
+      # - release:published → radish-ui-docs (radish-ui.saebyn.dev)
+      # - push:main / workflow_dispatch → radish-ui-docs-next (next.radish-ui.saebyn.dev)
       - name: Resolve deploy target
         id: target
         run: |
           if [ "${{ github.event_name }}" = "release" ]; then
-            echo "branch=production" >> "$GITHUB_OUTPUT"
+            echo "project=radish-ui-docs" >> "$GITHUB_OUTPUT"
             echo "docs_env=production" >> "$GITHUB_OUTPUT"
           else
-            echo "branch=main" >> "$GITHUB_OUTPUT"
+            echo "project=radish-ui-docs-next" >> "$GITHUB_OUTPUT"
             echo "docs_env=next" >> "$GITHUB_OUTPUT"
           fi
 
@@ -112,6 +112,5 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           command: >-
             pages deploy apps/docs/.vitepress/dist
-            --project-name=radish-ui-docs
-            --branch=${{ steps.target.outputs.branch }}
+            --project-name=${{ steps.target.outputs.project }}
             --commit-dirty=true
