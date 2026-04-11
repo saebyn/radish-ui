@@ -251,16 +251,16 @@ clear that visitors are reading unreleased documentation.
 
 ### How it works
 
-The `.github/workflows/deploy-docs.yml` workflow handles all three environments:
+The `.github/workflows/deploy-docs.yml` workflow deploys to two separate
+Cloudflare Pages projects:
 
 - **`release: published`** — builds with no banner and deploys to the
-  `production` Cloudflare Pages branch, which is aliased to
-  `radish-ui.saebyn.dev`.
+  `radish-ui-docs` Cloudflare Pages project, served at `radish-ui.saebyn.dev`.
 - **`push: main`** — builds with `VITE_DOCS_ENV=next` (which enables the
-  canary banner) and deploys to the `main` Cloudflare Pages branch, aliased to
-  `next.radish-ui.saebyn.dev`.
-- **`workflow_dispatch`** — also builds and deploys to the `main` branch,
-  useful for triggering an out-of-band preview.
+  canary banner) and deploys to the `radish-ui-docs-next` Cloudflare Pages
+  project, served at `next.radish-ui.saebyn.dev`.
+- **`workflow_dispatch`** — also builds and deploys to the `radish-ui-docs-next`
+  project, useful for triggering an out-of-band canary preview.
 
 ### Required GitHub Actions secrets
 
@@ -274,14 +274,18 @@ the repository:
 
 ### Cloudflare Pages project setup (one-time)
 
-1. Create a Cloudflare Pages project named **`radish-ui-docs`** (Direct Upload
-   mode — no Git integration needed, since deploys are driven by GitHub
-   Actions).
-2. In the project settings, set the **production branch** to `production`.
-3. Add the following custom domain aliases:
-   - `radish-ui.saebyn.dev` → `production` branch
-   - `next.radish-ui.saebyn.dev` → `main` branch preview alias
-4. Configure the DNS records in Cloudflare DNS for both custom domains.
+Create **two** Cloudflare Pages projects, both in Direct Upload mode (no Git
+integration — deploys are driven by GitHub Actions):
+
+1. **`radish-ui-docs`** — production project
+   - In the project's **Custom domains** settings, add `radish-ui.saebyn.dev`.
+     Cloudflare will handle the DNS record automatically if the domain is already
+     on Cloudflare.
+
+2. **`radish-ui-docs-next`** — canary project
+   - In the project's **Custom domains** settings, add `next.radish-ui.saebyn.dev`.
+     Cloudflare will handle the DNS record automatically if the domain is already
+     on Cloudflare.
 
 ### Local docs preview
 
