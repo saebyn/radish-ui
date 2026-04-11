@@ -25,6 +25,12 @@ updates:
       - dependency-name: "react-dom"
         update-types:
           - "version-update:semver-major"
+      - dependency-name: "@types/react"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "@types/react-dom"
+        update-types:
+          - "version-update:semver-major"
     groups:
       catalog:
         patterns:
