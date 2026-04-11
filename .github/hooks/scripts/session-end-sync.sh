@@ -30,10 +30,14 @@ echo "📦 Registry changes detected:" >&2
 echo "$REGISTRY_CHANGES" >&2
 
 echo "🔄 Running pnpm sync to update demo components from local registry..." >&2
-pnpm sync >&2
+if ! pnpm sync >&2; then
+  echo "⚠️  pnpm sync failed; continuing because session-end sync is best-effort." >&2
+fi
 
 echo "🏗️  Running pnpm --filter @radish-ui/demo build to validate demo..." >&2
-pnpm --filter @radish-ui/demo build >&2
+if ! pnpm --filter @radish-ui/demo build >&2; then
+  echo "⚠️  Demo build failed; continuing because session-end sync is best-effort." >&2
+fi
 
 echo "✅ Session-end sync complete." >&2
 
