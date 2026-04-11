@@ -15,9 +15,7 @@ function Wrapper({
 }) {
   return (
     <MemoryRouter>
-      <HasDashboardContextProvider value={hasDashboard}>
-        {children}
-      </HasDashboardContextProvider>
+      <HasDashboardContextProvider value={hasDashboard}>{children}</HasDashboardContextProvider>
     </MemoryRouter>
   );
 }
