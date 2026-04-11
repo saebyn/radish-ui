@@ -262,17 +262,20 @@ async function diffAllComponents(options: DiffOptions, cwd: string): Promise<voi
       const registryRelFiles = registryComponent.files.flatMap((f) => {
         try {
           return [registryFileToRelative(f)];
-        } catch {
+        } catch (err) {
+          console.warn(
+            `⚠ Skipping invalid registry file path for ${componentName}: ${f} — ${err instanceof Error ? err.message : String(err)}`,
+          );
           return [];
         }
       });
       const registryFileSet = new Set(registryRelFiles);
       const lockedFileSet = new Set(lockedFiles);
-      const hasManifestDrift =
+      const hasFileListMismatch =
         registryRelFiles.some((f) => !lockedFileSet.has(f)) ||
         lockedFiles.some((f) => !registryFileSet.has(f));
 
-      if (hasManifestDrift) {
+      if (hasFileListMismatch) {
         status = "upstream changes";
       } else {
         status = await getComponentStatus(componentLock, config, cwd);

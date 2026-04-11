@@ -406,7 +406,7 @@ describe("diffCommand (project-wide, no component arg)", () => {
           skeleton: {
             files: {
               "skeleton/skeleton.tsx": { registryHash: hash, localHash: hash },
-              // NOTE: registry now also declares "skeleton/utils.tsx" which is absent here
+              // NOTE: registry now also declares "src/skeleton/utils.tsx" which is absent here
             },
           },
         },
