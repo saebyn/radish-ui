@@ -12,6 +12,9 @@ function getInitials(name: string): string {
     .join("");
 }
 
+/** Fallback initials shown when the current user has no display name. */
+const DEFAULT_INITIALS = "U";
+
 // ---------------------------------------------------------------------------
 // UserMenuItem
 // ---------------------------------------------------------------------------
@@ -79,7 +82,9 @@ interface UserMenuProps {
  * Shows the current user's avatar and name (via `useGetIdentity`),
  * optional custom action items, and a built-in logout button (via `useLogout`).
  *
- * Renders nothing when there is no authenticated identity.
+ * While the identity query is pending the component renders nothing.
+ * Once resolved it shows the user's initials (or `"U"` when no display name
+ * is available) as the avatar trigger button.
  *
  * Copy this file into your project and customise freely.
  *
@@ -132,7 +137,7 @@ export function UserMenu({ children, logoutLabel, className }: UserMenuProps) {
   if (isPending) return null;
 
   const displayName = identity?.fullName ?? "";
-  const initials = displayName ? getInitials(displayName) : "U";
+  const initials = displayName ? getInitials(displayName) : DEFAULT_INITIALS;
   const ariaLabel = displayName ? `User menu for ${displayName}` : "User menu";
 
   return (
