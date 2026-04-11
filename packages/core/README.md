@@ -68,5 +68,5 @@ export default {
 ## Learn more
 
 - [radish-ui on GitHub](https://github.com/saebyn/radish-ui)
-- [Documentation](https://saebyn.github.io/radish-ui/)
+- [Documentation](https://radish-ui.saebyn.dev/)
 - [react-admin / ra-core](https://marmelab.com/react-admin/)

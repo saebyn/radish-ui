@@ -197,7 +197,7 @@ function Introduction() {
           <li>
             📖{" "}
             <a
-              href="https://saebyn.github.io/radish-ui/"
+              href="https://radish-ui.saebyn.dev/"
               target="_blank"
               rel="noreferrer"
               className="text-primary-600 dark:text-primary-400 underline underline-offset-2 hover:text-primary-800 dark:hover:text-primary-200"
