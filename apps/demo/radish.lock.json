@@ -27,8 +27,8 @@
     "datagrid": {
       "files": {
         "list/datagrid.tsx": {
-          "registryHash": "sha256-ffe5608876efdd6afb9d388980182eb8c21035b6fd79c46be43751cecdd6f8f2",
-          "localHash": "sha256-ffe5608876efdd6afb9d388980182eb8c21035b6fd79c46be43751cecdd6f8f2"
+          "registryHash": "sha256-d9d0322b89c3cbb4960c5507a62790d67c7eaec64f607155aaad8eb9ba45d542",
+          "localHash": "sha256-d9d0322b89c3cbb4960c5507a62790d67c7eaec64f607155aaad8eb9ba45d542"
         },
         "skeleton/skeleton.tsx": {
           "registryHash": "sha256-e6500bc5048f7adf331e45aaf4096ed85426c93b3933e204207fe1d029182f20",
