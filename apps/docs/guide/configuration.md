@@ -14,10 +14,10 @@ Instead of passing flags every time you run a CLI command, you can create a
 
 ### Fields
 
-| Field       | Type     | Default                                  | Description                                                                              |
-| ----------- | -------- | ---------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `registry`  | `string` | `https://radish-ui.saebyn.dev/registry`  | Path or URL to the component registry. Accepts a local path or an `http(s)://` URL.      |
-| `outputDir` | `string` | `src/components/radish`                       | Directory where components are copied. Must be a relative path within your project root. |
+| Field       | Type     | Default                                 | Description                                                                              |
+| ----------- | -------- | --------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `registry`  | `string` | `https://radish-ui.saebyn.dev/registry` | Path or URL to the component registry. Accepts a local path or an `http(s)://` URL.      |
+| `outputDir` | `string` | `src/components/radish`                 | Directory where components are copied. Must be a relative path within your project root. |
 
 CLI flags take precedence over values in `radish.json`.
 

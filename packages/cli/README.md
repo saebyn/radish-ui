@@ -206,10 +206,10 @@ The `radish.json` file at the project root configures the CLI. It is created by 
 }
 ```
 
-| Field       | Description                            | Default                                  |
-| ----------- | -------------------------------------- | ---------------------------------------- |
-| `registry`  | Registry URL or local path             | `https://radish-ui.saebyn.dev/registry`  |
-| `outputDir` | Directory where components are written | `src/components/radish`                       |
+| Field       | Description                            | Default                                 |
+| ----------- | -------------------------------------- | --------------------------------------- |
+| `registry`  | Registry URL or local path             | `https://radish-ui.saebyn.dev/registry` |
+| `outputDir` | Directory where components are written | `src/components/radish`                 |
 
 ## Learn more
 
