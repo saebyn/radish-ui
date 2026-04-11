@@ -50,8 +50,8 @@ program
   .action(syncCommand);
 
 program
-  .command("diff <component>")
-  .description("Show what changed upstream since you last synced a component")
+  .command("diff [component]")
+  .description("Show drift for a component, or all components when no argument is given")
   .option(
     "--registry <path>",
     "Path or URL to registry (local path or https:// URL; defaults to GitHub raw URL)",
