@@ -176,7 +176,7 @@ When no `--registry` flag is provided and there is no `registry` entry in
 `radish.json`, the CLI fetches components from the hosted registry:
 
 ```
-https://saebyn.github.io/radish-ui/registry
+https://radish-ui.saebyn.dev/registry
 ```
 
 You can override this at any time with the `--registry` flag or via

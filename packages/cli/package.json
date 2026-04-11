@@ -10,7 +10,7 @@
     "react-admin",
     "tailwindcss"
   ],
-  "homepage": "https://saebyn.github.io/radish-ui/",
+  "homepage": "https://radish-ui.saebyn.dev/",
   "license": "MIT",
   "repository": {
     "type": "git",
