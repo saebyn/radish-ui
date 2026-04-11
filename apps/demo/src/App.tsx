@@ -41,6 +41,16 @@ const dataProvider = fakeDataProvider(demoData);
 
 const i18nProvider = polyglotI18nProvider(() => englishMessages, "en");
 
+/** Demo-only auth provider: no real authentication, just provides an identity for the UserMenu. */
+const authProvider = {
+  login: () => Promise.resolve(),
+  logout: () => Promise.resolve(),
+  checkAuth: () => Promise.resolve(),
+  checkError: () => Promise.resolve(),
+  getPermissions: () => Promise.resolve(),
+  getIdentity: () => Promise.resolve({ id: 1, fullName: "Demo User" }),
+};
+
 function SeriesList() {
   return (
     <List resource="series" actions={<CreateButton />} pagination={<Pagination />}>
@@ -109,6 +119,7 @@ export default function App() {
   return (
     <Admin
       dataProvider={dataProvider}
+      authProvider={authProvider}
       i18nProvider={i18nProvider}
       layout={Layout}
       dashboard={DashboardPage}

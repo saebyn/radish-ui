@@ -3,8 +3,8 @@
     "layout": {
       "files": {
         "layout/layout.tsx": {
-          "registryHash": "sha256-add90a5df35e1ae9aa0bc85873aae7a0e7292da44db91233797c8d3ffe0ad3a3",
-          "localHash": "sha256-add90a5df35e1ae9aa0bc85873aae7a0e7292da44db91233797c8d3ffe0ad3a3"
+          "registryHash": "sha256-be81262fbfb870076ec4deb764d9101cfbc3c4f9e049046a343f0e48948fdf79",
+          "localHash": "sha256-be81262fbfb870076ec4deb764d9101cfbc3c4f9e049046a343f0e48948fdf79"
         },
         "layout/sidebar.tsx": {
           "registryHash": "sha256-9a6744cc02d26e2162c7caa6c497961c5e01c3d073ebe50843da3b6bf9bc1173",
@@ -21,6 +21,10 @@
         "layout/dashboard-menu-item.tsx": {
           "registryHash": "sha256-39651ac8456da0e020251e957942bd2f881f7465e805af137d9d623cc3633b60",
           "localHash": "sha256-39651ac8456da0e020251e957942bd2f881f7465e805af137d9d623cc3633b60"
+        },
+        "layout/user-menu.tsx": {
+          "registryHash": "sha256-815f2db7ea83a72dd8b644c06b203bbd3983e3ad61bcd600a66cb305df60aea3",
+          "localHash": "sha256-815f2db7ea83a72dd8b644c06b203bbd3983e3ad61bcd600a66cb305df60aea3"
         }
       }
     },

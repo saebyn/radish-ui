@@ -12,6 +12,7 @@
         "src/layout/sidebar.tsx",
         "src/layout/menu.tsx",
         "src/layout/dashboard-menu-item.tsx",
+        "src/layout/user-menu.tsx",
         "src/notification/notification.tsx"
       ],
       "dependencies": ["@radish-ui/core", "react-icons"]
@@ -199,6 +200,11 @@
     {
       "name": "dashboard-menu-item",
       "files": ["src/layout/dashboard-menu-item.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "user-menu",
+      "files": ["src/layout/user-menu.tsx"],
       "dependencies": ["@radish-ui/core"]
     }
   ]
