@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/scripts/enforce-pnpm.sh",
+        "timeoutSec": 5
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/scripts/post-edit-format.sh",
+        "timeoutSec": 30
+      },
+      {
+        "type": "command",
+        "bash": ".github/hooks/scripts/post-edit-lint.sh",
+        "timeoutSec": 30
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/scripts/session-end-sync.sh",
+        "timeoutSec": 120
+      }
+    ]
+  }
+}
