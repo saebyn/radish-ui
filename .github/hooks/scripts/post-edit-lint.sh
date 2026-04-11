@@ -19,7 +19,8 @@ case "$TOOL_NAME" in
     ;;
 esac
 
-REPO_ROOT="$(git -C "$(dirname "$0")" rev-parse --show-toplevel 2>/dev/null || echo "$PWD")"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || echo "$PWD")"
 cd "$REPO_ROOT"
 
 # Run lint and capture output; surface failures via stderr without blocking

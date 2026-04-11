@@ -19,11 +19,12 @@ case "$TOOL_NAME" in
 esac
 
 # Run format from the repo root; ignore failures (best-effort)
-REPO_ROOT="$(git -C "$(dirname "$0")" rev-parse --show-toplevel 2>/dev/null || echo "$PWD")"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null || echo "$PWD")"
 cd "$REPO_ROOT"
 
-# Redirect stdout only; preserve stderr so format errors remain visible
-FORMAT_OUTPUT="$(pnpm format 2>&1)" || {
+# Capture stdout only; stderr flows directly to the terminal so format errors remain visible
+FORMAT_OUTPUT="$(pnpm format)" || {
   echo "⚠️  pnpm format encountered an error:" >&2
   echo "$FORMAT_OUTPUT" >&2
 }
