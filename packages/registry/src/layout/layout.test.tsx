@@ -2,7 +2,10 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Layout } from "./layout";
 
-// Stub child components used inside Layout so tests stay isolated
+vi.mock("./user-menu", () => ({
+  UserMenu: () => <div data-testid="user-menu" />,
+}));
+
 vi.mock("./sidebar", () => ({
   Sidebar: ({
     open,
