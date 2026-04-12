@@ -1,7 +1,34 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ResourceDefinitionContextProvider } from "ra-core";
+import { CoreAdminContext } from "ra-core";
 import { MemoryRouter } from "react-router-dom";
 import { Layout } from "./layout";
+
+// ---------------------------------------------------------------------------
+// Minimal providers
+// ---------------------------------------------------------------------------
+
+const noop = () => Promise.resolve({ data: [] as never });
+
+const dataProvider = {
+  getList: () => Promise.resolve({ data: [], total: 0 }),
+  getOne: () => Promise.resolve({ data: { id: 1 } as never }),
+  getMany: noop,
+  getManyReference: () => Promise.resolve({ data: [], total: 0 }),
+  create: () => Promise.resolve({ data: { id: 2 } as never }),
+  update: () => Promise.resolve({ data: { id: 1 } as never }),
+  updateMany: noop,
+  delete: () => Promise.resolve({ data: { id: 1 } as never }),
+  deleteMany: noop,
+};
+
+const authProvider = {
+  login: () => Promise.resolve(),
+  logout: () => Promise.resolve(),
+  checkAuth: () => Promise.resolve(),
+  checkError: () => Promise.resolve(),
+  getPermissions: () => Promise.resolve(),
+  getIdentity: () => Promise.resolve({ id: 1, fullName: "Jane Smith" }),
+};
 
 const mockResources = {
   posts: { name: "posts", hasList: true, hasEdit: true, hasShow: true, hasCreate: true },
@@ -14,11 +41,15 @@ const meta: Meta<typeof Layout> = {
   decorators: [
     (Story) => (
       <MemoryRouter>
-        <ResourceDefinitionContextProvider definitions={mockResources}>
+        <CoreAdminContext
+          dataProvider={dataProvider}
+          authProvider={authProvider}
+          resources={Object.values(mockResources)}
+        >
           <div style={{ height: "100vh" }}>
             <Story />
           </div>
-        </ResourceDefinitionContextProvider>
+        </CoreAdminContext>
       </MemoryRouter>
     ),
   ],

@@ -272,4 +272,138 @@ describe("UserMenu – with auth provider", () => {
     fireEvent.click(trigger);
     expect(trigger).toHaveAttribute("aria-expanded", "true");
   });
+
+  it("opens the menu and focuses the first menuitem when ArrowDown is pressed on the trigger", async () => {
+    render(
+      <Wrapper authProvider={authProvider}>
+        <UserMenu />
+      </Wrapper>,
+    );
+    await waitFor(() => screen.getByLabelText("User menu for Jane Smith"));
+    const trigger = screen.getByLabelText("User menu for Jane Smith");
+    fireEvent.keyDown(trigger, { key: "ArrowDown" });
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+    await waitFor(() => {
+      const items = screen.getAllByRole("menuitem");
+      expect(document.activeElement).toBe(items[0]);
+    });
+  });
+
+  it("moves focus to the next item on ArrowDown", async () => {
+    render(
+      <Wrapper authProvider={authProvider}>
+        <UserMenu>
+          <UserMenuItem>First</UserMenuItem>
+          <UserMenuItem>Second</UserMenuItem>
+        </UserMenu>
+      </Wrapper>,
+    );
+    await waitFor(() => screen.getByLabelText("User menu for Jane Smith"));
+    fireEvent.click(screen.getByLabelText("User menu for Jane Smith"));
+    const items = screen.getAllByRole("menuitem");
+    items[0].focus();
+    fireEvent.keyDown(document, { key: "ArrowDown" });
+    expect(document.activeElement).toBe(items[1]);
+  });
+
+  it("moves focus to the previous item on ArrowUp", async () => {
+    render(
+      <Wrapper authProvider={authProvider}>
+        <UserMenu>
+          <UserMenuItem>First</UserMenuItem>
+          <UserMenuItem>Second</UserMenuItem>
+        </UserMenu>
+      </Wrapper>,
+    );
+    await waitFor(() => screen.getByLabelText("User menu for Jane Smith"));
+    fireEvent.click(screen.getByLabelText("User menu for Jane Smith"));
+    const items = screen.getAllByRole("menuitem");
+    items[1].focus();
+    fireEvent.keyDown(document, { key: "ArrowUp" });
+    expect(document.activeElement).toBe(items[0]);
+  });
+
+  it("wraps focus from last to first on ArrowDown", async () => {
+    render(
+      <Wrapper authProvider={authProvider}>
+        <UserMenu>
+          <UserMenuItem>Only custom item</UserMenuItem>
+        </UserMenu>
+      </Wrapper>,
+    );
+    await waitFor(() => screen.getByLabelText("User menu for Jane Smith"));
+    fireEvent.click(screen.getByLabelText("User menu for Jane Smith"));
+    const items = screen.getAllByRole("menuitem");
+    // focus the last item (logout)
+    items[items.length - 1].focus();
+    fireEvent.keyDown(document, { key: "ArrowDown" });
+    expect(document.activeElement).toBe(items[0]);
+  });
+
+  it("wraps focus from first to last on ArrowUp", async () => {
+    render(
+      <Wrapper authProvider={authProvider}>
+        <UserMenu>
+          <UserMenuItem>Only custom item</UserMenuItem>
+        </UserMenu>
+      </Wrapper>,
+    );
+    await waitFor(() => screen.getByLabelText("User menu for Jane Smith"));
+    fireEvent.click(screen.getByLabelText("User menu for Jane Smith"));
+    const items = screen.getAllByRole("menuitem");
+    items[0].focus();
+    fireEvent.keyDown(document, { key: "ArrowUp" });
+    expect(document.activeElement).toBe(items[items.length - 1]);
+  });
+
+  it("focuses the first item on Home key", async () => {
+    render(
+      <Wrapper authProvider={authProvider}>
+        <UserMenu>
+          <UserMenuItem>First</UserMenuItem>
+          <UserMenuItem>Second</UserMenuItem>
+        </UserMenu>
+      </Wrapper>,
+    );
+    await waitFor(() => screen.getByLabelText("User menu for Jane Smith"));
+    fireEvent.click(screen.getByLabelText("User menu for Jane Smith"));
+    const items = screen.getAllByRole("menuitem");
+    items[items.length - 1].focus();
+    fireEvent.keyDown(document, { key: "Home" });
+    expect(document.activeElement).toBe(items[0]);
+  });
+
+  it("focuses the last item on End key", async () => {
+    render(
+      <Wrapper authProvider={authProvider}>
+        <UserMenu>
+          <UserMenuItem>First</UserMenuItem>
+          <UserMenuItem>Second</UserMenuItem>
+        </UserMenu>
+      </Wrapper>,
+    );
+    await waitFor(() => screen.getByLabelText("User menu for Jane Smith"));
+    fireEvent.click(screen.getByLabelText("User menu for Jane Smith"));
+    const items = screen.getAllByRole("menuitem");
+    items[0].focus();
+    fireEvent.keyDown(document, { key: "End" });
+    expect(document.activeElement).toBe(items[items.length - 1]);
+  });
+
+  it("restores focus to the trigger when Escape closes the menu", async () => {
+    render(
+      <Wrapper authProvider={authProvider}>
+        <UserMenu />
+      </Wrapper>,
+    );
+    await waitFor(() => screen.getByLabelText("User menu for Jane Smith"));
+    const trigger = screen.getByLabelText("User menu for Jane Smith");
+    fireEvent.click(trigger);
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+    fireEvent.keyDown(document, { key: "Escape" });
+    await waitFor(() => {
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+      expect(document.activeElement).toBe(trigger);
+    });
+  });
 });

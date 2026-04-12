@@ -15,6 +15,9 @@ function getInitials(name: string): string {
 /** Fallback initials shown when the current user has no display name. */
 const DEFAULT_INITIALS = "U";
 
+/** Selector that matches all interactive menuitem elements inside a menu panel. */
+const MENUITEM_SELECTOR = '[role="menuitem"]:not([disabled])';
+
 // ---------------------------------------------------------------------------
 // UserMenuItem
 // ---------------------------------------------------------------------------
@@ -43,6 +46,7 @@ export function UserMenuItem({ onClick, icon, children, className }: UserMenuIte
     <button
       type="button"
       role="menuitem"
+      tabIndex={-1}
       onClick={onClick}
       className={cn(
         "flex w-full items-center gap-2 px-4 py-2 text-sm text-neutral-700",
@@ -86,6 +90,13 @@ interface UserMenuProps {
  * Once resolved it shows the user's initials (or `"U"` when no display name
  * is available) as the avatar trigger button.
  *
+ * Keyboard behaviour (ARIA menu pattern):
+ * - Enter / Space / ArrowDown on trigger: opens menu and focuses first item.
+ * - ArrowDown / ArrowUp: moves focus between menu items (wraps around).
+ * - Home: focuses first menu item.
+ * - End: focuses last menu item.
+ * - Escape / Tab: closes menu and returns focus to the trigger.
+ *
  * Copy this file into your project and customise freely.
  *
  * @example
@@ -101,38 +112,109 @@ interface UserMenuProps {
 export function UserMenu({ children, logoutLabel, className }: UserMenuProps) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const translate = useTranslate();
   const logout = useLogout();
   const { identity, isPending } = useGetIdentity();
 
   const resolvedLogoutLabel = logoutLabel ?? translate("ra.auth.logout", { _: "Logout" });
 
+  /** Returns all focusable menuitem elements in the open panel. */
+  const getMenuItems = useCallback((): HTMLElement[] => {
+    if (!menuRef.current) return [];
+    return Array.from(menuRef.current.querySelectorAll<HTMLElement>(MENUITEM_SELECTOR));
+  }, []);
+
+  /** Close the menu and restore focus to the trigger button. */
+  const closeMenu = useCallback((restoreFocus = true) => {
+    setOpen(false);
+    if (restoreFocus) {
+      // Use rAF so focus is restored after React re-renders and removes the panel.
+      requestAnimationFrame(() => {
+        triggerRef.current?.focus();
+      });
+    }
+  }, []);
+
+  /** Open the menu and focus the first menuitem on the next frame. */
+  const openMenu = useCallback(() => {
+    setOpen(true);
+    requestAnimationFrame(() => {
+      const items = menuRef.current?.querySelectorAll<HTMLElement>(MENUITEM_SELECTOR);
+      items?.[0]?.focus();
+    });
+  }, []);
+
   // Close when clicking outside the menu wrapper
   useEffect(() => {
     if (!open) return;
     const handlePointerDown = (e: PointerEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-        setOpen(false);
+        closeMenu(false);
       }
     };
     document.addEventListener("pointerdown", handlePointerDown);
     return () => document.removeEventListener("pointerdown", handlePointerDown);
-  }, [open]);
+  }, [open, closeMenu]);
 
-  // Close on Escape key
+  // Keyboard handling while the menu is open (ARIA menu pattern)
   useEffect(() => {
     if (!open) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      const items = getMenuItems();
+      const focused = document.activeElement as HTMLElement | null;
+      const currentIndex = focused ? items.indexOf(focused) : -1;
+
+      switch (e.key) {
+        case "Escape":
+          e.preventDefault();
+          closeMenu();
+          break;
+        case "Tab":
+          // Tab closes the menu; browser handles focus movement naturally.
+          closeMenu(false);
+          break;
+        case "ArrowDown":
+          e.preventDefault();
+          if (items.length === 0) break;
+          items[(currentIndex + 1) % items.length]?.focus();
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          if (items.length === 0) break;
+          items[(currentIndex - 1 + items.length) % items.length]?.focus();
+          break;
+        case "Home":
+          e.preventDefault();
+          items[0]?.focus();
+          break;
+        case "End":
+          e.preventDefault();
+          items[items.length - 1]?.focus();
+          break;
+        default:
+          break;
+      }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open]);
+  }, [open, closeMenu, getMenuItems]);
+
+  const handleTriggerKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>) => {
+      if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openMenu();
+      }
+    },
+    [openMenu],
+  );
 
   const handleLogout = useCallback(() => {
-    setOpen(false);
+    closeMenu();
     logout();
-  }, [logout]);
+  }, [closeMenu, logout]);
 
   if (isPending) return null;
 
@@ -144,8 +226,10 @@ export function UserMenu({ children, logoutLabel, className }: UserMenuProps) {
     <div ref={wrapperRef} className={cn("relative", className)}>
       {/* Trigger button */}
       <button
+        ref={triggerRef}
         type="button"
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={() => (open ? closeMenu() : openMenu())}
+        onKeyDown={handleTriggerKeyDown}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={ariaLabel}
@@ -187,6 +271,7 @@ export function UserMenu({ children, logoutLabel, className }: UserMenuProps) {
       {/* Dropdown panel */}
       {open && (
         <div
+          ref={menuRef}
           role="menu"
           aria-label={displayName ? `${displayName} actions` : "User actions"}
           className={cn(
