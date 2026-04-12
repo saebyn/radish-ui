@@ -113,6 +113,11 @@
       "dependencies": ["@radish-ui/core"]
     },
     {
+      "name": "autocomplete-array-input",
+      "files": ["src/form/autocomplete-array-input.tsx"],
+      "dependencies": ["@radish-ui/core"]
+    },
+    {
       "name": "notification",
       "files": ["src/notification/notification.tsx"],
       "dependencies": ["@radish-ui/core"]
