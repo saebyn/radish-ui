@@ -1,0 +1,10 @@
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { __COMPONENT_NAME__ } from "./__KEBAB_NAME__";
+
+describe("__COMPONENT_NAME__", () => {
+  it("renders without crashing", () => {
+    render(<__COMPONENT_NAME__ />);
+    expect(screen.getByText(/TODO/i)).toBeDefined();
+  });
+});
