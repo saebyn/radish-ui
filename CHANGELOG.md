@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `radish generate <ComponentName>` command to scaffold a new registry component with a stub `.tsx` file, Storybook story, and Vitest test. Updates `registry.json` and `apps/docs/guide/components.md`, runs `pnpm validate-registry` automatically, and prints next-step hints. Supports `--folder <domain>`, `--dry-run`, and `--list-folders` options.
+
 ## [0.2.0] - 2026-04-11
 
 ### Added

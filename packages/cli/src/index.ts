@@ -7,6 +7,7 @@ import { diffCommand } from "./commands/diff.js";
 import { newCommand } from "./commands/new.js";
 import { initCommand } from "./commands/init.js";
 import { listCommand } from "./commands/list.js";
+import { generateCommand, VALID_FOLDERS } from "./commands/generate.js";
 import { RadishError } from "./lib/errors.js";
 import { DEFAULT_OUTPUT_DIR } from "./lib/config.js";
 
@@ -81,6 +82,19 @@ program
     "Path or URL to registry (local path or https:// URL; defaults to GitHub raw URL)",
   )
   .action(listCommand);
+
+program
+  .command("generate <ComponentName>")
+  .description(
+    "Scaffold a new registry component with a stub .tsx file, Storybook story, and Vitest test",
+  )
+  .option(
+    "--folder <domain>",
+    `Registry subfolder to place the component in (default: custom). Valid folders: ${VALID_FOLDERS.join(", ")}`,
+  )
+  .option("--dry-run", "Print what would be created without writing any files")
+  .option("--list-folders", "Print valid folder names and exit")
+  .action(generateCommand);
 
 program.parseAsync(process.argv).catch((err) => {
   if (err instanceof RadishError) {
