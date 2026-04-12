@@ -6,6 +6,7 @@ import { NumberInput } from "./number-input";
 import { SelectInput } from "./select-input";
 import { BooleanInput } from "./boolean-input";
 import { SimpleForm } from "./simple-form";
+import { AutocompleteArrayInput } from "./autocomplete-array-input";
 
 // Minimal data provider required by CoreAdminContext
 const dataProvider = {
@@ -210,5 +211,89 @@ describe("SimpleForm", () => {
       </CoreAdminContext>,
     );
     expect(screen.getByRole("button", { name: "Saving…" })).toBeDisabled();
+  });
+});
+
+describe("AutocompleteArrayInput", () => {
+  const choices = [
+    { id: 1, name: "Sports" },
+    { id: 2, name: "Tech" },
+    { id: 3, name: "Culture" },
+  ];
+
+  it("renders with a capitalised source as the default label", () => {
+    render(<AutocompleteArrayInput source="tag_ids" choices={choices} />, {
+      wrapper: FormWrapper,
+    });
+    expect(screen.getByText("Tag ids")).toBeInTheDocument();
+  });
+
+  it("renders with an explicit label", () => {
+    render(<AutocompleteArrayInput source="tag_ids" choices={choices} label="Tags" />, {
+      wrapper: FormWrapper,
+    });
+    expect(screen.getByText("Tags")).toBeInTheDocument();
+  });
+
+  it("renders a combobox input", () => {
+    render(<AutocompleteArrayInput source="tag_ids" choices={choices} />, {
+      wrapper: FormWrapper,
+    });
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
+  });
+
+  it("shows the dropdown when the input is focused", () => {
+    render(<AutocompleteArrayInput source="tag_ids" choices={choices} />, {
+      wrapper: FormWrapper,
+    });
+    const input = screen.getByRole("combobox");
+    fireEvent.focus(input);
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    expect(screen.getByText("Sports")).toBeInTheDocument();
+    expect(screen.getByText("Tech")).toBeInTheDocument();
+    expect(screen.getByText("Culture")).toBeInTheDocument();
+  });
+
+  it("filters choices as the user types", async () => {
+    render(<AutocompleteArrayInput source="tag_ids" choices={choices} />, {
+      wrapper: FormWrapper,
+    });
+    const input = screen.getByRole("combobox");
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: "tech" } });
+    expect(screen.getByText("Tech")).toBeInTheDocument();
+    expect(screen.queryByText("Sports")).not.toBeInTheDocument();
+  });
+
+  it("adds a chip when a choice is selected", () => {
+    render(<AutocompleteArrayInput source="tag_ids" choices={choices} />, {
+      wrapper: FormWrapper,
+    });
+    const input = screen.getByRole("combobox");
+    fireEvent.focus(input);
+    const option = screen.getByText("Sports");
+    fireEvent.mouseDown(option);
+    // The chip for Sports should now be visible
+    expect(screen.getByLabelText("Remove Sports")).toBeInTheDocument();
+  });
+
+  it("removes a chip when the remove button is clicked", () => {
+    render(<AutocompleteArrayInput source="tag_ids" choices={choices} />, {
+      wrapper: FormWrapper,
+    });
+    const input = screen.getByRole("combobox");
+    fireEvent.focus(input);
+    fireEvent.mouseDown(screen.getByText("Sports"));
+    expect(screen.getByLabelText("Remove Sports")).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText("Remove Sports"));
+    expect(screen.queryByLabelText("Remove Sports")).not.toBeInTheDocument();
+  });
+
+  it("renders the placeholder when no items are selected", () => {
+    render(
+      <AutocompleteArrayInput source="tag_ids" choices={choices} placeholder="Choose tags…" />,
+      { wrapper: FormWrapper },
+    );
+    expect(screen.getByPlaceholderText("Choose tags…")).toBeInTheDocument();
   });
 });
