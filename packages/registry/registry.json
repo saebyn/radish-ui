@@ -206,6 +206,11 @@
       "name": "user-menu",
       "files": ["src/layout/user-menu.tsx"],
       "dependencies": ["@radish-ui/core"]
+    },
+    {
+      "name": "password-input",
+      "files": ["src/form/password-input.tsx"],
+      "dependencies": ["@radish-ui/core"]
     }
   ]
 }

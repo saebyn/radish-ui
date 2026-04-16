@@ -6,6 +6,7 @@ import { TextInput } from "./text-input";
 import { NumberInput } from "./number-input";
 import { SelectInput } from "./select-input";
 import { BooleanInput } from "./boolean-input";
+import { PasswordInput } from "./password-input";
 
 const defaultValues = {
   title: "Hello World",
@@ -114,6 +115,15 @@ export const BooleanInputStory: Story = {
   render: () => (
     <Wrapper>
       <BooleanInput source="is_featured" label="Featured?" />
+    </Wrapper>
+  ),
+};
+
+export const PasswordInputStory: Story = {
+  name: "PasswordInput",
+  render: () => (
+    <Wrapper>
+      <PasswordInput source="password" label="Password" />
     </Wrapper>
   ),
 };
