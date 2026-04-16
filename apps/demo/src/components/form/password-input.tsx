@@ -79,6 +79,8 @@ export function PasswordInput({
             "focus:outline-none focus-visible:ring-1 focus-visible:ring-primary-500",
           )}
         >
+          {/* Show the "eye-off" icon when password is visible (to offer hiding it),
+              and the "eye" icon when it is hidden (to offer revealing it). */}
           {showPassword ? (
             <EyeOffIcon />
           ) : (
