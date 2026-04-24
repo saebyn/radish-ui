@@ -17,9 +17,9 @@
     "storybook": "pnpm --filter @radish-ui/registry storybook"
   },
   "devDependencies": {
-    "oxfmt": "^0.44.0",
-    "oxlint": "^1.59.0",
-    "typescript": "6.0.2"
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
+    "typescript": "6.0.3"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
