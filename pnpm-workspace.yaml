@@ -7,14 +7,14 @@ allowBuilds:
 catalog:
   # Build tools
   tsup: 8.5.1
-  vite: 8.0.14
-  vitest: 4.1.7
+  vite: 8.0.16
+  vitest: 4.1.8
   typescript: 6.0.3
 
   # React
   react: 18.3.1
   react-dom: 18.3.1
-  react-router-dom: 7.15.1
+  react-router-dom: 7.17.0
   react-icons: 5.6.0
   "@types/react": 18.3.28
   "@types/react-dom": 18.3.7
@@ -26,10 +26,10 @@ catalog:
   ra-data-json-server: 5.14.7
   ra-i18n-polyglot: 5.14.7
   ra-language-english: 5.14.7
-  react-hook-form: 7.76.1
+  react-hook-form: 7.79.0
 
   # Tailwind / CSS
-  tailwindcss: 4.3.0
-  "@tailwindcss/postcss": 4.3.0
+  tailwindcss: 4.3.1
+  "@tailwindcss/postcss": 4.3.1
   postcss: 8.5.15
   autoprefixer: 10.5.0
