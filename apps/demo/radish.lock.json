@@ -203,6 +203,14 @@
           "localHash": "sha256-09f6c02ef246e01b0d4bfdefa5f94126b6c86baba9040d7c54c94bb08ddd2fa6"
         }
       }
+    },
+    "password-input": {
+      "files": {
+        "form/password-input.tsx": {
+          "registryHash": "sha256-5839bb5f34a89f1cf06b27ea2437f8cb771d3e8daea412bb77840b34fc3625f8",
+          "localHash": "sha256-5839bb5f34a89f1cf06b27ea2437f8cb771d3e8daea412bb77840b34fc3625f8"
+        }
+      }
     }
   }
 }

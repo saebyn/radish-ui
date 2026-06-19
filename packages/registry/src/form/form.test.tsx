@@ -5,6 +5,7 @@ import { TextInput } from "./text-input";
 import { NumberInput } from "./number-input";
 import { SelectInput } from "./select-input";
 import { BooleanInput } from "./boolean-input";
+import { PasswordInput } from "./password-input";
 import { SimpleForm } from "./simple-form";
 
 // Minimal data provider required by CoreAdminContext
@@ -158,6 +159,56 @@ describe("BooleanInput", () => {
     const initial = checkbox.checked;
     fireEvent.click(checkbox);
     expect(checkbox.checked).toBe(!initial);
+  });
+});
+
+describe("PasswordInput", () => {
+  it("renders with a capitalised source as the default label", () => {
+    render(<PasswordInput source="password" />, { wrapper: FormWrapper });
+    expect(screen.getByText("Password")).toBeInTheDocument();
+  });
+
+  it("renders with an explicit label", () => {
+    render(<PasswordInput source="password" label="Secret" />, { wrapper: FormWrapper });
+    expect(screen.getByText("Secret")).toBeInTheDocument();
+  });
+
+  it("renders an input of type password by default", () => {
+    render(<PasswordInput source="password" />, { wrapper: FormWrapper });
+    const input = document.querySelector('input[type="password"]');
+    expect(input).toBeInTheDocument();
+  });
+
+  it("toggles password visibility when the show/hide button is clicked", () => {
+    render(<PasswordInput source="password" />, { wrapper: FormWrapper });
+    const input = document.querySelector("input") as HTMLInputElement;
+    expect(input.type).toBe("password");
+    const toggle = screen.getByRole("button", { name: /show password/i });
+    fireEvent.click(toggle);
+    expect(input.type).toBe("text");
+    fireEvent.click(screen.getByRole("button", { name: /hide password/i }));
+    expect(input.type).toBe("password");
+  });
+
+  it("associates the label with the input via htmlFor/id", () => {
+    render(<PasswordInput source="password" label="Password" />, { wrapper: FormWrapper });
+    const label = screen.getByText("Password");
+    const input = document.querySelector("input") as HTMLInputElement;
+    expect(label.getAttribute("for")).toBe(input.getAttribute("id"));
+  });
+
+  it("renders a placeholder when provided", () => {
+    render(<PasswordInput source="password" placeholder="Enter password…" />, {
+      wrapper: FormWrapper,
+    });
+    expect(screen.getByPlaceholderText("Enter password…")).toBeInTheDocument();
+  });
+
+  it("accepts user input", () => {
+    render(<PasswordInput source="password" />, { wrapper: FormWrapper });
+    const input = document.querySelector("input") as HTMLInputElement;
+    fireEvent.change(input, { target: { value: "s3cret!" } });
+    expect(input.value).toBe("s3cret!");
   });
 });
 
