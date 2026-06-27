@@ -23,7 +23,7 @@ catalog:
   # react-admin
   ra-core: 5.14.7
   ra-data-fakerest: 5.14.7
-  ra-data-json-server: 5.14.7
+  ra-data-json-server: 5.15.0
   ra-i18n-polyglot: 5.14.7
   ra-language-english: 5.14.7
   react-hook-form: 7.76.1
