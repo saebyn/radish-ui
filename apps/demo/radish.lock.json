@@ -203,6 +203,14 @@
           "localHash": "sha256-09f6c02ef246e01b0d4bfdefa5f94126b6c86baba9040d7c54c94bb08ddd2fa6"
         }
       }
+    },
+    "autocomplete-array-input": {
+      "files": {
+        "form/autocomplete-array-input.tsx": {
+          "registryHash": "sha256-69c166e778e26cefac8c8821294b136999a0069b04c2f7603ba2b31a00bcb2cc",
+          "localHash": "sha256-69c166e778e26cefac8c8821294b136999a0069b04c2f7603ba2b31a00bcb2cc"
+        }
+      }
     }
   }
 }

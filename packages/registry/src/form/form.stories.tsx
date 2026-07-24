@@ -6,6 +6,7 @@ import { TextInput } from "./text-input";
 import { NumberInput } from "./number-input";
 import { SelectInput } from "./select-input";
 import { BooleanInput } from "./boolean-input";
+import { AutocompleteArrayInput } from "./autocomplete-array-input";
 
 const defaultValues = {
   title: "Hello World",
@@ -136,6 +137,38 @@ export const InCreateContext: Story = {
           />
           <BooleanInput source="is_featured" label="Featured?" />
         </SimpleForm>
+      </CreateBase>
+    </CoreAdminContext>
+  ),
+};
+
+const tagChoices = [
+  { id: 1, name: "Sports" },
+  { id: 2, name: "Tech" },
+  { id: 3, name: "Culture" },
+  { id: 4, name: "Science" },
+  { id: 5, name: "Health" },
+];
+
+export const AutocompleteArrayInputStory: Story = {
+  name: "AutocompleteArrayInput",
+  render: () => (
+    <Wrapper>
+      <AutocompleteArrayInput source="tag_ids" label="Tags" choices={tagChoices} />
+    </Wrapper>
+  ),
+};
+
+export const AutocompleteArrayInputWithPreselected: Story = {
+  name: "AutocompleteArrayInput (pre-selected values)",
+  render: () => (
+    <CoreAdminContext>
+      <CreateBase resource="posts" record={{ tag_ids: [1, 3] }}>
+        <div className="max-w-xl p-6">
+          <SimpleForm>
+            <AutocompleteArrayInput source="tag_ids" label="Tags" choices={tagChoices} />
+          </SimpleForm>
+        </div>
       </CreateBase>
     </CoreAdminContext>
   ),
