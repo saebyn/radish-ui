@@ -31,5 +31,5 @@ catalog:
   # Tailwind / CSS
   tailwindcss: 4.3.0
   "@tailwindcss/postcss": 4.3.0
-  postcss: 8.5.15
+  postcss: 8.5.23
   autoprefixer: 10.5.0
